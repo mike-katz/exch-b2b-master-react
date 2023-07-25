@@ -4,6 +4,7 @@ import MainApp from "./app/index";
 import { persistor, store } from "./app/redux/store";
 import { Helmet } from "react-helmet";
 const color = store.getState().persist.themeColor;
+const { isLoggedIn } = store.getState().persist;
 
 function App() {
   const isLoading = false;
@@ -17,7 +18,12 @@ function App() {
           sizes="16x16"
         />
       </Helmet>
-      <div className=" bg-[#eeeeee] h-[100vh]">
+      <div
+        style={{
+          backgroundColor: isLoggedIn ? "#eeeeee" : "",
+          height: isLoggedIn ? "100vh" : "unset",
+        }}
+      >
         <MainApp />
       </div>
     </PersistGate>

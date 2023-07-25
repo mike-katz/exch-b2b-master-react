@@ -35,6 +35,7 @@ const ChangePasswordModal = ({ isVisible, onCloseMenu }) => {
           />
         </div>
         <Formik
+          validateOnBlur={false}
           enableReinitialize
           initialValues={{
             old_password: "",

@@ -48,3 +48,30 @@ export const forgotPasswordSchema = Yup.object().shape({
       "Yor new password and confirm password should be same"
     ),
 });
+
+export const addPlayerSchema = Yup.object().shape({
+  username: Yup.string().required("Please enter username"),
+  exposer: Yup.number().required("Please enter exposer"),
+  commission: Yup.number().required("Please enter commission"),
+  password: Yup.string().required("Please enter new password"),
+  confirm_password: Yup.string()
+    .required("Please enter confirm password")
+    .oneOf(
+      [Yup.ref("new_password"), null],
+      "Yor new password and confirm password should be same"
+    ),
+});
+
+export const addPlayerMasterSchema = Yup.object().shape({
+  username: Yup.string().required("Please enter username"),
+  exposer: Yup.number().required("Please enter exposer"),
+  commission: Yup.number().required("Please enter commission"),
+  password: Yup.string().required("Please enter new password"),
+  user_type: Yup.string().required("Please select user type"),
+  confirm_password: Yup.string()
+    .required("Please enter confirm password")
+    .oneOf(
+      [Yup.ref("new_password"), null],
+      "Yor new password and confirm password should be same"
+    ),
+});

@@ -13,10 +13,8 @@ import CreditRefModal from "./CreditRefModal";
 import ChangeStatusModal from "./ChangeStatusModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
 import AddPlayerModal from "./AddPlayerModal";
-import { useNavigate } from "react-router-dom";
 
-const DownListUser = () => {
-  const navigate = useNavigate();
+const Dashboard = () => {
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
   const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
   const [isVisibleEditStatus, setIsVisibleEditStatus] = useState(false);
@@ -57,10 +55,6 @@ const DownListUser = () => {
 
   const onCloseAddPlayer = () => {
     setIsVisibleAddPlayer(false);
-  };
-
-  const onClickMenu = (id) => {
-    navigate(`/down-list-master/details/${id}`);
   };
 
   return (
@@ -223,20 +217,10 @@ const DownListUser = () => {
             </td>
             <td className="text-right w-[100px]">
               <div className="flex items-center justify-end">
-                <div
-                  onClick={() => {
-                    onClickMenu("betting-profit-lost");
-                  }}
-                  className="h-[26px] w-[26px] cursor-pointer ml-1"
-                >
+                <div className="h-[26px] w-[26px] cursor-pointer ml-1">
                   <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
                 </div>
-                <div
-                  onClick={() => {
-                    onClickMenu("betting-history");
-                  }}
-                  className="h-[26px] w-[26px] cursor-pointer ml-1"
-                >
+                <div className="h-[26px] w-[26px] cursor-pointer ml-1">
                   <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
                 </div>
                 <div
@@ -245,12 +229,7 @@ const DownListUser = () => {
                 >
                   <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
                 </div>
-                <div
-                  onClick={() => {
-                    onClickMenu("account-summery");
-                  }}
-                  className="h-[26px] w-[26px] cursor-pointer ml-1"
-                >
+                <div className="h-[26px] w-[26px] cursor-pointer ml-1">
                   <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/person.png" />
                 </div>
               </div>
@@ -412,4 +391,4 @@ const DownListUser = () => {
   );
 };
 
-export default DownListUser;
+export default Dashboard;

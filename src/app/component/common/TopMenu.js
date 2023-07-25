@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const TopMenu = () => {
   const [activeMenu, setActiveMenu] = useState("/");
+  console.log({ activeMenu });
   const navigate = useNavigate();
   const location = useLocation();
   const onClickMenu = (menu) => {
@@ -30,7 +31,47 @@ const TopMenu = () => {
     >
       <div className="container flex justify-between items-center">
         <div className="flex items-center">
-          <div
+          <Menu placement="bottom-start">
+            <MenuHandler>
+              <Button
+                className={`rounded-none bg-transparent text-[12px] text-[#000000] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer py-0 capitalize ${
+                  activeMenu === "/down-list-user" || activeMenu === "/"
+                    ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                    : ""
+                }`}
+              >
+                Down List
+                <FaCaretDown color="#000000" className="ml-1" />
+              </Button>
+            </MenuHandler>
+            <MenuList className="bg-[#ffbd14] rounded-none border-none mt-[-5px] p-0 text-[12px] text-[#000000] font-extrabold">
+              <MenuItem
+                onClick={() => {
+                  onClickMenu("/");
+                }}
+                className={`m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent ${
+                  activeMenu === "/"
+                    ? "bg-[#ffdc7a] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                    : ""
+                } border-t border-[rgba(0,0,0,.2)]`}
+              >
+                Down List Master
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  onClickMenu("/down-list-user");
+                }}
+                className={`m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent ${
+                  activeMenu === "/down-list-user"
+                    ? "bg-[#ffdc7a]  shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                    : ""
+                } border-t border-[rgba(0,0,0,.2)]`}
+              >
+                Down List User
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          {/* <div
             onClick={() => {
               onClickMenu("/");
             }}
@@ -39,7 +80,7 @@ const TopMenu = () => {
             }`}
           >
             Downline List
-          </div>
+          </div> */}
           <div
             onClick={() => {
               onClickMenu("/my-account");

@@ -11,8 +11,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./component/common/Header";
 import TopMenu from "./component/common/TopMenu";
 import News from "./component/common/News";
+import { useSelector } from "react-redux";
 
 const MainApp = () => {
+  const { isLoggedIn } = useSelector((state) => state?.persist);
+
   return (
     <Router>
       <ToastContainer
@@ -28,14 +31,15 @@ const MainApp = () => {
         theme="light"
       />
       <div>
-        <Header />
-        <TopMenu />
-        <div className="container">
-          <News />
-        </div>
-        {/* <Header />
-        <TopMenu />
-        <WPSupport /> */}
+        {isLoggedIn && (
+          <>
+            <Header />
+            <TopMenu />
+            <div className="container">
+              <News />
+            </div>
+          </>
+        )}
       </div>
       <div>
         <div className="xl:block hidden">

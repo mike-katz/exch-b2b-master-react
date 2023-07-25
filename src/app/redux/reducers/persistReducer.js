@@ -8,7 +8,7 @@ import {
 } from "../actions/persistAction";
 
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: true,
   userData: null,
   loginModalVisibleState: false,
   signupModalVisibleState: false,
