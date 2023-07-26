@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AccountSummary from "./AccountSummary";
+import BettingHistory from "./BettingHistory";
+import BettingProfitLost from "./BettingProfitLost";
+import TransactionHistory from "./TransactionHistory";
+import ActivityLog from "./ActivityLog";
 // import AccountStatement from "./AccountStatement";
 // import Profile from "./Profile";
 // import ActivityLog from "./ActivityLog";
@@ -23,7 +27,7 @@ const DownLineMasterDetails = () => {
   };
 
   return (
-    <div className="mt-2">
+    <div className="px-2 mt-2">
       <div className="border border-[#7e97a7] w-fit rounded px-[15px] flex items-center">
         <div className="bg-[#85b352] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
           MA
@@ -33,7 +37,7 @@ const DownLineMasterDetails = () => {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-4 mt-4">
-        <div className="col-span-2 font-semibold">
+        <div className="col-span-12 lg:col-span-2 font-semibold">
           <div>
             <div className="bg-[#243a48] text-[#FFFFFF] px-[10px] border-b border-[#eee1c0] leading-[25px]">
               Position
@@ -105,8 +109,12 @@ const DownLineMasterDetails = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-10">
+        <div className="col-span-12 lg:col-span-10">
           {activeTab === "account-summery" && <AccountSummary />}
+          {activeTab === "beating-history" && <BettingHistory />}
+          {activeTab === "beating-profit-lost" && <BettingProfitLost />}
+          {activeTab === "transactions-history" && <TransactionHistory />}
+          {activeTab === "activity-log" && <ActivityLog />}
           {/* {activeTab === 2 && <AccountStatement />}
           {activeTab === 3 && <Profile />}
           {activeTab === 4 && <ActivityLog />} */}

@@ -21,7 +21,7 @@ function App() {
       <div
         style={{
           backgroundColor: isLoggedIn ? "#eeeeee" : "",
-          height: isLoggedIn ? "100vh" : "unset",
+          minHeight: isLoggedIn ? "100vh" : "unset",
         }}
       >
         <MainApp />

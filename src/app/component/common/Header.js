@@ -7,9 +7,12 @@ const Header = () => {
       style={{ backgroundImage: "linear-gradient(#353535, #111111)" }}
       className="h-[60px] flex items-center"
     >
-      <div className="container flex justify-between items-center">
-        <img />
-        <div className="flex items-center">
+      <div className="container flex justify-between items-center px-2">
+        <img
+          src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png"
+          className="h-[40px]"
+        />
+        <div className="flex sm:flex-row flex-col items-center justify-center">
           <div className="flex items-center">
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] uppercase font-bold">
               ma
@@ -28,7 +31,7 @@ const Header = () => {
           </div>
           <div
             style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,.5)" }}
-            className="bg-[#3e3e3e] mx-4"
+            className="bg-[#3e3e3e] mx-4 sm:block hidden"
           >
             <div className="bg-[rgba(255,255,255,.1)] p-1">
               <FiRotateCcw color="#ecad17" size={13} />

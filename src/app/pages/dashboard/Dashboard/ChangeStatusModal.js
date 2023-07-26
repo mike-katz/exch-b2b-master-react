@@ -11,8 +11,8 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
 
   return (
     <Model isVisible={isVisible} onCloseMenu={onCloseMenu} center>
-      <div className="bg-[#eee] rounded">
-        <div className="p-[15px] flex items-center justify-between min-w-[500px]">
+      <div className="bg-[#eee] rounded w-full">
+        <div className="p-[15px] flex items-center justify-between sm:min-w-[500px]">
           <div className="text-[16px] text-[#3b5160] font-black">
             Change Status
           </div>
@@ -43,7 +43,7 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
                 Locked
               </div> */}
           </div>
-          <div className="flex items-center justify-around py-4 px-[5px]">
+          <div className="flex items-center sm:justify-center justify-around py-4 px-[5px] sm:flex-row flex-col">
             <div
               onClick={() => {
                 onSelectStatus("active");
@@ -109,7 +109,7 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center py-4">
+        <div className="flex items-center justify-center py-4 sm:flex-row flex-col">
           <div className="flex items-center mr-4">
             <div className="col-span-3 text-[12px] text-[#1e1e1e] mr-2">
               Password:
@@ -123,7 +123,7 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
               />
             </div>
           </div>
-          <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]">
+          <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] mt-4">
             Change
           </button>
         </div>

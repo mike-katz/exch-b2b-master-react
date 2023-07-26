@@ -8,9 +8,12 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { FiMenu } from "react-icons/fi";
+import MobileMenu from "./MobileMenu";
 
 const TopMenu = () => {
   const [activeMenu, setActiveMenu] = useState("/");
+  const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
   console.log({ activeMenu });
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,15 +25,30 @@ const TopMenu = () => {
     setActiveMenu(location?.pathname);
   }, [location]);
 
+  const onCloseDrawer = () => {
+    setIsVisibleDrawer(false);
+  };
+
+  const onOpenDrawer = () => {
+    setIsVisibleDrawer(true);
+  };
+
   return (
     <div
       style={{
         backgroundImage: "linear-gradient(180deg, #ffcc2e 0%, #ffbd14 100%)",
       }}
-      className="leading-[30px] flex items-center"
+      className="leading-[30px] flex items-center px-4"
     >
+      <MobileMenu
+        isMenuVisible={isVisibleDrawer}
+        onCloseDrawer={onCloseDrawer}
+      />
       <div className="container flex justify-between items-center">
-        <div className="flex items-center">
+        <div className="flex lg:hidden">
+          <FiMenu onClick={onOpenDrawer} size={25} />
+        </div>
+        <div className="items-center lg:flex hidden">
           <Menu placement="bottom-start">
             <MenuHandler>
               <Button
@@ -150,12 +168,12 @@ const TopMenu = () => {
           </Menu>
         </div>
         <div className="flex items-center">
-          <div className="text-[12px] text-[#000000] font-extrabold">
+          {/* <div className="text-[12px] text-[#000000] font-extrabold">
             <span className="text-[rgba(0,0,0,.6)]  font-normal">
               Time Zone :
             </span>
             GMT+5:30
-          </div>
+          </div> */}
           <div className="text-[12px] text-[#000000] font-extrabold border-l border-r border-[rgba(0,0,0,.2)] px-2 ml-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer">
             Logout
             <FaSignOutAlt className="ml-1" color="#000000" />

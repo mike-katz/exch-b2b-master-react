@@ -75,6 +75,11 @@ button:focus-visible {
   font-family: unset
 }
 
+.table-responsive {
+  overflow: hidden;
+  overflow-x: auto;
+}
+
 table thead tr th {
   color: #243a48;
   background-color: #e4e4e4;
@@ -180,7 +185,7 @@ table tbody tr td {
   background-image: linear-gradient(-180deg, #fefefe 0%, #e0e0e0 100%);
   border: 1px solid #9d9d9d;
   border-radius: 8px;
-  margin: 0 5px;
+  margin: 5px;
   padding: 8px 0;
   color: #508d0e;
   cursor: pointer;
@@ -221,4 +226,12 @@ table tbody tr td {
 .active_open {
   background-image: linear-gradient(-180deg, #8dd13b 3%, #4e7427 100%) !important;
   color: #fff;
+}
+
+.fromto {
+  margin: 5px;
+  background-image: url('https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/icon-fromto.png');
+  background-repeat: no-repeat;
+  height: 8px;
+  width: 7px;
 }

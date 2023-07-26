@@ -35,7 +35,7 @@ const MainApp = () => {
           <>
             <Header />
             <TopMenu />
-            <div className="container">
+            <div className="container px-2">
               <News />
             </div>
           </>
