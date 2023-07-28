@@ -9,12 +9,15 @@ const AppCommonInput = (
     <Field name={name}>
       {({ field, form, meta }) => (
         <div className="w-full">
-          <div
-            style={{ color: labelColor }}
-            className="text-[12px] text-[#FFFFFF] uppercase mt-2 mb-1"
-          >
-            {label}
-          </div>
+          {label && (
+            <div
+              style={{ color: labelColor }}
+              className="text-[12px] text-[#FFFFFF] uppercase mt-2 mb-1"
+            >
+              {label}
+            </div>
+          )}
+
           <input
             {...props}
             {...field}

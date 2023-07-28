@@ -6,6 +6,7 @@ import Login from "./auth/Login";
 import { AuthRoute, PrivateRoute } from "../component/common/PrivateRoute";
 import DownListUser from "./dashboard/Dashboard";
 import DownLineMasterDetails from "./dashboard/Dashboard/DownLineMasterDetails";
+import Banking from "./dashboard/Banking";
 
 const CustomRoutes = () => {
   return (
@@ -47,6 +48,14 @@ const CustomRoutes = () => {
         element={
           <PrivateRoute>
             <DownLineMasterDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/banking"
+        element={
+          <PrivateRoute>
+            <Banking />
           </PrivateRoute>
         }
       />

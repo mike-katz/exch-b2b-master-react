@@ -144,7 +144,12 @@ const TopMenu = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-          <div className="text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer">
+          <div
+            onClick={() => {
+              onClickMenu("/banking");
+            }}
+            className="text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer"
+          >
             Banking
           </div>
           <Menu placement="bottom-start">

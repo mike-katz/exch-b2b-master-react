@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import ChangePasswordModal from "./ChangePasswordModal";
 
 const Profile = () => {
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+
+  const onShowChangePassword = () => {
+    setIsVisiblePassword(true);
+  };
+
+  const onCloseChangePassword = () => {
+    setIsVisiblePassword(false);
+  };
   return (
     <div>
-      <ChangePasswordModal isVisible />
+      <ChangePasswordModal
+        isVisible={isVisiblePassword}
+        onCloseMenu={onCloseChangePassword}
+      />
       <div className="text-[#243a48] text-[16px] font-black">Profile</div>
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-6">
+        <div className="md:col-span-6 col-span-12">
           <div className="bg-[#7e97a7] text-[#ffffff] px-[10px] text-[15px] font-black leading-[24px]">
             About You
           </div>
@@ -48,7 +60,10 @@ const Profile = () => {
               </div>
               <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
                 <div>********************************</div>
-                <div className="text-[#2789ce] flex items-center">
+                <div
+                  onClick={onShowChangePassword}
+                  className="text-[#2789ce] flex items-center cursor-pointer"
+                >
                   Edit
                   <FaPencilAlt className="ml-1" />
                 </div>
@@ -65,7 +80,7 @@ const Profile = () => {
             <td></td>
           </tr>
         </div>
-        <div className="col-span-6">
+        <div className="md:col-span-6 col-span-12">
           <div className="bg-[#7e97a7] text-[#ffffff] px-[10px] text-[15px] font-black leading-[24px]">
             Contact Details
           </div>
