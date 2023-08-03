@@ -8,7 +8,7 @@ function* loginSaga(data) {
     const result = yield call(getLogin, data?.payload);
 
     if (result?.accessToken) {
-      if (result?.roles?.includes("User")) {
+      if (!result?.roles?.includes("User")) {
         yield put(loginEnd(result));
         data?.successCallback();
       } else {

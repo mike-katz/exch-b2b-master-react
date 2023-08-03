@@ -3,7 +3,7 @@ import {
   FaCircle,
   FaDownload,
   FaPencilAlt,
-  FaPlusSquare,
+  // FaPlusSquare,
   FaUndo,
   FaUserPlus,
 } from "react-icons/fa";
@@ -15,10 +15,10 @@ import EditExposureLimitModal from "./EditExposureLimitModal";
 import AddPlayerModal from "./AddPlayerModal";
 import { useNavigate } from "react-router-dom";
 
-const DownListUser = () => {
+const DownListMaster = () => {
   const navigate = useNavigate();
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
-  const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
+  // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
   const [isVisibleEditStatus, setIsVisibleEditStatus] = useState(false);
   const [isVisibleExposureLimit, setIsVisibleExposureLimit] = useState(false);
   const [isVisibleAddPlayer, setIsVisibleAddPlayer] = useState(false);
@@ -31,9 +31,9 @@ const DownListUser = () => {
     setIsVisibleEditCreditRef(false);
   };
 
-  const onClickBalance = () => {
-    setIsEnableBalanceView(!isEnableBalanceView);
-  };
+  // const onClickBalance = () => {
+  //   setIsEnableBalanceView(!isEnableBalanceView);
+  // };
 
   const onClickEditStatus = () => {
     setIsVisibleEditStatus(true);
@@ -188,11 +188,11 @@ const DownListUser = () => {
               </td>
               <td>
                 <div
-                  className="flex items-center underline text-[#2789ce] cursor-pointer"
-                  onClick={onClickBalance}
+                  className="flex items-center"
+                  // onClick={onClickBalance}
                 >
                   13.00
-                  <FaPlusSquare className="ml-1" size={15} />
+                  {/* <FaPlusSquare className="ml-1" size={15} /> */}
                 </div>
               </td>
 
@@ -257,7 +257,7 @@ const DownListUser = () => {
                 </div>
               </td>
             </tr>
-            {isEnableBalanceView && (
+            {/* {isEnableBalanceView && (
               <tr className="">
                 <td className="bg-[#e2e8ed]" colSpan="3"></td>
                 <td className="bg-[#e2e8ed] p-0" colSpan="6">
@@ -352,7 +352,7 @@ const DownListUser = () => {
                   </table>
                 </td>
               </tr>
-            )}
+            )} */}
           </tbody>
         </table>
       </div>
@@ -414,4 +414,4 @@ const DownListUser = () => {
   );
 };
 
-export default DownListUser;
+export default DownListMaster;

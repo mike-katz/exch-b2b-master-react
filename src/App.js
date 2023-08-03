@@ -4,10 +4,13 @@ import MainApp from "./app/index";
 import { persistor, store } from "./app/redux/store";
 import { Helmet } from "react-helmet";
 const color = store.getState().persist.themeColor;
-const { isLoggedIn } = store.getState().persist;
+// const { isLoggedIn } = store.getState().persist;
+// const data = store.getState().persist;
+// console.log({ data });
 
 function App() {
   const isLoading = false;
+  // console.log({ isLoggedIn });
   return (
     <PersistGate loading={isLoading} persistor={persistor}>
       <Helmet>
@@ -18,14 +21,8 @@ function App() {
           sizes="16x16"
         />
       </Helmet>
-      <div
-        style={{
-          backgroundColor: isLoggedIn ? "#eeeeee" : "",
-          minHeight: isLoggedIn ? "100vh" : "unset",
-        }}
-      >
-        <MainApp />
-      </div>
+
+      <MainApp />
     </PersistGate>
   );
 }

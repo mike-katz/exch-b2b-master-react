@@ -8,11 +8,26 @@ import AppSelect from "../../../component/form/AppSelect";
 import { ADMIN_USER_TYPE } from "../../../utils/dropdown";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
-  const onClickAddPlayer = () => {};
+  const onClickAddPlayer = (values) => {
+    const payload = {
+      username: "admin",
+      password: "Admin@123",
+      mobile: "1234567890",
+      ip: "::0",
+      exposure: 0,
+      commision: 0,
+      roles: "",
+
+      exposer: "",
+      commission: "",
+      phone: values?.mobile,
+    };
+    console.log({ payload });
+  };
   return (
     <Model isVisible={isVisible} onCloseMenu={onCloseMenu} center>
-      <div className="bg-[#eee] rounded">
-        <div className="p-[15px] flex items-center justify-between min-w-[300px]">
+      <div className="bg-[#eee] rounded w-[400px]">
+        <div className="p-[15px] flex items-center justify-between min-w-[200px]">
           <div className="text-[16px] text-[#3b5160] font-black">
             Add Player
           </div>
@@ -58,7 +73,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                     <AppSelect
                       data={ADMIN_USER_TYPE}
                       name="user_type"
-                      placeholder="Select"
+                      placeholder="Select user type"
                     />
                     <div className="text-[red] text-[18px] ml-2">*</div>
                   </div>

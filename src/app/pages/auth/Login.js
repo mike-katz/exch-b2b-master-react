@@ -1,16 +1,38 @@
 import React, { useState } from "react";
 import { Form, Formik } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSchema } from "../../utils/validationSchema";
 import AppInput from "../../component/form/AppInput";
 import Loader from "../../component/common/Loader";
+import { loginStart } from "../../redux/actions/persistAction";
+import { getIPAddress } from "../../redux/services/ipAddress";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const { themeColor } = useSelector((state) => state?.persist);
   const [isLoading, setIsLoading] = useState(false);
 
   const onClickLogin = async (values) => {
     setIsLoading(true);
+
+    const IPData = await getIPAddress();
+
+    const payload = {
+      username: values?.user?.toLowerCase(),
+      password: values?.password,
+      ip: JSON.stringify(IPData),
+    };
+
+    const callback = () => {
+      setIsLoading(false);
+    };
+
+    const successCallback = () => {
+      setIsLoading(false);
+      // dispatch(loginModalHide());
+    };
+
+    dispatch(loginStart(payload, callback, successCallback));
   };
 
   return (

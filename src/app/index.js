@@ -17,48 +17,55 @@ const MainApp = () => {
   const { isLoggedIn } = useSelector((state) => state?.persist);
 
   return (
-    <Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <div>
-        {isLoggedIn && (
-          <>
-            <Header />
-            <TopMenu />
-            <div className="container px-2">
-              <News />
-            </div>
-          </>
-        )}
-      </div>
-      <div>
-        <div className="xl:block hidden">
-          <div className="fixed top-[147px] xl:top-[105px] left-0 w-[240px]">
-            {/* <SideMenu /> */}
-          </div>
+    <div
+      style={{
+        backgroundColor: isLoggedIn ? "#eeeeee" : "",
+        minHeight: isLoggedIn ? "100vh" : "unset",
+      }}
+    >
+      <Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        <div>
+          {isLoggedIn && (
+            <>
+              <Header />
+              <TopMenu />
+              <div className="container px-2">
+                <News />
+              </div>
+            </>
+          )}
         </div>
-        {/* <div className="block lg:hidden">
+        <div>
+          <div className="xl:block hidden">
+            <div className="fixed top-[147px] xl:top-[105px] left-0 w-[240px]">
+              {/* <SideMenu /> */}
+            </div>
+          </div>
+          {/* <div className="block lg:hidden">
           <MobileMenu />
         </div> */}
-        {/* <div className="fixed top-[147px] xl:top-[105px] xl:left-[240px] z-[9] overflow-hidden overflow-y-auto">
+          {/* <div className="fixed top-[147px] xl:top-[105px] xl:left-[240px] z-[9] overflow-hidden overflow-y-auto">
           <div className="h-[calc(100vh-105px)] w-[100vw] xl:w-[calc(100vw-240px)]"> */}
-        <div className="container">
-          <CustomRoutes />
-        </div>
-        {/* </div>
+          <div className="container">
+            <CustomRoutes />
+          </div>
+          {/* </div>
         </div> */}
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </div>
   );
 };
 

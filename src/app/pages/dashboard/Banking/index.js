@@ -1,21 +1,8 @@
-import React, { useState } from "react";
-import { FaCircle, FaPencilAlt, FaPlusSquare } from "react-icons/fa";
+import React from "react";
 // import Pagination from "../../../component/common/Pagination";
 import Searching from "../../../component/form/Searching";
-import { useNavigate } from "react-router-dom";
 
 const Banking = () => {
-  const navigate = useNavigate();
-  const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
-
-  const onClickBalance = () => {
-    setIsEnableBalanceView(!isEnableBalanceView);
-  };
-
-  const onClickMenu = (id) => {
-    navigate(`/down-list-master/details/${id}`);
-  };
-
   return (
     <div className="relative px-2">
       <div className="grid grid-cols-12 gap-4 mt-2">
@@ -41,198 +28,105 @@ const Banking = () => {
         </div>
       </div>
       <div className="table-responsive mt-4">
-        <table className="w-full min-w-max table-auto text-left">
+        <table className="w-full min-w-max table-auto text-left font-medium">
           <thead>
             <tr>
-              <th className="">Account</th>
-              <th className="">Credit Ref.</th>
-              <th className="">Balance</th>
-              <th className="">Exposure</th>
-              <th className="">Avail. bal.</th>
-              <th className="">Exposure Limit</th>
-              <th className="">Ref. P/L</th>
-              <th className="">Status</th>
-              <th className="text-right">Action</th>
+              <th className="">UID</th>
+              <th className="text-right">Balance</th>
+              <th className="text-right">Available D/W</th>
+              <th className="text-right">Exposure</th>
+              <th className="text-right border-l border-r border-[#7e97a7]">
+                Check Balance
+              </th>
+              <th className="text-center border-r border-[#7e97a7]">
+                Deposit / Withdraw
+              </th>
+              <th className="text-right">Credit Reference</th>
+              <th className="text-right border-r border-[#7e97a7]">
+                Reference P/L
+              </th>
+              <th className="text-right border-r border-[#7e97a7]">Remark</th>
+              <th className="text-center">
+                <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black w-[58px]">
+                  All Log
+                </button>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <div className="flex items-center">
-                  <span className="w-[30px]">1.</span>{" "}
-                  <div className="bg-[#568bc8] text-[10px] text-[#fff] uppercase w-[26px] h-[15px] flex justify-center items-center rounded mr-[5px]">
-                    PL
-                  </div>
+                  <span className="w-[30px] text-[#999] text-center">1.</span>{" "}
                   12340ss
                 </div>
               </td>
-              <td>
-                <div className="flex items-center underline text-[#2789ce] cursor-pointer">
-                  0.00
-                  <FaPencilAlt className="ml-1" />
+              <td className="text-right">13.00</td>
+              <td className="text-right">13.00</td>
+              <td className="text-right">0.00</td>
+              <td
+                className="text-right border-l border-r border-[#7e97a7]"
+                width={200}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-[11px] text-[#7e97a7] flex flex-col items-start items-start">
+                    <span>2023-07-29</span>
+                    <span>15:33:51</span>
+                  </div>
+                  <div>13</div>
                 </div>
               </td>
-              <td>
-                <div
-                  className="flex items-center underline text-[#2789ce] cursor-pointer"
-                  onClick={onClickBalance}
-                >
-                  13.00
-                  <FaPlusSquare className="ml-1" size={15} />
+              <td className="text-center border-r border-[#7e97a7] flex items-center justify-center">
+                <div className="flex items-center">
+                  <button className="w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black border-r-0 border border-[#bbb] rounded-l deposit-withdraw-button">
+                    D
+                  </button>
+                  <button className="w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black  border border-[#bbb] rounded-r deposit-withdraw-button">
+                    W
+                  </button>
+                </div>
+                <div className="mx-2">
+                  <input
+                    placeholder="0"
+                    style={{ boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)" }}
+                    className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] font-black text-[14px]"
+                  />
+                </div>
+                <div>
+                  <button className="w-[45px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded">
+                    Full
+                  </button>
                 </div>
               </td>
-
-              <td>0.00</td>
-              <td>13.00</td>
-              <td>
-                <div className="flex items-center underline text-[#2789ce] cursor-pointer">
-                  200,000.00
-                  <FaPencilAlt className="ml-1" />
-                </div>
-              </td>
-              <td>13.00</td>
-              <td>
-                <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                  <FaCircle size={8} className="mr-1" />
-                  Active
-                </div>
-                {/* <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                <FaCircle size={8} className="mr-1" />
-                Suspended
-              </div> */}
-                {/* <div className="border border-[#b9c5cd] text-[#5a7384] text-[11px] bg-[#e3e8eb] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                <FaCircle size={8} className="mr-1" />
-                Locked
-              </div> */}
-              </td>
-              <td className="text-right w-[100px]">
+              <td className="text-right w-[200px]">
                 <div className="flex items-center justify-end">
-                  <div
-                    onClick={() => {
-                      onClickMenu("beating-history");
-                    }}
-                    className="h-[26px] w-[26px] cursor-pointer ml-1"
-                  >
-                    <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
-                  </div>
-                  <div
-                    onClick={() => {
-                      onClickMenu("beating-history");
-                    }}
-                    className="h-[26px] w-[26px] cursor-pointer ml-1"
-                  >
-                    <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
-                  </div>
-                  <div className="h-[26px] w-[26px] cursor-pointer ml-1">
-                    <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
-                  </div>
-                  <div
-                    onClick={() => {
-                      onClickMenu("account-summery");
-                    }}
-                    className="h-[26px] w-[26px] cursor-pointer ml-1"
-                  >
-                    <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/person.png" />
-                  </div>
+                  <input
+                    placeholder="0"
+                    style={{ boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)" }}
+                    className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right font-black text-[14px]"
+                  />
+                  {/* <div className="flex items-center underline text-[#2789ce] cursor-pointer mr-1">
+                    0.00
+                  </div> */}
+                  <button className="w-[48px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded">
+                    Edit
+                  </button>
                 </div>
+              </td>
+              <td className="text-right border-r border-[#7e97a7]">13.00</td>
+              <td className="text-right border-r border-[#7e97a7]">
+                <input
+                  placeholder="Remark"
+                  style={{ boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)" }}
+                  className="rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right w-[100px]"
+                />
+              </td>
+              <td className="text-center">
+                <button className="common-button h-[28px] font-black w-[58px]">
+                  Log
+                </button>
               </td>
             </tr>
-            {isEnableBalanceView && (
-              <tr className="">
-                <td className="bg-[#e2e8ed]" colSpan="3"></td>
-                <td className="bg-[#e2e8ed] p-0" colSpan="6">
-                  <table className="border-l border-[#7e97a7] w-full">
-                    <tr className="border-b  border-[#7e97a7]">
-                      <th width="12%" className="font-black px-[10px] py-[8px]">
-                        Game
-                      </th>
-                      <th
-                        width="13%"
-                        className="font-black px-[10px] py-[8px ] text-right"
-                      >
-                        Balance
-                      </th>
-                      <th width="8%" className="px-[10px] py-[8px] text-right">
-                        <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
-                          Recall All
-                        </div>
-                      </th>
-                      <th></th>
-                    </tr>
-                    <tr>
-                      <th width="12%" className="px-[10px] py-[8px]">
-                        Royal Gaming
-                      </th>
-                      <th width="13%" className="px-[10px] py-[8px] text-right">
-                        0
-                      </th>
-                      <th width="8%" className="px-[10px] py-[8px] text-right">
-                        <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
-                          Recall
-                        </div>
-                      </th>
-                      <th></th>
-                    </tr>
-                    <tr>
-                      <th width="12%" className="px-[10px] py-[8px]">
-                        SABA
-                      </th>
-                      <th width="13%" className="px-[10px] py-[8px] text-right">
-                        0
-                      </th>
-                      <th width="8%" className="px-[10px] py-[8px] text-right">
-                        <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
-                          Recall
-                        </div>
-                      </th>
-                      <th></th>
-                    </tr>
-                    <tr>
-                      <th width="12%" className="px-[10px] py-[8px]">
-                        BPoker
-                      </th>
-                      <th width="13%" className="px-[10px] py-[8px] text-right">
-                        0
-                      </th>
-                      <th width="8%" className="px-[10px] py-[8px] text-right">
-                        <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
-                          Recall
-                        </div>
-                      </th>
-                      <th></th>
-                    </tr>
-                    <tr>
-                      <th width="12%" className="px-[10px] py-[8px]">
-                        Sky Trader
-                      </th>
-                      <th width="13%" className="px-[10px] py-[8px] text-right">
-                        0
-                      </th>
-                      <th width="8%" className="px-[10px] py-[8px] text-right">
-                        <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
-                          Recall
-                        </div>
-                      </th>
-                      <th></th>
-                    </tr>
-                    <tr>
-                      <th width="12%" className="px-[10px] py-[8px]">
-                        Casino
-                      </th>
-                      <th width="13%" className="px-[10px] py-[8px] text-right">
-                        0
-                      </th>
-                      <th width="8%" className="px-[10px] py-[8px] text-right">
-                        <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
-                          Recall
-                        </div>
-                      </th>
-                      <th></th>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
       </div>
@@ -241,53 +135,12 @@ const Banking = () => {
       </div>
       <div className="">
         <div className="fixed right-0 bottom-0 mt-2 w-full border-t border-[#d4d4d4] bg-[#eeeeee] py-2 overflow-hidden overflow-x-auto">
-          <div className="flex md:justify-end container flex-wrap">
-            <div className="mt-1 ml-1 flex items-center mr-2">
-              <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/bank.png"
-                className="h-[26px] w-[26px]"
-              />
-              <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
-                Bank
-              </span>
-            </div>
-            <div className="mt-1 ml-1 flex items-center mr-2">
-              <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/p_l.png"
-                className="h-[26px] w-[26px]"
-              />
-              <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
-                Betting Profit & Loss
-              </span>
-            </div>
-            <div className="mt-1 ml-1 flex items-center mr-2">
-              <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png"
-                className="h-[26px] w-[26px]"
-              />
-              <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
-                Betting History
-              </span>
-            </div>
-            <div className="mt-1 ml-1 flex items-center mr-2">
-              <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/status.png"
-                className="h-[26px] w-[26px]"
-              />
-              <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
-                Profile
-              </span>
-            </div>
-            <div className="mt-1 ml-1 flex items-center mr-2">
-              <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/person.png"
-                className="h-[26px] w-[26px]"
-              />
-              <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
-                Change Status
-              </span>
-            </div>
-          </div>
+          <button className="common-button w-[130px] h-[33px] font-black text-[14px]">
+            Clear All
+          </button>
+          <button className="bg-[#000000] text-[#feba11] rounded px-2 w-[228px] h-[33px] font-black text-[14px]">
+            Submit <span>0</span> Payment
+          </button>
         </div>
       </div>
     </div>

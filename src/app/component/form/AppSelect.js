@@ -21,7 +21,7 @@ const AppSelect = (
             className={`w-full rounded p-[5px] text-[12px] text-[#1e1e1e] font-bold ${className}`}
           >
             <option disabled value="">
-              Select User Type
+              {placeholder}
             </option>
             {data &&
               data.map((item, index) => (

@@ -5,7 +5,7 @@ import Model from "../../../component/common/Modal";
 const EditExposureLimitModal = ({ isVisible, onCloseMenu }) => {
   return (
     <Model isVisible={isVisible} onCloseMenu={onCloseMenu} center>
-      <div className="bg-[#eee] rounded">
+      <div className="bg-[#eee] rounded w-[400px]">
         <div className="p-[15px] flex items-center justify-between w-full sm:min-w-[400px]">
           <div className="text-[16px] text-[#3b5160] font-black">
             Change Exposure Limit

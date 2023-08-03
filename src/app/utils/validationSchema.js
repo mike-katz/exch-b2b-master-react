@@ -51,13 +51,13 @@ export const forgotPasswordSchema = Yup.object().shape({
 
 export const addPlayerSchema = Yup.object().shape({
   username: Yup.string().required("Please enter username"),
-  exposer: Yup.number().required("Please enter exposer"),
-  commission: Yup.number().required("Please enter commission"),
+  exposure: Yup.number().required("Please enter exposer"),
+  commision: Yup.number().required("Please enter commission"),
   password: Yup.string().required("Please enter new password"),
   confirm_password: Yup.string()
     .required("Please enter confirm password")
     .oneOf(
-      [Yup.ref("new_password"), null],
+      [Yup.ref("password"), null],
       "Yor new password and confirm password should be same"
     ),
 });
@@ -71,7 +71,7 @@ export const addPlayerMasterSchema = Yup.object().shape({
   confirm_password: Yup.string()
     .required("Please enter confirm password")
     .oneOf(
-      [Yup.ref("new_password"), null],
+      [Yup.ref("password"), null],
       "Yor new password and confirm password should be same"
     ),
 });

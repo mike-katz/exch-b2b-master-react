@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaCircle,
   FaDownload,
   FaPencilAlt,
-  FaPlusSquare,
   FaUndo,
   FaUserPlus,
 } from "react-icons/fa";
@@ -13,13 +12,46 @@ import CreditRefModal from "./CreditRefModal";
 import ChangeStatusModal from "./ChangeStatusModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
 import AddPlayerModal from "./AddPlayerModal";
+import {
+  getDownLineUserData,
+  getMyBalanceData,
+} from "../../../redux/services/DownLineUser";
 
-const Dashboard = () => {
+const DownLineUser = () => {
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
-  const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
+  // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
   const [isVisibleEditStatus, setIsVisibleEditStatus] = useState(false);
   const [isVisibleExposureLimit, setIsVisibleExposureLimit] = useState(false);
   const [isVisibleAddPlayer, setIsVisibleAddPlayer] = useState(false);
+  const [pageData, setPageData] = useState(false);
+  const [myBalance, setMyBalance] = useState([]);
+
+  useEffect(() => {
+    getDownLineUser();
+    getMyBalance();
+  }, []);
+
+  const getDownLineUser = async () => {
+    const payload = {
+      page: 1,
+      limit: 10,
+    };
+    const data = await getDownLineUserData(payload);
+
+    if (data) {
+      setPageData(data?.data?.results);
+    }
+  };
+
+  const getMyBalance = async () => {
+    const data = await getMyBalanceData();
+
+    if (data) {
+      setMyBalance(data?.data);
+    }
+  };
+
+  console.log({ pageData, myBalance });
 
   const onClickEditCreditRef = () => {
     setIsVisibleEditCreditRef(true);
@@ -29,9 +61,9 @@ const Dashboard = () => {
     setIsVisibleEditCreditRef(false);
   };
 
-  const onClickBalance = () => {
-    setIsEnableBalanceView(!isEnableBalanceView);
-  };
+  // const onClickBalance = () => {
+  //   setIsEnableBalanceView(!isEnableBalanceView);
+  // };
 
   const onClickEditStatus = () => {
     setIsVisibleEditStatus(true);
@@ -113,36 +145,39 @@ const Dashboard = () => {
         <div className="col-span-2 px-2 flex flex-col justify-center">
           <div className="text-[12px] text-[#9b9b9b]">Total Balance</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR 1,119,779.92
+            IR {myBalance?.totalBalance}
           </div>
         </div>
         <div className="col-span-2 px-2 flex flex-col justify-center border-l border-[#7e97a7]">
           <div className="text-[12px] text-[#9b9b9b]">Total Exposure</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR <span className="text-[#d0021b]">(1,119,779.92)</span>
+            IR{" "}
+            <span className="text-[#d0021b]">({myBalance?.totalExposure})</span>
           </div>
         </div>
         <div className="col-span-2 px-2 flex flex-col justify-center border-l border-[#7e97a7]">
           <div className="text-[12px] text-[#9b9b9b]">Total Avail. bal.</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR 752,903.92
+            IR {myBalance?.totalBalance + myBalance?.totalBalance}
           </div>
         </div>
         <div className="col-span-2 px-2 flex flex-col justify-center border-l border-[#7e97a7]">
           <div className="text-[12px] text-[#9b9b9b]">Balance</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR 3,387,364.67
+            IR {myBalance?.balance}
           </div>
         </div>
         <div className="col-span-2 px-2 flex flex-col justify-center border-l border-[#7e97a7]">
           <div className="text-[12px] text-[#9b9b9b]">Available Balance</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR 4,140,268.59
+            IR {myBalance?.balance + myBalance?.totalExposure}
           </div>
         </div>
         <div className="col-span-2 px-2 flex flex-col justify-center border-l border-[#7e97a7]">
           <div className="text-[12px] text-[#9b9b9b]">Total Users</div>
-          <div className="text-[#243a48] text-[15px] font-black">2525</div>
+          <div className="text-[#243a48] text-[15px] font-black">
+            {myBalance?.totalUser}
+          </div>
         </div>
       </div>
       <table className="w-full min-w-max table-auto text-left">
@@ -181,11 +216,11 @@ const Dashboard = () => {
             </td>
             <td>
               <div
-                className="flex items-center underline text-[#2789ce] cursor-pointer"
-                onClick={onClickBalance}
+                className="flex items-center"
+                // onClick={onClickBalance}
               >
                 13.00
-                <FaPlusSquare className="ml-1" size={15} />
+                {/* <FaPlusSquare className="ml-1" size={15} /> */}
               </div>
             </td>
 
@@ -235,7 +270,7 @@ const Dashboard = () => {
               </div>
             </td>
           </tr>
-          {isEnableBalanceView && (
+          {/* {isEnableBalanceView && (
             <tr className="">
               <td className="bg-[#e2e8ed]" colSpan="3"></td>
               <td className="bg-[#e2e8ed] p-0" colSpan="6">
@@ -330,7 +365,7 @@ const Dashboard = () => {
                 </table>
               </td>
             </tr>
-          )}
+          )} */}
         </tbody>
       </table>
       <div className="flex justify-center  my-7">
@@ -391,4 +426,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DownLineUser;

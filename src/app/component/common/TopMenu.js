@@ -10,11 +10,13 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import MobileMenu from "./MobileMenu";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/actions/persistAction";
 
 const TopMenu = () => {
   const [activeMenu, setActiveMenu] = useState("/");
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
-  console.log({ activeMenu });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const onClickMenu = (menu) => {
@@ -31,6 +33,10 @@ const TopMenu = () => {
 
   const onOpenDrawer = () => {
     setIsVisibleDrawer(true);
+  };
+
+  const onClickLogout = () => {
+    dispatch(logoutUser());
   };
 
   return (
@@ -179,7 +185,10 @@ const TopMenu = () => {
             </span>
             GMT+5:30
           </div> */}
-          <div className="text-[12px] text-[#000000] font-extrabold border-l border-r border-[rgba(0,0,0,.2)] px-2 ml-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer">
+          <div
+            onClick={onClickLogout}
+            className="text-[12px] text-[#000000] font-extrabold border-l border-r border-[rgba(0,0,0,.2)] px-2 ml-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer"
+          >
             Logout
             <FaSignOutAlt className="ml-1" color="#000000" />
           </div>

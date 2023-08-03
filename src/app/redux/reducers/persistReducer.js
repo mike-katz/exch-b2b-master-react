@@ -8,10 +8,25 @@ import {
 } from "../actions/persistAction";
 
 const initialState = {
-  isLoggedIn: true,
+  isLoggedIn: false,
   userData: null,
   loginModalVisibleState: false,
   signupModalVisibleState: false,
+  themeColor: {
+    bottomImageContainerBg: "#6D081D",
+    faviconUrl:
+      "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
+    logoUrl:
+      "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
+    commonActiveColor: "#C10930",
+    commonBgColor: "#343435",
+    commonHeighLightColor: "#6D081D",
+    commonTextColor: "#FFFFFF",
+    loginSignupBg: "#005098",
+    loginSignupText: "#FFFFFF",
+    topHeaderBgColor: "#292525",
+    topHeaderTextColor: "#FFFFFF",
+  },
 };
 
 export default (state = initialState, action) => {
@@ -28,7 +43,7 @@ export default (state = initialState, action) => {
       };
 
     case LOGOUT_USER:
-      return { ...initialState };
+      return { ...state, isLoggedIn: false, token: false, userData: null };
 
     case LOGIN_MODAL_VISIBLE_START:
       return { ...state, loginModalVisibleState: true };

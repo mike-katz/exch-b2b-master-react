@@ -4,12 +4,24 @@ import { Form, Formik } from "formik";
 import Model from "../../../component/common/Modal";
 import AppCommonInput from "../../../component/form/AppCommonInput";
 import { addPlayerSchema } from "../../../utils/validationSchema";
+import { registerUser } from "../../../redux/services/DownLineUser";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
-  const onClickAddPlayer = () => {};
+  const onClickAddPlayer = async (values) => {
+    const payload = {
+      ...values,
+      confirm_password: undefined,
+      roles: "User",
+    };
+    const data = await registerUser(payload);
+    console.log({ data });
+    if (data) {
+      onCloseMenu();
+    }
+  };
   return (
     <Model isVisible={isVisible} onCloseMenu={onCloseMenu} center>
-      <div className="bg-[#eee] rounded">
+      <div className="bg-[#eee] rounded w-[400px]">
         <div className="p-[15px] flex items-center justify-between min-w-[300px]">
           <div className="text-[16px] text-[#3b5160] font-black">
             Add Player
@@ -25,11 +37,11 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
           enableReinitialize
           initialValues={{
             username: "",
-            exposer: "",
-            commission: "",
+            exposure: "",
+            commision: "",
             password: "",
             confirm_password: "",
-            phone: "",
+            mobile: "",
           }}
           validationSchema={addPlayerSchema}
           onSubmit={onClickAddPlayer}
@@ -37,6 +49,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
         >
           {({ values, errors, touched, handleSubmit }) => (
             <Form>
+              {console.log({ values, errors })}
               <div className="border-b border-t border-[#ccc] px-[40px] pt-[15px]">
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
@@ -53,7 +66,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                   </div>
                   <div className="col-span-9 flex">
                     <AppCommonInput
-                      name="phone"
+                      name="mobile"
                       placeholder="Enter"
                       type="number"
                     />
@@ -66,7 +79,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                   </div>
                   <div className="col-span-9 flex">
                     <AppCommonInput
-                      name="exposer"
+                      name="exposure"
                       placeholder="Enter"
                       type="number"
                     />
@@ -79,7 +92,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                   </div>
                   <div className="col-span-9 flex">
                     <AppCommonInput
-                      name="commission"
+                      name="commision"
                       placeholder="Enter"
                       type="number"
                     />

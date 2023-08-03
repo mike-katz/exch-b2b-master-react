@@ -12,22 +12,6 @@ export const getLogin = async (payload) => {
   return data;
 };
 
-export const registerUser = async (payload) => {
-  const { data } = await Rest.post(
-    APIEndpoint.register,
-    payload,
-    false,
-    {},
-    true
-  );
-
-  if (data) {
-    showToastMessage(data?.message, 200);
-  }
-
-  return data;
-};
-
 export const verifyRegisterOTP = async (payload) => {
   const { data } = await Rest.post(
     APIEndpoint.verifyOTP,

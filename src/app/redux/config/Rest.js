@@ -12,6 +12,7 @@ axios.defaults.headers = {
 export default class Rest {
   static async get(url, publicToken = false) {
     const { persist } = store.getState();
+    console.log({ persist });
     const token = persist?.token;
 
     const instance = axios.create({
@@ -38,7 +39,7 @@ export default class Rest {
           showToastMessage(error?.response?.data?.message, 500);
           return false;
         } else {
-          console.clear();
+          // console.clear();
           return false;
         }
       });
@@ -52,6 +53,7 @@ export default class Rest {
     publicToken = false
   ) {
     const { persist } = store.getState();
+    console.log({ persist, publicToken });
     const token = persist?.token;
 
     const instance = axios.create({
@@ -72,15 +74,15 @@ export default class Rest {
       })
       .catch((error) => {
         if (error?.response?.status === 403) {
-          console.clear();
+          // console.clear();
           // store.dispatch(logoutUser());
           return false;
         } else if (error?.response?.data?.message) {
-          console.clear();
+          // console.clear();
           showToastMessage(error?.response?.data?.message, 500);
           return false;
         } else {
-          console.clear();
+          // console.clear();
           return false;
         }
       });
@@ -93,6 +95,7 @@ export default class Rest {
     publicToken = false
   ) {
     const { persist } = store.getState();
+    console.log({ persist });
     const token = persist?.token;
 
     const instance = axios.create({
