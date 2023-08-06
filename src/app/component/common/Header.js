@@ -1,7 +1,10 @@
 import React from "react";
 import { FiRotateCcw } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import { amountFormate, roleStatusWithoutColor } from "../../utils/helper";
 
 const Header = () => {
+  const { userData } = useSelector((state) => state?.persist);
   return (
     <div
       style={{ backgroundImage: "linear-gradient(#353535, #111111)" }}
@@ -15,10 +18,10 @@ const Header = () => {
         <div className="flex sm:flex-row flex-col items-center justify-center">
           <div className="flex items-center">
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] uppercase font-bold">
-              ma
+              {roleStatusWithoutColor(userData?.roles?.toString())}
             </div>
             <div className="text-[#ecad17] text-[12px] font-black ml-2">
-              skyid0080
+              {userData?.username}
             </div>
           </div>
           <div className="flex items-center ml-4">
@@ -26,7 +29,7 @@ const Header = () => {
               main
             </div>
             <div className="text-[#ecad17] text-[12px] font-black ml-2">
-              IR 4,186,782.10
+              IR {amountFormate(userData?.balance)}
             </div>
           </div>
           <div

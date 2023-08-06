@@ -1,7 +1,26 @@
-import React from "react";
-import Pagination from "../../../component/common/Pagination";
+import React, { useEffect, useState } from "react";
+// import Pagination from "../../../component/common/Pagination";
+import { getActivityLogData } from "../../../redux/services/DownLineUser";
+import Loader from "../../../component/common/Loader";
 
 const ActivityLog = () => {
+  const [pageData, setPageData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    getUserDetail();
+  }, []);
+
+  const getUserDetail = async () => {
+    setIsLoading(true);
+    const data = await getActivityLogData();
+
+    if (data?.data) {
+      setPageData(data?.data);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div>
       <div className="text-[#243a48] text-[16px] font-black">Activity Log</div>
@@ -17,27 +36,41 @@ const ActivityLog = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="">2023-07-17 17:50:06</td>
-            <td className="text-right text-[#508d0e]">Login Success</td>
-            <td className="text-right">152.58.34.25</td>
-            <td className="text-right">Reliance Jio Infocomm Limited</td>
-            <td className="text-right">Sikka, Gujarat, IN</td>
-            <td className="text-right">Browser</td>
-          </tr>
-          <tr>
-            <td className="">2023-07-17 17:50:06</td>
-            <td className="text-right text-[#508d0e]">Login Success</td>
-            <td className="text-right">152.58.34.25</td>
-            <td className="text-right">Reliance Jio Infocomm Limited</td>
-            <td className="text-right">Sikka, Gujarat, IN</td>
-            <td className="text-right">Browser (mobile)</td>
-          </tr>
+          {isLoading && (
+            <tr>
+              <td className="h-[200px] text-center" colSpan={6}>
+                <Loader color={"#FEBA11"} size={25} />
+              </td>
+            </tr>
+          )}
+          {!isLoading && pageData?.length === 0 && (
+            <tr>
+              <td
+                className="h-[200px] text-center text-[16px] font-black"
+                colSpan={6}
+              >
+                No Record Found
+              </td>
+            </tr>
+          )}
+          {!isLoading &&
+            pageData?.map((item, index) => {
+              return (
+                <tr key={index}>
+                  <td className="">2023-07-17 17:50:06</td>
+                  <td className="text-right text-[#508d0e]">Login Success</td>
+                  <td className="text-right">152.58.34.25</td>
+                  <td className="text-right">Reliance Jio Infocomm Limited</td>
+                  <td className="text-right">Sikka, Gujarat, IN</td>
+                  <td className="text-right">Browser</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
-      <div className="flex justify-center  my-7">
+      {/* <div className="flex justify-center  my-7">
         <Pagination itemsPerPage={4} />
-      </div>
+      </div> */}
     </div>
   );
 };

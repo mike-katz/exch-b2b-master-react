@@ -3,8 +3,11 @@ import AccountSummary from "./AccountSummary";
 import AccountStatement from "./AccountStatement";
 import Profile from "./Profile";
 import ActivityLog from "./ActivityLog";
+import { useSelector } from "react-redux";
+import { roleStatus } from "../../../utils/helper";
 
 const MyAccount = () => {
+  const { userData } = useSelector((state) => state?.persist);
   const [activeTab, setActiveTab] = useState(1);
 
   const onClickTab = (tab) => {
@@ -14,11 +17,9 @@ const MyAccount = () => {
   return (
     <div className="px-2 mt-2">
       <div className="border border-[#7e97a7] w-fit rounded px-[15px] flex items-center">
-        <div className="bg-[#85b352] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
-          MA
-        </div>
+        {roleStatus(userData?.roles?.toString())}
         <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
-          skyid0080
+          {userData?.username}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-4 mt-4">
@@ -82,7 +83,7 @@ const MyAccount = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-12 lg:col-span-10">
+        <div className="col-span-12 lg:col-span-10 py-4">
           {activeTab === 1 && <AccountSummary />}
           {activeTab === 2 && <AccountStatement />}
           {activeTab === 3 && <Profile />}

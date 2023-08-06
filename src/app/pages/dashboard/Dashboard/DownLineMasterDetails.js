@@ -12,7 +12,7 @@ import ActivityLog from "./ActivityLog";
 const DownLineMasterDetails = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(1);
-  const { activeName } = useParams();
+  const { activeName, userId } = useParams();
 
   // const onClickTab = (tab) => {
   //   setActiveTab(tab);
@@ -23,17 +23,19 @@ const DownLineMasterDetails = () => {
   }, [activeName]);
 
   const onClickMenu = (id) => {
-    navigate(`/down-list-master/details/${id}`);
+    navigate(`/down-list-master/details/${id}/${userId}`);
   };
 
   return (
     <div className="px-2 mt-2">
-      <div className="border border-[#7e97a7] w-fit rounded px-[15px] flex items-center">
-        <div className="bg-[#85b352] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
-          MA
-        </div>
-        <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
-          skyid0080
+      <div className="flex items-center border border-[#7e97a7] w-fit">
+        <div className="w-fit rounded px-[15px] flex items-center agent_path-L">
+          <div className="bg-[#85b352] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
+            MA
+          </div>
+          <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
+            skyid0080
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-12 gap-4 mt-4">
@@ -109,7 +111,7 @@ const DownLineMasterDetails = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-12 lg:col-span-10">
+        <div className="col-span-12 lg:col-span-10 pb-4">
           {activeTab === "account-summery" && <AccountSummary />}
           {activeTab === "beating-history" && <BettingHistory />}
           {activeTab === "beating-profit-lost" && <BettingProfitLost />}

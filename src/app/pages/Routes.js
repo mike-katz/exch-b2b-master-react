@@ -8,6 +8,7 @@ import DownLineMasterDetails from "./dashboard/Dashboard/DownLineMasterDetails";
 import Banking from "./dashboard/Banking";
 import DownListMaster from "./dashboard/Dashboard";
 import DownLineUser from "./dashboard/DownListUser";
+import CreditRefLogs from "./dashboard/CreditRefLogs";
 
 const CustomRoutes = () => {
   return (
@@ -45,10 +46,18 @@ const CustomRoutes = () => {
         }
       />
       <Route
-        path="/down-list-master/details/:activeName"
+        path="/down-list-master/details/:activeName/:userId"
         element={
           <PrivateRoute>
             <DownLineMasterDetails />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/credit-ref-logs/:userId"
+        element={
+          <PrivateRoute>
+            <CreditRefLogs />
           </PrivateRoute>
         }
       />

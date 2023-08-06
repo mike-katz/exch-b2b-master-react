@@ -2,9 +2,9 @@ import React from "react";
 import { FaWindowClose } from "react-icons/fa";
 import { Form, Formik } from "formik";
 import Model from "../../../component/common/Modal";
-import AppCommonInput from "../../../component/form/AppCommonInput";
 import { addPlayerSchema } from "../../../utils/validationSchema";
 import { registerUser } from "../../../redux/services/DownLineUser";
+import CommonInput from "../../../component/form/CommonInput";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
   const onClickAddPlayer = async (values) => {
@@ -14,7 +14,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
       roles: "User",
     };
     const data = await registerUser(payload);
-    console.log({ data });
+
     if (data) {
       onCloseMenu();
     }
@@ -38,7 +38,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
           initialValues={{
             username: "",
             exposure: "",
-            commision: "",
+            commission: "",
             password: "",
             confirm_password: "",
             mobile: "",
@@ -49,14 +49,13 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
         >
           {({ values, errors, touched, handleSubmit }) => (
             <Form>
-              {console.log({ values, errors })}
               <div className="border-b border-t border-[#ccc] px-[40px] pt-[15px]">
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
                     Username
                   </div>
                   <div className="col-span-9 flex">
-                    <AppCommonInput name="username" placeholder="Enter" />
+                    <CommonInput name="username" placeholder="Enter" />
                     <div className="text-[red] text-[18px] ml-2">*</div>
                   </div>
                 </div>
@@ -65,7 +64,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                     Phone
                   </div>
                   <div className="col-span-9 flex">
-                    <AppCommonInput
+                    <CommonInput
                       name="mobile"
                       placeholder="Enter"
                       type="number"
@@ -78,7 +77,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                     Exposer
                   </div>
                   <div className="col-span-9 flex">
-                    <AppCommonInput
+                    <CommonInput
                       name="exposure"
                       placeholder="Enter"
                       type="number"
@@ -91,8 +90,8 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                     Commission
                   </div>
                   <div className="col-span-9 flex">
-                    <AppCommonInput
-                      name="commision"
+                    <CommonInput
+                      name="commission"
                       placeholder="Enter"
                       type="number"
                     />
@@ -104,7 +103,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                     Password
                   </div>
                   <div className="col-span-9 flex">
-                    <AppCommonInput
+                    <CommonInput
                       name="password"
                       placeholder="Enter"
                       type="password"
@@ -117,7 +116,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                     Confirm Password
                   </div>
                   <div className="col-span-9 flex">
-                    <AppCommonInput
+                    <CommonInput
                       name="confirm_password"
                       placeholder="Enter"
                       type="password"
@@ -126,11 +125,11 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
                   </div>
                 </div>
               </div>
-              <div
-                onClick={handleSubmit}
-                className="flex items-center justify-center p-[15px]"
-              >
-                <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]">
+              <div className="flex items-center justify-center p-[15px]">
+                <button
+                  onClick={handleSubmit}
+                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+                >
                   Create
                 </button>
               </div>

@@ -3,7 +3,7 @@ import { FaWindowClose } from "react-icons/fa";
 import { Form, Formik } from "formik";
 import Model from "../../../component/common/Modal";
 import { changePasswordSchema } from "../../../utils/validationSchema";
-import AppCommonInput from "../../../component/form/AppCommonInput";
+import CommonInput from "../../../component/form/CommonInput";
 
 const ChangePasswordModal = ({ isVisible, onCloseMenu }) => {
   const onSubmitNewPassword = async (values) => {
@@ -49,55 +49,37 @@ const ChangePasswordModal = ({ isVisible, onCloseMenu }) => {
             <Form>
               <div className="border-b border-t border-[#ccc] px-[40px] pt-[15px]">
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Password
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      isRequired
-                      error={errors?.new_password}
-                      type="password"
-                      // labelText={"Old Password"}
-                      name="old_password"
-                      id="old_password"
-                      // label="Old Password:"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    error={errors?.new_password}
+                    type="password"
+                    label={"Password"}
+                    name="old_password"
+                    id="old_password"
+                    placeholder="Enter"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    New Password
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      isRequired
-                      error={errors?.new_password}
-                      type="password"
-                      // labelText={"Old Password"}
-                      name="new_password"
-                      id="new_password"
-                      // label="Old Password:"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    error={errors?.new_password}
+                    type="password"
+                    label="New Password"
+                    name="new_password"
+                    id="new_password"
+                    placeholder="Enter"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Confirm Password
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      isRequired
-                      error={errors?.new_password}
-                      type="password"
-                      // labelText={"Old Password"}
-                      name="confirm_password"
-                      id="confirm_password"
-                      // label="Old Password:"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    error={errors?.new_password}
+                    type="password"
+                    label="Confirm Password"
+                    name="confirm_password"
+                    id="confirm_password"
+                    placeholder="Enter"
+                  />
                 </div>
               </div>
             </Form>

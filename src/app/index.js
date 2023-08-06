@@ -16,6 +16,11 @@ import { useSelector } from "react-redux";
 const MainApp = () => {
   const { isLoggedIn } = useSelector((state) => state?.persist);
 
+  // const DISABLE_MENU_ROUTE_LIST = [""];
+  // useEffect(() => {
+  //   setRouteList()
+  // }, [location]);
+
   return (
     <div
       style={{
@@ -37,7 +42,8 @@ const MainApp = () => {
           theme="light"
         />
         <div>
-          {isLoggedIn && (
+          {!isLoggedIn ||
+          window.location?.pathname?.includes("/credit-ref-logs/") ? null : (
             <>
               <Header />
               <TopMenu />

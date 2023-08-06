@@ -266,3 +266,10 @@ button[disabled] {
   opacity: 0.5;
   cursor: no-drop;
 }
+
+.agent_path-L {
+  padding: 0 15px 0 10px;
+  background-image: url('https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ag_path_arrow.png');
+  background-position: right;
+  background-repeat: no-repeat;
+}

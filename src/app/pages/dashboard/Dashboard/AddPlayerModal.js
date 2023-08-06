@@ -1,29 +1,40 @@
-import React from "react";
-import { FaWindowClose } from "react-icons/fa";
+import React, { useState } from "react";
 import { Form, Formik } from "formik";
+import { FaWindowClose } from "react-icons/fa";
 import Model from "../../../component/common/Modal";
-import AppCommonInput from "../../../component/form/AppCommonInput";
+import {
+  ADMIN_USER_TYPE,
+  MASTER_USER_TYPE,
+  SUPPER_USER_TYPE,
+  WHITE_LABEL_USER_TYPE,
+} from "../../../utils/dropdown";
 import { addPlayerMasterSchema } from "../../../utils/validationSchema";
-import AppSelect from "../../../component/form/AppSelect";
-import { ADMIN_USER_TYPE } from "../../../utils/dropdown";
+import { registerUser } from "../../../redux/services/DownLineUser";
+import Loader from "../../../component/common/Loader";
+import CommonInput from "../../../component/form/CommonInput";
+import CommonSelect from "../../../component/form/CommonSelect";
+import { useSelector } from "react-redux";
 
-const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
-  const onClickAddPlayer = (values) => {
+const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
+  const { userData } = useSelector((state) => state?.persist);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const onClickAddPlayer = async (values) => {
     const payload = {
-      username: "admin",
-      password: "Admin@123",
-      mobile: "1234567890",
-      ip: "::0",
-      exposure: 0,
-      commision: 0,
-      roles: "",
-
-      exposer: "",
-      commission: "",
-      phone: values?.mobile,
+      ...values,
+      confirm_password: undefined,
     };
-    console.log({ payload });
+
+    setIsLoadingSubmit(true);
+    const data = await registerUser(payload);
+
+    if (data) {
+      onCloseMenu();
+      onRefreshTable();
+    }
+
+    setIsLoadingSubmit(false);
   };
+
   return (
     <Model isVisible={isVisible} onCloseMenu={onCloseMenu} center>
       <div className="bg-[#eee] rounded w-[400px]">
@@ -42,12 +53,12 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
           enableReinitialize
           initialValues={{
             username: "",
-            exposer: "",
+            exposure: "",
             commission: "",
             password: "",
             confirm_password: "",
-            phone: "",
-            user_type: "",
+            mobile: "",
+            roles: "",
           }}
           validationSchema={addPlayerMasterSchema}
           onSubmit={onClickAddPlayer}
@@ -57,98 +68,87 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
             <Form>
               <div className="border-b border-t border-[#ccc] px-[40px] pt-[15px]">
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Username
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput name="username" placeholder="Enter" />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    label="Username"
+                    name="username"
+                    placeholder="Enter"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    User Type
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppSelect
-                      data={ADMIN_USER_TYPE}
-                      name="user_type"
-                      placeholder="Select user type"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonSelect
+                    isRequired
+                    label="User Type"
+                    data={
+                      userData?.roles?.toString() === "Admin"
+                        ? ADMIN_USER_TYPE
+                        : userData?.roles?.toString() === "WhiteLabel"
+                        ? WHITE_LABEL_USER_TYPE
+                        : userData?.roles?.toString() === "Super"
+                        ? SUPPER_USER_TYPE
+                        : userData?.roles?.toString() === "Master"
+                        ? MASTER_USER_TYPE
+                        : userData?.roles?.toString() === "Agent"
+                        ? []
+                        : []
+                    }
+                    name="roles"
+                    placeholder="Select user type"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Phone
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      name="phone"
-                      placeholder="Enter"
-                      type="number"
-                    />
-                    <div className="ml-4"></div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    label="Phone"
+                    name="mobile"
+                    placeholder="Enter"
+                    type="number"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Exposer
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      name="exposer"
-                      placeholder="Enter"
-                      type="number"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    label="Exposer"
+                    name="exposure"
+                    placeholder="Enter"
+                    type="number"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Commission
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      name="commission"
-                      placeholder="Enter"
-                      type="number"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    label="Commission"
+                    name="commission"
+                    placeholder="Enter"
+                    type="number"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Password
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      name="password"
-                      placeholder="Enter"
-                      type="password"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    label="Password"
+                    name="password"
+                    placeholder="Enter"
+                    type="password"
+                  />
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
-                  <div className="col-span-3 text-[12px] text-[#1e1e1e] font-semibold">
-                    Confirm Password
-                  </div>
-                  <div className="col-span-9 flex">
-                    <AppCommonInput
-                      name="confirm_password"
-                      placeholder="Enter"
-                      type="password"
-                    />
-                    <div className="text-[red] text-[18px] ml-2">*</div>
-                  </div>
+                  <CommonInput
+                    isRequired
+                    label="Confirm Password"
+                    name="confirm_password"
+                    placeholder="Enter"
+                    type="password"
+                  />
                 </div>
               </div>
-              <div
-                onClick={handleSubmit}
-                className="flex items-center justify-center p-[15px]"
-              >
-                <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]">
+              <div className="flex items-center justify-center p-[15px]">
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+                >
+                  {isLoadingSubmit && <Loader color="#feba11" size={10} />}
                   Create
                 </button>
               </div>

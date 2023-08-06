@@ -6,11 +6,10 @@ import { Helmet } from "react-helmet";
 const color = store.getState().persist.themeColor;
 // const { isLoggedIn } = store.getState().persist;
 // const data = store.getState().persist;
-// console.log({ data });
 
 function App() {
   const isLoading = false;
-  // console.log({ isLoggedIn });
+
   return (
     <PersistGate loading={isLoading} persistor={persistor}>
       <Helmet>

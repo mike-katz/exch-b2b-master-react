@@ -39,6 +39,8 @@ export default (state = initialState, action) => {
         userData: {
           username: action.data?.username,
           mobile: action.data?.mobile,
+          balance: action.data?.balance,
+          roles: action.data?.roles,
         },
       };
 
