@@ -109,11 +109,11 @@ const Login = () => {
             <div className="col-span-12 md:col-span-6 h-full md:flex hidden relative justify-center items-center rounded-lg">
               <div className="blured"></div>
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/two-people-stadium-with-their-arms-raised_492154-11927.jpg"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/two-people-stadium-with-their-arms-raised_492154-11927.jpg"
                 className="h-fit w-full rounded-r-lg"
               />
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png"
                 className="absolute z-[4] w-[200px]"
               />
             </div>

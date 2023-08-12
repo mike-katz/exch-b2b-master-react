@@ -43,7 +43,8 @@ const MainApp = () => {
         />
         <div>
           {!isLoggedIn ||
-          window.location?.pathname?.includes("/credit-ref-logs/") ? null : (
+          window.location?.pathname?.includes("/credit-ref-logs/") ||
+          window.location?.pathname?.includes("/banking-logs/") ? null : (
             <>
               <Header />
               <TopMenu />

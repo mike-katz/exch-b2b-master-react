@@ -54,11 +54,11 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
             >
               <div className="flex flex-col items-center justify-center">
                 <img
-                  // src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_active.png"
+                  // src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active.png"
                   src={
                     activeStatus === "active"
-                      ? "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_active_open.png"
-                      : "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_active_gray.png"
+                      ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active_open.png"
+                      : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active_gray.png"
                   }
                   className="h-[33px] w-[33px]"
                 />
@@ -77,10 +77,10 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
                 <img
                   src={
                     activeStatus === "suspend"
-                      ? "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_open.png"
-                      : "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend.png"
+                      ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_open.png"
+                      : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend.png"
                   }
-                  // src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_gray.png"
+                  // src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_gray.png"
                   className="h-[33px] w-[33px]"
                 />
                 <div>Suspend</div>
@@ -98,10 +98,10 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
                 <img
                   src={
                     activeStatus === "locked"
-                      ? "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_open.png"
-                      : "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_lock.png"
+                      ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_open.png"
+                      : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_lock.png"
                   }
-                  // src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_gray.png"
+                  // src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_gray.png"
                   className="h-[33px] w-[33px]"
                 />
                 <div>Locked</div>

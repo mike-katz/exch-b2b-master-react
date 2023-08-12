@@ -16,4 +16,6 @@ export default class APIEndpoint {
   static updateStatus = "api/user/update-status";
   static editExposureLimit = "api/user/change-exposure";
   static exportCSVFile = "api/user/export";
+  static bankingTransaction = "api/banking/transaction";
+  static bankingTransactionHistory = "api/banking/transaction-history";
 }

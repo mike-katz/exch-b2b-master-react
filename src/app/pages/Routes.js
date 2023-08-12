@@ -1,14 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-// import Dashboard from "./dashboard/Dashboard";
-import MyAccount from "./dashboard/MyAccount";
-import Login from "./auth/Login";
 import { AuthRoute, PrivateRoute } from "../component/common/PrivateRoute";
-import DownLineMasterDetails from "./dashboard/Dashboard/DownLineMasterDetails";
-import Banking from "./dashboard/Banking";
-import DownListMaster from "./dashboard/Dashboard";
-import DownLineUser from "./dashboard/DownListUser";
+import Login from "./auth/Login";
+import BankingUser from "./dashboard/Banking/BankingUser";
 import CreditRefLogs from "./dashboard/CreditRefLogs";
+import DownListMaster from "./dashboard/Dashboard";
+import DownLineMasterDetails from "./dashboard/Dashboard/DownLineMasterDetails";
+import DownLineUser from "./dashboard/DownListUser";
+import MyAccount from "./dashboard/MyAccount";
+import BankingMaster from "./dashboard/Banking/BankingMaster";
+import BankingLogs from "./dashboard/Banking/BankingLogs";
 
 const CustomRoutes = () => {
   return (
@@ -23,6 +24,14 @@ const CustomRoutes = () => {
       />
       <Route
         path="/"
+        element={
+          <PrivateRoute>
+            <DownListMaster />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/down-list-master"
         element={
           <PrivateRoute>
             <DownListMaster />
@@ -62,10 +71,28 @@ const CustomRoutes = () => {
         }
       />
       <Route
-        path="/banking"
+        path="/banking-logs/:userId"
         element={
           <PrivateRoute>
-            <Banking />
+            <BankingLogs />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/banking-user"
+        element={
+          <PrivateRoute>
+            <BankingUser />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/banking-master"
+        element={
+          <PrivateRoute>
+            <BankingMaster />
           </PrivateRoute>
         }
       />

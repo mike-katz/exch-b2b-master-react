@@ -312,7 +312,7 @@ const DownLineUser = () => {
                         }}
                         className="h-[26px] w-[26px] cursor-pointer ml-1"
                       >
-                        <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
+                        <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
                       </div>
                       <div
                         onClick={() => {
@@ -320,13 +320,13 @@ const DownLineUser = () => {
                         }}
                         className="h-[26px] w-[26px] cursor-pointer ml-1"
                       >
-                        <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
+                        <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
                       </div>
                       <div
                         className="h-[26px] w-[26px] cursor-pointer ml-1"
                         onClick={onClickEditStatus}
                       >
-                        <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
+                        <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
                       </div>
                       <div
                         onClick={() => {
@@ -334,7 +334,7 @@ const DownLineUser = () => {
                         }}
                         className="h-[26px] w-[26px] cursor-pointer ml-1"
                       >
-                        <img src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/person.png" />
+                        <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/person.png" />
                       </div>
                     </div>
                   </td>
@@ -351,7 +351,7 @@ const DownLineUser = () => {
           <div className="flex justify-end container">
             <div className="ml-1 flex items-center mr-2">
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/bank.png"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/bank.png"
                 className="h-[26px] w-[26px]"
               />
               <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
@@ -360,7 +360,7 @@ const DownLineUser = () => {
             </div>
             <div className="ml-1 flex items-center mr-2">
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/p_l.png"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/p_l.png"
                 className="h-[26px] w-[26px]"
               />
               <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
@@ -369,7 +369,7 @@ const DownLineUser = () => {
             </div>
             <div className="ml-1 flex items-center mr-2">
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png"
                 className="h-[26px] w-[26px]"
               />
               <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
@@ -378,7 +378,7 @@ const DownLineUser = () => {
             </div>
             <div className="ml-1 flex items-center mr-2">
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/status.png"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png"
                 className="h-[26px] w-[26px]"
               />
               <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">
@@ -387,7 +387,7 @@ const DownLineUser = () => {
             </div>
             <div className="ml-1 flex items-center mr-2">
               <img
-                src="https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/icons/person.png"
+                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/person.png"
                 className="h-[26px] w-[26px]"
               />
               <span className="text-[11px] whitespace-nowrap ml-1 text-[#000000]">

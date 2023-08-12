@@ -15,9 +15,9 @@ const initialState = {
   themeColor: {
     bottomImageContainerBg: "#6D081D",
     faviconUrl:
-      "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
+      "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
     logoUrl:
-      "https://exch-s3-react-dev-002.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
+      "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
     commonActiveColor: "#C10930",
     commonBgColor: "#343435",
     commonHeighLightColor: "#6D081D",

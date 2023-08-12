@@ -4,7 +4,7 @@ import Searching from "../../../component/form/Searching";
 
 const DATA = [1, 1, 1, 1];
 
-const Banking = () => {
+const BankingUser = () => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [pageSubmitData, setPageSubmitData] = useState([]);
@@ -287,4 +287,4 @@ const Banking = () => {
   );
 };
 
-export default Banking;
+export default BankingUser;
