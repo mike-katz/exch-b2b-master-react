@@ -46,17 +46,17 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
           <div className="flex items-center justify-around py-4 px-[5px]">
             <div
               onClick={() => {
-                onSelectStatus("active");
+                onSelectStatus("Active");
               }}
               className={`but_active disabled_button ${
-                activeStatus === "active" ? "active_open" : ""
+                activeStatus === "Active" ? "active_open" : ""
               }`}
             >
               <div className="flex flex-col items-center justify-center">
                 <img
                   // src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active.png"
                   src={
-                    activeStatus === "active"
+                    activeStatus === "Active"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active_open.png"
                       : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active_gray.png"
                   }
@@ -67,16 +67,16 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
             </div>
             <div
               onClick={() => {
-                onSelectStatus("suspend");
+                onSelectStatus("Suspend");
               }}
               className={`but_suspend ${
-                activeStatus === "suspend" ? "suspend_open" : ""
+                activeStatus === "Suspend" ? "suspend_open" : ""
               }`}
             >
               <div className="flex flex-col items-center justify-center">
                 <img
                   src={
-                    activeStatus === "suspend"
+                    activeStatus === "Suspend"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_open.png"
                       : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend.png"
                   }
@@ -88,16 +88,16 @@ const ChangeStatusModal = ({ isVisible, onCloseMenu }) => {
             </div>
             <div
               onClick={() => {
-                onSelectStatus("locked");
+                onSelectStatus("Lock");
               }}
               className={`but_locked ${
-                activeStatus === "locked" ? "locked_open" : ""
+                activeStatus === "Lock" ? "locked_open" : ""
               }`}
             >
               <div className="flex flex-col items-center justify-center">
                 <img
                   src={
-                    activeStatus === "locked"
+                    activeStatus === "Lock"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_open.png"
                       : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_lock.png"
                   }

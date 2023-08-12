@@ -7,23 +7,23 @@ import {
   FaUndo,
   FaUserPlus,
 } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
 import Searching from "../../../component/form/Searching";
-import CreditRefModal from "./CreditRefModal";
-import ChangeStatusModal from "./ChangeStatusModal";
-import EditExposureLimitModal from "./EditExposureLimitModal";
-import AddPlayerModal from "./AddPlayerModal";
-import { useNavigate } from "react-router-dom";
+import { updateBalance } from "../../../redux/actions/persistAction";
 import {
   exportCSVFileData,
   getDownLineMasterData,
   getMyBalanceData,
 } from "../../../redux/services/DownLineUser";
-import Loader from "../../../component/common/Loader";
-import { amountFormate, roleStatus } from "../../../utils/helper";
 import { USER_STATUS } from "../../../utils/dropdown";
-import { useDispatch, useSelector } from "react-redux";
-import { updateBalance } from "../../../redux/actions/persistAction";
+import { amountFormate, roleStatus } from "../../../utils/helper";
+import AddPlayerModal from "./AddPlayerModal";
+import ChangeStatusModal from "./ChangeStatusModal";
+import CreditRefModal from "./CreditRefModal";
+import EditExposureLimitModal from "./EditExposureLimitModal";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
@@ -256,6 +256,10 @@ const DownListMaster = () => {
   };
 
   const onClickUserManage = ({ role, _id }) => {
+    if (userData?.roles?.toString() === role) {
+      setActivePageId("");
+    }
+
     const customizeActivePageRole = [];
 
     let lastData = false;
@@ -289,6 +293,9 @@ const DownListMaster = () => {
 
     getDownLineMaster(payload);
   };
+
+  const currentStatusActive = userData?.status === "Active";
+  const findUser = pageData?.find((item) => item?.roles?.toString() === "User");
 
   return (
     <div className="relative px-2">
@@ -360,7 +367,12 @@ const DownListMaster = () => {
         <div className="hidden md:block md:col-span-6 lg:col-span-3"></div>
         <div className="col-span-6 md:col-span-3 lg:col-span-2 flex items-center justify-end">
           <button
-            onClick={onClickAddPlayer}
+            disabled={!currentStatusActive}
+            onClick={() => {
+              if (currentStatusActive) {
+                onClickAddPlayer();
+              }
+            }}
             className="common-button bg-[#FFFFFF] text-[#000000] rounded px-2 text-[12px] font-semibold flex items-center justify-center h-[31px] border border-[#cdcdcd]"
           >
             <FaUserPlus color="#000000" size={15} className="mr-1" /> Add Player
@@ -450,7 +462,7 @@ const DownListMaster = () => {
               <th className="text-right">Balance</th>
               <th className="text-right">Exposure</th>
               <th className="text-right">Avail. bal.</th>
-              <th className="text-right">Exposure Limit</th>
+              {findUser ? <th className="text-right">Exposure Limit</th> : null}
               <th className="text-right">Ref. P/L</th>
               <th className="text-right">Status</th>
               <th className="text-right">Action</th>
@@ -486,26 +498,42 @@ const DownListMaster = () => {
                         className={`flex items-center ${
                           item?.roles?.toString() === "User"
                             ? ""
-                            : "text-[#568bc8] cursor-pointer "
+                            : "text-[#568bc8] cursor-pointer"
                         }`}
                       >
                         <span className="w-[30px]">
                           {(currentPage - 1) * perPage + index + 1}.
                         </span>{" "}
                         {roleStatus(item?.roles?.toString())}
-                        <span className="underline">{item?.username}</span>
+                        <span
+                          className={`${
+                            item?.roles?.toString() === "User"
+                              ? ""
+                              : "underline"
+                          }`}
+                        >
+                          {item?.username}
+                        </span>
                       </div>
                     </td>
                     <td className="text-right">
                       <div className="flex w-full justify-end">
                         <div
-                          className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
+                          className={`flex items-center ${
+                            activePageId || !currentStatusActive
+                              ? ""
+                              : "underline text-[#2789ce]"
+                          } cursor-pointer w-fit`}
                           onClick={() => {
-                            onClickEditCreditRef(item?.creditRef, item?._id);
+                            if (!activePageId && currentStatusActive) {
+                              onClickEditCreditRef(item?.creditRef, item?._id);
+                            }
                           }}
                         >
                           {amountFormate(item?.creditRef)}
-                          <FaPencilAlt className="ml-1" />
+                          {activePageId || !currentStatusActive ? null : (
+                            <FaPencilAlt className="ml-1" />
+                          )}
                         </div>
                       </div>
                     </td>
@@ -516,37 +544,40 @@ const DownListMaster = () => {
                     <td className="text-right">
                       {amountFormate(Number(item?.balance + item?.exposure))}
                     </td>
-                    <td className="text-right">
-                      {item?.roles?.toString() === "User" ? (
-                        <div className="flex w-full justify-end">
-                          <div
-                            className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
-                            onClick={() => {
-                              onClickEditExposureLimit(
-                                item?.exposureLimit,
-                                item?._id
-                              );
-                            }}
-                          >
-                            {amountFormate(item?.exposureLimit)}
-                            <FaPencilAlt className="ml-1" />
+                    {findUser ? (
+                      <td className="text-right">
+                        {activePageId ? (
+                          <div>{amountFormate(item?.exposureLimit)}</div>
+                        ) : (
+                          <div className="flex w-full justify-end">
+                            <div
+                              className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
+                              onClick={() => {
+                                onClickEditExposureLimit(
+                                  item?.exposureLimit,
+                                  item?._id
+                                );
+                              }}
+                            >
+                              {amountFormate(item?.exposureLimit)}
+                              <FaPencilAlt className="ml-1" />
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div>-</div>
-                      )}
-                    </td>
+                        )}
+                      </td>
+                    ) : null}
+
                     <td className="text-right">
                       {amountFormate(Number(item?.balance + item?.creditRef))}
                     </td>
                     <td className="text-right">
                       <div className="flex justify-end w-full">
-                        {item?.status === "active" ? (
+                        {item?.status === "Active" ? (
                           <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
                             <FaCircle size={8} className="mr-1" />
                             Active
                           </div>
-                        ) : item?.status === "suspend" ? (
+                        ) : item?.status === "Suspend" ? (
                           <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
                             <FaCircle size={8} className="mr-1" />
                             Suspended
@@ -577,19 +608,22 @@ const DownListMaster = () => {
                         >
                           <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
                         </div>
-                        <div
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
-                          onClick={() => {
-                            onClickEditStatus(
-                              item?.status,
-                              item?._id,
-                              item?.username,
-                              item?.roles?.toString()
-                            );
-                          }}
-                        >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
-                        </div>
+                        {activePageId || !currentStatusActive ? null : (
+                          <div
+                            className="h-[26px] w-[26px] cursor-pointer ml-1"
+                            onClick={() => {
+                              onClickEditStatus(
+                                item?.status,
+                                item?._id,
+                                item?.username,
+                                item?.roles?.toString()
+                              );
+                            }}
+                          >
+                            <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
+                          </div>
+                        )}
+
                         <div
                           onClick={() => {
                             onClickMenu("account-summery", item?._id);

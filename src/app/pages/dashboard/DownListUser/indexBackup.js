@@ -284,7 +284,7 @@ const DownLineUser = () => {
                     {amountFormate(Number(item?.balance + item?.creditRef))}
                   </td>
                   <td>
-                    {item?.status === "active" ? (
+                    {item?.status === "Active" ? (
                       <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
                         <FaCircle size={8} className="mr-1" />
                         Active

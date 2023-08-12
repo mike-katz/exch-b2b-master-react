@@ -22,12 +22,13 @@ import {
 import Loader from "../../../component/common/Loader";
 import { amountFormate, roleStatus } from "../../../utils/helper";
 import { USER_STATUS } from "../../../utils/dropdown";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateBalance } from "../../../redux/actions/persistAction";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userData } = useSelector((state) => state?.persist);
 
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
   // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
@@ -214,6 +215,8 @@ const DownListMaster = () => {
     }
   };
 
+  const currentStatusActive = userData?.status === "Active";
+
   return (
     <div className="relative px-2">
       <CreditRefModal
@@ -284,7 +287,12 @@ const DownListMaster = () => {
         <div className="hidden md:block md:col-span-6 lg:col-span-3"></div>
         <div className="col-span-6 md:col-span-3 lg:col-span-2 flex items-center justify-end">
           <button
-            onClick={onClickAddPlayer}
+            disabled={!currentStatusActive}
+            onClick={() => {
+              if (currentStatusActive) {
+                onClickAddPlayer();
+              }
+            }}
             className="common-button bg-[#FFFFFF] text-[#000000] rounded px-2 text-[12px] font-semibold flex items-center justify-center h-[31px] border border-[#cdcdcd]"
           >
             <FaUserPlus color="#000000" size={15} className="mr-1" /> Add Player
@@ -394,13 +402,19 @@ const DownListMaster = () => {
                     </td>
                     <td>
                       <div
-                        className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
+                        className={`flex items-center ${
+                          currentStatusActive ? "underline text-[#2789ce]" : ""
+                        } cursor-pointer w-fit`}
                         onClick={() => {
-                          onClickEditCreditRef(item?.creditRef, item?._id);
+                          if (currentStatusActive) {
+                            onClickEditCreditRef(item?.creditRef, item?._id);
+                          }
                         }}
                       >
                         {amountFormate(item?.creditRef)}
-                        <FaPencilAlt className="ml-1" />
+                        {currentStatusActive ? (
+                          <FaPencilAlt className="ml-1" />
+                        ) : null}
                       </div>
                     </td>
                     <td>
@@ -420,28 +434,38 @@ const DownListMaster = () => {
                     </td>
                     <td>
                       <div
-                        className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
+                        className={`flex items-center ${
+                          currentStatusActive
+                            ? "underline text-[#2789ce] cursor-pointer"
+                            : ""
+                        } w-fit`}
                         onClick={() => {
-                          onClickEditExposureLimit(
-                            item?.exposureLimit,
-                            item?._id
-                          );
+                          if (currentStatusActive) {
+                            onClickEditExposureLimit(
+                              item?.exposureLimit,
+                              item?._id
+                            );
+                          }
                         }}
                       >
                         {amountFormate(item?.exposureLimit)}
-                        <FaPencilAlt className="ml-1" />
+                        {currentStatusActive ? (
+                          <FaPencilAlt className="ml-1" />
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </td>
                     <td>
                       {amountFormate(Number(item?.balance + item?.creditRef))}
                     </td>
                     <td>
-                      {item?.status === "active" ? (
+                      {item?.status === "Active" ? (
                         <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
                           <FaCircle size={8} className="mr-1" />
                           Active
                         </div>
-                      ) : item?.status === "suspend" ? (
+                      ) : item?.status === "Suspend" ? (
                         <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
                           <FaCircle size={8} className="mr-1" />
                           Suspended
@@ -471,19 +495,22 @@ const DownListMaster = () => {
                         >
                           <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
                         </div>
-                        <div
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
-                          onClick={() => {
-                            onClickEditStatus(
-                              item?.status,
-                              item?._id,
-                              item?.username,
-                              item?.roles?.toString()
-                            );
-                          }}
-                        >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
-                        </div>
+                        {currentStatusActive ? (
+                          <div
+                            className="h-[26px] w-[26px] cursor-pointer ml-1"
+                            onClick={() => {
+                              onClickEditStatus(
+                                item?.status,
+                                item?._id,
+                                item?.username,
+                                item?.roles?.toString()
+                              );
+                            }}
+                          >
+                            <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
+                          </div>
+                        ) : null}
+
                         <div
                           onClick={() => {
                             onClickMenu("account-summery", item?._id);

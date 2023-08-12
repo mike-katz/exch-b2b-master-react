@@ -78,12 +78,12 @@ const ChangeStatusModal = ({
               {roleStatus(activeRole)}
               {activeUser}
             </div>
-            {initialActiveStatus === "active" ? (
+            {initialActiveStatus === "Active" ? (
               <div className="text-[#508d0e] text-[11px] w-fit flex items-center font-black px-1 py-[2px] rounded">
                 <FaCircle size={8} className="mr-1" />
                 Active
               </div>
-            ) : initialActiveStatus === "suspend" ? (
+            ) : initialActiveStatus === "Suspend" ? (
               <div className="text-[#d0021b] text-[11px] w-fit flex items-center font-black px-1 py-[2px] rounded">
                 <FaCircle size={8} className="mr-1" />
                 Suspended
@@ -98,20 +98,20 @@ const ChangeStatusModal = ({
           <div className="flex items-center sm:justify-center justify-around py-4 px-[5px] sm:flex-row flex-col">
             <div
               onClick={() => {
-                if (initialActiveStatus !== "active") {
-                  onSelectStatus("active");
+                if (initialActiveStatus !== "Active") {
+                  onSelectStatus("Active");
                 }
               }}
               className={`but_active ${
-                initialActiveStatus === "active" ? "disabled_button" : ""
-              } ${activeStatus === "active" ? "active_open" : ""}`}
+                initialActiveStatus === "Active" ? "disabled_button" : ""
+              } ${activeStatus === "Active" ? "active_open" : ""}`}
             >
               <div className="flex flex-col items-center justify-center">
                 <img
                   src={
-                    initialActiveStatus === "active"
+                    initialActiveStatus === "Active"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active_gray.png"
-                      : activeStatus === "active"
+                      : activeStatus === "Active"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active_open.png"
                       : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_active.png"
                   }
@@ -122,26 +122,26 @@ const ChangeStatusModal = ({
             </div>
             <div
               onClick={() => {
-                if (initialActiveStatus !== "suspend") {
-                  if (initialActiveStatus !== "locked") {
-                    onSelectStatus("suspend");
+                if (initialActiveStatus !== "Suspend") {
+                  if (initialActiveStatus !== "Lock") {
+                    onSelectStatus("Suspend");
                   }
                 }
               }}
               className={`but_suspend ${
-                initialActiveStatus === "suspend" ||
-                initialActiveStatus === "locked"
+                initialActiveStatus === "Suspend" ||
+                initialActiveStatus === "Lock"
                   ? "disabled_button"
                   : ""
-              } ${activeStatus === "suspend" ? "suspend_open" : ""}`}
+              } ${activeStatus === "Suspend" ? "suspend_open" : ""}`}
             >
               <div className="flex flex-col items-center justify-center">
                 <img
                   src={
-                    initialActiveStatus === "suspend" ||
-                    initialActiveStatus === "locked"
+                    initialActiveStatus === "Suspend" ||
+                    initialActiveStatus === "Lock"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_gray.png"
-                      : activeStatus === "suspend"
+                      : activeStatus === "Suspend"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend_open.png"
                       : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_suspend.png"
                   }
@@ -152,20 +152,20 @@ const ChangeStatusModal = ({
             </div>
             <div
               onClick={() => {
-                if (initialActiveStatus !== "locked") {
-                  onSelectStatus("locked");
+                if (initialActiveStatus !== "Lock") {
+                  onSelectStatus("Lock");
                 }
               }}
               className={`but_locked ${
-                initialActiveStatus === "locked" ? "disabled_button" : ""
-              } ${activeStatus === "locked" ? "locked_open" : ""}`}
+                initialActiveStatus === "Lock" ? "disabled_button" : ""
+              } ${activeStatus === "Lock" ? "locked_open" : ""}`}
             >
               <div className="flex flex-col items-center justify-center">
                 <img
                   src={
-                    initialActiveStatus === "locked"
+                    initialActiveStatus === "Lock"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_gray.png"
-                      : activeStatus === "locked"
+                      : activeStatus === "Lock"
                       ? "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_locked_open.png"
                       : "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/ico_lock.png"
                   }

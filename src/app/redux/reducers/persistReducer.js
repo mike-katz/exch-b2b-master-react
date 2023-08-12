@@ -42,6 +42,7 @@ export default (state = initialState, action) => {
           mobile: action.data?.mobile,
           balance: action.data?.balance,
           roles: action.data?.roles,
+          status: action.data?.status,
         },
       };
 

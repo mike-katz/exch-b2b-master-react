@@ -20,7 +20,7 @@ export const MASTER_USER_TYPE = [{ value: "Agent", label: "Agent" }];
 
 export const USER_STATUS = [
   { value: "", label: "ALL" },
-  { value: "active", label: "ACTIVE" },
-  { value: "suspend", label: "SUSPENDED" },
-  { value: "locked", label: "LOCKED" },
+  { value: "Active", label: "ACTIVE" },
+  { value: "Suspend", label: "SUSPENDED" },
+  { value: "Lock", label: "LOCKED" },
 ];
