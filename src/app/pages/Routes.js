@@ -10,6 +10,7 @@ import DownLineUser from "./dashboard/DownListUser";
 import MyAccount from "./dashboard/MyAccount";
 import BankingMaster from "./dashboard/Banking/BankingMaster";
 import BankingLogs from "./dashboard/Banking/BankingLogs";
+import AllBankingLogs from "./dashboard/Banking/AllBankingLogs";
 
 const CustomRoutes = () => {
   return (
@@ -75,6 +76,14 @@ const CustomRoutes = () => {
         element={
           <PrivateRoute>
             <BankingLogs />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/banking-logs-all"
+        element={
+          <PrivateRoute>
+            <AllBankingLogs />
           </PrivateRoute>
         }
       />

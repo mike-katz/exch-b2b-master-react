@@ -1,18 +1,85 @@
 import React, { useEffect, useState } from "react";
 // import Pagination from "../../../component/common/Pagination";
 import Searching from "../../../component/form/Searching";
+import {
+  addBankTransactionData,
+  getDownLineUserData,
+  getMyBalanceData,
+} from "../../../redux/services/DownLineUser";
+import Loader from "../../../component/common/Loader";
+import Pagination from "../../../component/common/Pagination";
+import { amountFormate, roleStatus } from "../../../utils/helper";
+import { Link } from "react-router-dom";
+import { USER_STATUS } from "../../../utils/dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { updateBalance } from "../../../redux/actions/persistAction";
 
-const DATA = [1, 1, 1, 1];
+const BankingMaster = () => {
+  const { userData } = useSelector((state) => state?.persist);
+  const dispatch = useDispatch();
 
-const BankingUser = () => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [pageSubmitData, setPageSubmitData] = useState([]);
   const [changeCount, setChangeCount] = useState(0);
+  const [pageData, setPageData] = useState([]);
+
+  const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(20);
+  const [paginationPage, setPaginationPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useState("");
+  const [statusParams, setStatusParams] = useState("");
+
+  const [isLoadingTable, setIsLoadingTable] = useState(false);
+
+  // useEffect(() => {
+  //   onClickClearAll();
+  // }, []);
 
   useEffect(() => {
-    onClickClearAll();
+    getDownLineUser();
   }, []);
+
+  const getDownLineUser = async (payloadParams = false) => {
+    let payload = {};
+    if (payloadParams) {
+      payload = payloadParams;
+    } else {
+      payload = {
+        page: currentPage,
+        limit: perPage,
+        search: searchParams,
+        status: statusParams,
+      };
+    }
+    setIsLoadingTable(true);
+    const data = await getDownLineUserData(payload);
+
+    if (data) {
+      const clearData = [];
+      data?.data?.results?.map((item) => {
+        clearData?.push({
+          userId: item?._id,
+          dw: "",
+          creditRef: "",
+          remark: "",
+          type: "",
+          isVisibleCreditRef: false,
+        });
+      });
+      setPageSubmitData(clearData);
+
+      setTotalPage(data?.data?.totalPages);
+      setPerPage(data?.data?.limit);
+      setCurrentPage(data?.data?.page);
+      setPageData(data?.data?.results);
+      setPageData(data?.data?.results);
+      setPaginationPage(data?.data?.totalPages);
+    }
+    setIsLoadingTable(false);
+  };
 
   const onChangePassword = (e) => {
     setPassword(e?.target?.value);
@@ -74,31 +141,206 @@ const BankingUser = () => {
 
   const onClickClearAll = () => {
     const data = [];
-    DATA?.map((item) => {
-      data?.push({ dw: "", creditRef: "", remark: "" });
+    pageData?.map((item) => {
+      data?.push({
+        userId: item?._id,
+        dw: "",
+        creditRef: "",
+        remark: "",
+        type: "",
+        isVisibleCreditRef: false,
+      });
     });
     setPageSubmitData(data);
   };
 
-  const onSubmitPayment = () => {};
+  const onSubmitPayment = async () => {
+    if (!password) {
+      setPasswordError("Please enter password");
+      return false;
+    }
 
-  const onClickD = () => {};
+    const submitData = [];
 
-  const onClickW = () => {};
+    pageSubmitData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark) {
+        submitData.push({
+          userId: item?.userId,
+          balance: Number(item?.dw) ? Number(item?.dw) : "",
+          type:
+            item?.type === "D"
+              ? "deposit"
+              : item?.type === "W"
+              ? "withdraw"
+              : "",
+          remark: item?.remark,
+          creditRef: Number(item?.creditRef) ? Number(item?.creditRef) : "",
+        });
+      }
+    });
+
+    if (submitData?.length > 0) {
+      const payload = {
+        password: password,
+        data: submitData,
+      };
+
+      const data = await addBankTransactionData(payload);
+
+      if (data) {
+        setPassword("");
+        setPasswordError("");
+        setChangeCount(0);
+        const balanceData = await getMyBalanceData();
+
+        if (balanceData) {
+          dispatch(updateBalance(balanceData?.data));
+        }
+        getDownLineUser();
+      }
+    }
+  };
+
+  const onClickD = (value, index) => {
+    const customizeData = [...pageSubmitData];
+    customizeData[index].type = value;
+    setPageSubmitData(customizeData);
+
+    let count = 0;
+
+    customizeData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark) {
+        count += 1;
+      }
+    });
+
+    setChangeCount(count);
+  };
+
+  const onClickW = (value, index) => {
+    const customizeData = [...pageSubmitData];
+    customizeData[index].type = value;
+    setPageSubmitData(customizeData);
+
+    let count = 0;
+
+    customizeData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark) {
+        count += 1;
+      }
+    });
+
+    setChangeCount(count);
+  };
+
+  const onClickEnableEdit = (value, index) => {
+    const customizeData = [...pageSubmitData];
+
+    if (value) {
+      customizeData[index].isVisibleCreditRef = value;
+    } else {
+      customizeData[index].isVisibleCreditRef = value;
+      customizeData[index].creditRef = "";
+    }
+
+    setPageSubmitData(customizeData);
+
+    let count = 0;
+
+    customizeData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark) {
+        count += 1;
+      }
+    });
+
+    setChangeCount(count);
+  };
+
+  const onClickFull = (value, index) => {
+    const customizeData = [...pageSubmitData];
+    customizeData[index].dw = value;
+    setPageSubmitData(customizeData);
+
+    let count = 0;
+
+    customizeData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark) {
+        count += 1;
+      }
+    });
+
+    setChangeCount(count);
+  };
+
+  const onRefreshPagination = (count) => {
+    setCurrentPage(count);
+    const payload = {
+      page: count,
+      limit: perPage,
+      search: searchParams,
+      status: statusParams,
+      // userId: activePageId,
+    };
+
+    getDownLineUser(payload);
+  };
+
+  const onChangeSearch = (e) => {
+    setSearchParams(e?.target?.value);
+  };
+
+  const onSubmitSearch = () => {
+    const payload = {
+      page: currentPage,
+      limit: perPage,
+      search: searchParams,
+      status: statusParams,
+      // userId: activePageId,
+    };
+
+    getDownLineUser(payload);
+  };
+
+  const onChangeStatus = (e) => {
+    setStatusParams(e?.target?.value);
+
+    const payload = {
+      page: currentPage,
+      limit: perPage,
+      search: searchParams,
+      status: e?.target?.value,
+      // userId: activePageId,
+    };
+
+    getDownLineUser(payload);
+  };
 
   return (
     <div className="relative px-2">
       <div className="grid grid-cols-12 gap-4 mt-2">
         <div className="col-span-12 md:col-span-6 lg:col-span-3">
-          <Searching />
+          <Searching
+            onChange={onChangeSearch}
+            onSubmitSearch={onSubmitSearch}
+          />
         </div>
         <div className="col-span-12 md:col-span-6 lg:col-span-2 flex items-center">
           <div className="text-[12px] font-black">Status: </div>
-          <select className="ml-2 w-full h-[30px] border border-[#cdcdcd] uppercase text-[#2b2b2b] text-[12px] px-[5px]">
-            <option value="0">ACTIVE</option>
-            <option value="1">SUSPENDED</option>
-            <option value="2">LOCKED</option>
-            <option value="-1">ALL</option>
+          <select
+            onChange={onChangeStatus}
+            className="ml-2 w-full h-[30px] border border-[#cdcdcd] uppercase text-[#2b2b2b] text-[12px] px-[5px]"
+          >
+            {USER_STATUS?.map((item) => {
+              return (
+                <option
+                  key={item?.value}
+                  value={item?.value}
+                  selected={item?.value === statusParams}
+                >
+                  {item?.label}
+                </option>
+              );
+            })}
           </select>
         </div>
       </div>
@@ -106,7 +348,10 @@ const BankingUser = () => {
         <div className="text-[#3b5160] text-[13px] font-black">
           Your Balance:{" "}
           <span className="font-normal">
-            IR <span className="text-[23px] font-black">3,855,346.46</span>
+            IR{" "}
+            <span className="text-[23px] font-black">
+              {amountFormate(userData?.balance)}
+            </span>
           </span>
         </div>
       </div>
@@ -118,10 +363,10 @@ const BankingUser = () => {
               <th className="text-right">Balance</th>
               <th className="text-right">Available D/W</th>
               <th className="text-right">Exposure</th>
-              <th className="text-right border-l border-r border-[#7e97a7]">
+              {/* <th className="text-right border-l border-r border-[#7e97a7]">
                 Check Balance
-              </th>
-              <th className="text-center border-r border-[#7e97a7]">
+              </th> */}
+              <th className="text-center border-r border-l border-[#7e97a7]">
                 Deposit / Withdraw
               </th>
               <th className="text-right">Credit Reference</th>
@@ -131,27 +376,49 @@ const BankingUser = () => {
               <th className="text-right border-r border-[#7e97a7]">Remark</th>
               <th className="text-center">
                 <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black w-[58px]">
-                  All Log
+                  <Link target="_blank" to={`/banking-logs-all`} className="">
+                    All Log
+                  </Link>
                 </button>
               </th>
             </tr>
           </thead>
           <tbody>
-            {DATA?.map((item, index) => {
+            {isLoadingTable && (
+              <tr>
+                <td className="h-[200px] text-center" colSpan={9}>
+                  <Loader color={"#FEBA11"} size={25} />
+                </td>
+              </tr>
+            )}
+            {!isLoadingTable && pageData?.length === 0 && (
+              <tr>
+                <td
+                  className="h-[200px] text-center text-[16px] font-black"
+                  colSpan={9}
+                >
+                  No Record Found
+                </td>
+              </tr>
+            )}
+            {pageData?.map((item, index) => {
               return (
                 <tr key={index}>
                   <td>
                     <div className="flex items-center">
-                      <span className="w-[30px] text-[#999] text-center">
-                        1.
+                      <span className="w-[30px]">
+                        {(currentPage - 1) * perPage + index + 1}.
                       </span>{" "}
-                      12340ss
+                      {roleStatus(item?.roles?.toString())}
+                      {item?.username}
                     </div>
                   </td>
-                  <td className="text-right">13.00</td>
-                  <td className="text-right">13.00</td>
-                  <td className="text-right">0.00</td>
-                  <td
+                  <td className="text-right">{amountFormate(item?.balance)}</td>
+                  <td className="text-right">
+                    {amountFormate(Number(item?.balance + item?.exposure))}
+                  </td>
+                  <td className="text-right">{item?.exposure}</td>
+                  {/* <td
                     className="text-right border-l border-r border-[#7e97a7]"
                     width={200}
                   >
@@ -162,24 +429,37 @@ const BankingUser = () => {
                       </div>
                       <div>13</div>
                     </div>
-                  </td>
-                  <td className="text-center border-r border-[#7e97a7] flex items-center justify-center">
+                  </td> */}
+                  <td className="text-center border-r border-l border-r-[#7e97a7] border-l-[#7e97a7] flex items-center justify-center">
                     <div className="flex items-center">
                       <button
-                        onClick={onClickD}
-                        className="w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black border-r-0 border border-[#bbb] rounded-l deposit-withdraw-button"
+                        onClick={() => {
+                          onClickD("D", index);
+                        }}
+                        className={`w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black border-r-0 border border-[#bbb] rounded-l ${
+                          pageSubmitData?.[index]?.type === "D"
+                            ? "deposit-button-active"
+                            : "deposit-withdraw-button"
+                        }`}
                       >
                         D
                       </button>
                       <button
-                        onClick={onClickW}
-                        className="w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black  border border-[#bbb] rounded-r deposit-withdraw-button"
+                        onClick={() => {
+                          onClickW("W", index);
+                        }}
+                        className={`w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black  border border-[#bbb] rounded-r ${
+                          pageSubmitData?.[index]?.type === "W"
+                            ? "withdraw-button-active"
+                            : "deposit-withdraw-button"
+                        }`}
                       >
                         W
                       </button>
                     </div>
-                    <div className="mx-2">
+                    <div className="mx-2 relative">
                       <input
+                        readOnly={!pageSubmitData?.[index]?.type}
                         type="number"
                         onChange={(e) => {
                           onChangeDW(e?.target?.value, index);
@@ -189,39 +469,73 @@ const BankingUser = () => {
                         style={{
                           boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
                         }}
-                        className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] font-black text-[14px]"
+                        className="text-right w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] font-black text-[14px]"
                       />
+                      {pageSubmitData?.[index]?.type === "D" ? (
+                        <div className="absolute left-2 top-[4px] text-[15px] text-[#5bab03]">
+                          +
+                        </div>
+                      ) : pageSubmitData?.[index]?.type === "W" ? (
+                        <div className="absolute left-2 top-[4px] text-[15px] text-[#d0021b]">
+                          -
+                        </div>
+                      ) : null}
                     </div>
                     <div>
-                      <button className="w-[45px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded">
+                      <button
+                        onClick={() => {
+                          onClickFull(item?.balance, index);
+                        }}
+                        disabled={pageSubmitData?.[index]?.type !== "W"}
+                        className="w-[45px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
+                      >
                         Full
                       </button>
                     </div>
                   </td>
                   <td className="text-right w-[200px]">
                     <div className="flex items-center justify-end">
-                      <input
-                        type="number"
-                        onChange={(e) => {
-                          onChangeCreditRef(e?.target?.value, index);
+                      {pageSubmitData?.[index]?.isVisibleCreditRef ? (
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            onChangeCreditRef(e?.target?.value, index);
+                          }}
+                          value={pageSubmitData?.[index]?.creditRef || ""}
+                          placeholder="0"
+                          style={{
+                            boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
+                          }}
+                          className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right font-black text-[14px]"
+                        />
+                      ) : (
+                        <Link
+                          target="_blank"
+                          to={`/credit-ref-logs/${item?._id}`}
+                          className="flex items-center underline text-[#2789ce] cursor-pointer w-fit mr-2"
+                        >
+                          {amountFormate(item?.creditRef)}
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          onClickEnableEdit(
+                            !pageSubmitData?.[index]?.isVisibleCreditRef,
+                            index
+                          );
                         }}
-                        value={pageSubmitData?.[index]?.creditRef || ""}
-                        placeholder="0"
-                        style={{
-                          boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
-                        }}
-                        className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right font-black text-[14px]"
-                      />
-
-                      <button className="w-[48px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded">
-                        Edit
+                        className="w-[48px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
+                      >
+                        {pageSubmitData?.[index]?.isVisibleCreditRef
+                          ? "Cancel"
+                          : "Edit"}
                       </button>
                     </div>
                   </td>
-                  <td className="text-right border-r border-[#7e97a7]">
-                    13.00
+                  <td className="text-right border-r border-r-[#7e97a7]">
+                    {amountFormate(Number(item?.balance + item?.creditRef))}
                   </td>
-                  <td className="text-right border-r border-[#7e97a7]">
+                  <td className="text-right border-r border-r-[#7e97a7]">
                     <input
                       onChange={(e) => {
                         onChangeRemark(e?.target?.value, index);
@@ -234,7 +548,13 @@ const BankingUser = () => {
                   </td>
                   <td className="text-center">
                     <button className="common-button h-[28px] font-black w-[58px]">
-                      Log
+                      <Link
+                        target="_blank"
+                        to={`/banking-logs/${item?._id}`}
+                        className=""
+                      >
+                        Log
+                      </Link>
                     </button>
                   </td>
                 </tr>
@@ -244,7 +564,11 @@ const BankingUser = () => {
         </table>
       </div>
       <div className="flex justify-center my-7 mb:pb-0 pb-20">
-        {/* <Pagination itemsPerPage={4} /> */}
+        <Pagination
+          itemsPerPage={paginationPage}
+          totalPage={totalPage}
+          onChange={onRefreshPagination}
+        />
       </div>
       <div className="fixed right-0 bottom-0 mt-2 w-full border-t border-[#d4d4d4] bg-[#eeeeee] py-2 overflow-hidden overflow-x-auto">
         <div className="flex items-center justify-center">
@@ -287,4 +611,4 @@ const BankingUser = () => {
   );
 };
 
-export default BankingUser;
+export default BankingMaster;

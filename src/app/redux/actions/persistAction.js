@@ -6,6 +6,7 @@ export const LOGIN_MODAL_VISIBLE_START = "LOGIN_MODAL_VISIBLE_START";
 export const LOGIN_MODAL_VISIBLE_END = "LOGIN_MODAL_VISIBLE_END";
 export const SIGNUP_MODAL_VISIBLE_START = "SIGNUP_MODAL_VISIBLE_START";
 export const SIGNUP_MODAL_VISIBLE_END = "SIGNUP_MODAL_VISIBLE_END";
+export const UPDATE_BALANCE_START = "UPDATE_BALANCE_START";
 
 export const detailStart = (payload, callback) => ({
   type: DETAIL_START,
@@ -43,4 +44,9 @@ export const signupModalVisible = () => ({
 
 export const signupModalHide = () => ({
   type: SIGNUP_MODAL_VISIBLE_END,
+});
+
+export const updateBalance = (data) => ({
+  type: UPDATE_BALANCE_START,
+  data,
 });

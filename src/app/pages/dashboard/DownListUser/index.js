@@ -22,9 +22,13 @@ import {
 import Loader from "../../../component/common/Loader";
 import { amountFormate, roleStatus } from "../../../utils/helper";
 import { USER_STATUS } from "../../../utils/dropdown";
+import { useDispatch } from "react-redux";
+import { updateBalance } from "../../../redux/actions/persistAction";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
   // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
   const [isVisibleEditStatus, setIsVisibleEditStatus] = useState(false);
@@ -84,6 +88,7 @@ const DownListMaster = () => {
     const data = await getMyBalanceData();
 
     if (data) {
+      dispatch(updateBalance(data?.data));
       setMyBalance(data?.data);
     }
   };

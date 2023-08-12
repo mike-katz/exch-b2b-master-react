@@ -5,6 +5,7 @@ import {
   LOGOUT_USER,
   SIGNUP_MODAL_VISIBLE_END,
   SIGNUP_MODAL_VISIBLE_START,
+  UPDATE_BALANCE_START,
 } from "../actions/persistAction";
 
 const initialState = {
@@ -58,6 +59,16 @@ export default (state = initialState, action) => {
 
     case SIGNUP_MODAL_VISIBLE_END:
       return { ...state, signupModalVisibleState: false };
+
+    case UPDATE_BALANCE_START:
+      console.log({ action });
+      return {
+        ...state,
+        userData: {
+          ...state?.userData,
+          balance: action.data?.balance,
+        },
+      };
 
     default:
       return state;

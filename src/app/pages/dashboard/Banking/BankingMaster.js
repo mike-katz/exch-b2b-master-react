@@ -4,14 +4,19 @@ import Searching from "../../../component/form/Searching";
 import {
   addBankTransactionData,
   getDownLineMasterData,
+  getMyBalanceData,
 } from "../../../redux/services/DownLineUser";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
 import { amountFormate, roleStatus } from "../../../utils/helper";
 import { Link } from "react-router-dom";
 import { USER_STATUS } from "../../../utils/dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { updateBalance } from "../../../redux/actions/persistAction";
 
 const BankingMaster = () => {
+  const { userData } = useSelector((state) => state?.persist);
+  const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [pageSubmitData, setPageSubmitData] = useState([]);
@@ -160,7 +165,7 @@ const BankingMaster = () => {
       if (item?.dw || item?.creditRef || item?.remark) {
         submitData.push({
           userId: item?.userId,
-          balance: Number(item?.dw),
+          balance: Number(item?.dw) ? Number(item?.dw) : "",
           type:
             item?.type === "D"
               ? "deposit"
@@ -168,7 +173,7 @@ const BankingMaster = () => {
               ? "withdraw"
               : "",
           remark: item?.remark,
-          creditRef: Number(item?.creditRef),
+          creditRef: Number(item?.creditRef) ? Number(item?.creditRef) : "",
         });
       }
     });
@@ -182,6 +187,14 @@ const BankingMaster = () => {
       const data = await addBankTransactionData(payload);
 
       if (data) {
+        setPassword("");
+        setPasswordError("");
+        setChangeCount(0);
+        const balanceData = await getMyBalanceData();
+
+        if (balanceData) {
+          dispatch(updateBalance(balanceData?.data));
+        }
         getDownLineMaster();
       }
     }
@@ -229,6 +242,22 @@ const BankingMaster = () => {
       customizeData[index].creditRef = "";
     }
 
+    setPageSubmitData(customizeData);
+
+    let count = 0;
+
+    customizeData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark) {
+        count += 1;
+      }
+    });
+
+    setChangeCount(count);
+  };
+
+  const onClickFull = (value, index) => {
+    const customizeData = [...pageSubmitData];
+    customizeData[index].dw = value;
     setPageSubmitData(customizeData);
 
     let count = 0;
@@ -318,7 +347,10 @@ const BankingMaster = () => {
         <div className="text-[#3b5160] text-[13px] font-black">
           Your Balance:{" "}
           <span className="font-normal">
-            IR <span className="text-[23px] font-black">3,855,346.46</span>
+            IR{" "}
+            <span className="text-[23px] font-black">
+              {amountFormate(userData?.balance)}
+            </span>
           </span>
         </div>
       </div>
@@ -343,7 +375,9 @@ const BankingMaster = () => {
               <th className="text-right border-r border-[#7e97a7]">Remark</th>
               <th className="text-center">
                 <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black w-[58px]">
-                  All Log
+                  <Link target="_blank" to={`/banking-logs-all`} className="">
+                    All Log
+                  </Link>
                 </button>
               </th>
             </tr>
@@ -448,6 +482,9 @@ const BankingMaster = () => {
                     </div>
                     <div>
                       <button
+                        onClick={() => {
+                          onClickFull(item?.balance, index);
+                        }}
                         disabled={pageSubmitData?.[index]?.type !== "W"}
                         className="w-[45px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
                       >

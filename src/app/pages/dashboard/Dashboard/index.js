@@ -22,10 +22,13 @@ import {
 import Loader from "../../../component/common/Loader";
 import { amountFormate, roleStatus } from "../../../utils/helper";
 import { USER_STATUS } from "../../../utils/dropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateBalance } from "../../../redux/actions/persistAction";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { userData } = useSelector((state) => state?.persist);
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
   // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
@@ -97,6 +100,7 @@ const DownListMaster = () => {
     const data = await getMyBalanceData();
 
     if (data) {
+      dispatch(updateBalance(data?.data));
       setMyBalance(data?.data);
     }
   };
@@ -442,13 +446,13 @@ const DownListMaster = () => {
           <thead>
             <tr>
               <th className="">Account</th>
-              <th className="">Credit Ref.</th>
-              <th className="">Balance</th>
-              <th className="">Exposure</th>
-              <th className="">Avail. bal.</th>
-              <th className="">Exposure Limit</th>
-              <th className="">Ref. P/L</th>
-              <th className="">Status</th>
+              <th className="text-right">Credit Ref.</th>
+              <th className="text-right">Balance</th>
+              <th className="text-right">Exposure</th>
+              <th className="text-right">Avail. bal.</th>
+              <th className="text-right">Exposure Limit</th>
+              <th className="text-right">Ref. P/L</th>
+              <th className="text-right">Status</th>
               <th className="text-right">Action</th>
             </tr>
           </thead>
@@ -482,76 +486,78 @@ const DownListMaster = () => {
                         className={`flex items-center ${
                           item?.roles?.toString() === "User"
                             ? ""
-                            : "text-[#568bc8] cursor-pointer underline"
+                            : "text-[#568bc8] cursor-pointer "
                         }`}
                       >
                         <span className="w-[30px]">
                           {(currentPage - 1) * perPage + index + 1}.
                         </span>{" "}
                         {roleStatus(item?.roles?.toString())}
-                        {item?.username}
+                        <span className="underline">{item?.username}</span>
                       </div>
                     </td>
-                    <td>
-                      <div
-                        className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
-                        onClick={() => {
-                          onClickEditCreditRef(item?.creditRef, item?._id);
-                        }}
-                      >
-                        {amountFormate(item?.creditRef)}
-                        <FaPencilAlt className="ml-1" />
+                    <td className="text-right">
+                      <div className="flex w-full justify-end">
+                        <div
+                          className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
+                          onClick={() => {
+                            onClickEditCreditRef(item?.creditRef, item?._id);
+                          }}
+                        >
+                          {amountFormate(item?.creditRef)}
+                          <FaPencilAlt className="ml-1" />
+                        </div>
                       </div>
                     </td>
-                    <td>
-                      <div
-                        className="flex items-center"
-                        // onClick={onClickBalance}
-                      >
-                        {amountFormate(item?.balance)}
-
-                        {/* <FaPlusSquare className="ml-1" size={15} /> */}
-                      </div>
+                    <td className="text-right">
+                      <div>{amountFormate(item?.balance)}</div>
                     </td>
-
-                    <td>{item?.exposure}</td>
-                    <td>
+                    <td className="text-right">{item?.exposure}</td>
+                    <td className="text-right">
                       {amountFormate(Number(item?.balance + item?.exposure))}
                     </td>
-                    <td>
-                      <div
-                        className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
-                        onClick={() => {
-                          onClickEditExposureLimit(
-                            item?.exposureLimit,
-                            item?._id
-                          );
-                        }}
-                      >
-                        {amountFormate(item?.exposureLimit)}
-                        <FaPencilAlt className="ml-1" />
-                      </div>
-                    </td>
-                    <td>
-                      {amountFormate(Number(item?.balance + item?.creditRef))}
-                    </td>
-                    <td>
-                      {item?.status === "active" ? (
-                        <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                          <FaCircle size={8} className="mr-1" />
-                          Active
-                        </div>
-                      ) : item?.status === "suspend" ? (
-                        <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                          <FaCircle size={8} className="mr-1" />
-                          Suspended
+                    <td className="text-right">
+                      {item?.roles?.toString() === "User" ? (
+                        <div className="flex w-full justify-end">
+                          <div
+                            className="flex items-center underline text-[#2789ce] cursor-pointer w-fit"
+                            onClick={() => {
+                              onClickEditExposureLimit(
+                                item?.exposureLimit,
+                                item?._id
+                              );
+                            }}
+                          >
+                            {amountFormate(item?.exposureLimit)}
+                            <FaPencilAlt className="ml-1" />
+                          </div>
                         </div>
                       ) : (
-                        <div className="border border-[#b9c5cd] text-[#5a7384] text-[11px] bg-[#e3e8eb] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                          <FaCircle size={8} className="mr-1" />
-                          Locked
-                        </div>
+                        <div>-</div>
                       )}
+                    </td>
+                    <td className="text-right">
+                      {amountFormate(Number(item?.balance + item?.creditRef))}
+                    </td>
+                    <td className="text-right">
+                      <div className="flex justify-end w-full">
+                        {item?.status === "active" ? (
+                          <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
+                            <FaCircle size={8} className="mr-1" />
+                            Active
+                          </div>
+                        ) : item?.status === "suspend" ? (
+                          <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
+                            <FaCircle size={8} className="mr-1" />
+                            Suspended
+                          </div>
+                        ) : (
+                          <div className="border border-[#b9c5cd] text-[#5a7384] text-[11px] bg-[#e3e8eb] w-fit flex items-center font-black px-1 py-[2px] rounded">
+                            <FaCircle size={8} className="mr-1" />
+                            Locked
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="text-right w-[100px]">
                       <div className="flex items-center justify-end">

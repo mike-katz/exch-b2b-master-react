@@ -6,12 +6,12 @@ import { getBankTransactionData } from "../../../redux/services/DownLineUser";
 import { amountFormate } from "../../../utils/helper";
 import Pagination from "../../../component/common/Pagination";
 
-const BankingLogs = () => {
+const AllBankingLogs = () => {
   const { userId } = useParams();
 
   const [pageData, setPageData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
 
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,9 +37,9 @@ const BankingLogs = () => {
 
     const data = await getBankTransactionData(payload);
 
-    if (data?.username) {
-      setUsername(data?.username);
-    }
+    // if (data?.username) {
+    //   setUsername(data?.username);
+    // }
 
     if (data?.data) {
       setTotalPage(data?.data?.totalPages);
@@ -70,9 +70,9 @@ const BankingLogs = () => {
           <div className="text-[18px] text-[#FFFFFF] font-black">
             Banking Logs
           </div>
-          <div className="bg-[#fff] text-[#243a48] text-[15px] py-[1px] px-[8px] rounded mx-[5px] font-black">
+          {/* <div className="bg-[#fff] text-[#243a48] text-[15px] py-[1px] px-[8px] rounded mx-[5px] font-black">
             {username}
-          </div>
+          </div> */}
         </div>
 
         <div>
@@ -160,4 +160,4 @@ const BankingLogs = () => {
   );
 };
 
-export default BankingLogs;
+export default AllBankingLogs;

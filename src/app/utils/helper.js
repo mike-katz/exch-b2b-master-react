@@ -12,12 +12,15 @@ export const showToastMessage = (text, responseCode, options) => {
 
 export const amountFormate = (amount = "") => {
   const value = amount?.toString();
+  if (value) {
+    const sanitizedValue = value.replace(/,/g, "");
 
-  const sanitizedValue = value.replace(/,/g, "");
+    const formattedValue = Number(sanitizedValue).toLocaleString();
 
-  const formattedValue = Number(sanitizedValue).toLocaleString();
-
-  return formattedValue;
+    return formattedValue;
+  } else {
+    return value;
+  }
 };
 
 export const roleStatus = (role = "") => {
