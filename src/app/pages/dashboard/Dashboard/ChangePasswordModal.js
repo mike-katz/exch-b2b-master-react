@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import Model from "../../../component/common/Modal";
 import { changePasswordSchema } from "../../../utils/validationSchema";
 import CommonInput from "../../../component/form/CommonInput";
-import { changePasswordData } from "../../../redux/services/DownLineUser";
+import { updateProfileData } from "../../../redux/services/DownLineUser";
 import Loader from "../../../component/common/Loader";
 
 const ChangePasswordModal = ({ isVisible, onCloseMenu, userId }) => {
@@ -12,12 +12,13 @@ const ChangePasswordModal = ({ isVisible, onCloseMenu, userId }) => {
 
   const onSubmitNewPassword = async (values) => {
     const payload = {
-      oldPassword: values?.old_password,
-      newPassword: values?.new_password,
+      userId: userId,
+      password: values?.old_password,
+      myPassword: values?.new_password,
     };
 
     setIsLoading(true);
-    const data = await changePasswordData(payload);
+    const data = await updateProfileData(payload);
     if (data) {
       onCloseMenu();
     }

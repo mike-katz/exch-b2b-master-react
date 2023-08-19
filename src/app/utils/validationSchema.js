@@ -19,7 +19,10 @@ export const changePasswordSchema = Yup.object().shape({
 export const addPlayerSchema = Yup.object().shape({
   username: Yup.string().required("Please enter username"),
   exposure: Yup.number().required("Please enter exposer"),
-  commission: Yup.number().required("Please enter commission"),
+  commission: Yup.number()
+    .required("Please enter commission")
+    .min(1, "Please enter min 1")
+    .max(100, "Please enter max 100"),
   password: Yup.string().required("Please enter new password"),
   confirm_password: Yup.string()
     .required("Please enter confirm password")
@@ -31,8 +34,11 @@ export const addPlayerSchema = Yup.object().shape({
 
 export const addPlayerMasterSchema = Yup.object().shape({
   username: Yup.string().required("Please enter username"),
-  exposure: Yup.number().required("Please enter exposer"),
-  commission: Yup.number().required("Please enter commission"),
+  // exposure: Yup.number().required("Please enter exposer"),
+  // commission: Yup.number()
+  //   .required("Please enter commission")
+  //   .min(1, "Please enter min 1")
+  //   .max(100, "Please enter max 100"),
   password: Yup.string().required("Please enter new password"),
   roles: Yup.string().required("Please select user type"),
   confirm_password: Yup.string()
@@ -50,5 +56,15 @@ export const editCreditRefSchema = Yup.object().shape({
 
 export const editExposureSchema = Yup.object().shape({
   exposure: Yup.string().required("Please enter exposure"),
+  password: Yup.string().required("Please enter password"),
+});
+
+export const editCommissionSchema = Yup.object().shape({
+  commission: Yup.string().required("Please enter commission"),
+  password: Yup.string().required("Please enter password"),
+});
+
+export const editMobileSchema = Yup.object().shape({
+  mobile: Yup.string().required("Please enter mobile"),
   password: Yup.string().required("Please enter password"),
 });

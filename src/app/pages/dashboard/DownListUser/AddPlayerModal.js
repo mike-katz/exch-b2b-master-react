@@ -5,8 +5,10 @@ import Model from "../../../component/common/Modal";
 import { addPlayerSchema } from "../../../utils/validationSchema";
 import { registerUser } from "../../../redux/services/DownLineUser";
 import CommonInput from "../../../component/form/CommonInput";
+import { useSelector } from "react-redux";
 
-const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
+const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
+  const { userData } = useSelector((state) => state?.persist);
   const onClickAddPlayer = async (values) => {
     const payload = {
       ...values,
@@ -17,8 +19,10 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
 
     if (data) {
       onCloseMenu();
+      onRefreshTable();
     }
   };
+
   return (
     <Model isVisible={isVisible} onCloseMenu={onCloseMenu} center>
       <div className="bg-[#eee] rounded w-[400px]">
@@ -37,8 +41,8 @@ const AddPlayerModal = ({ isVisible, onCloseMenu }) => {
           enableReinitialize
           initialValues={{
             username: "",
-            exposure: "",
-            commission: "",
+            exposure: 500000,
+            commission: userData?.commission || 1,
             password: "",
             confirm_password: "",
             mobile: "",

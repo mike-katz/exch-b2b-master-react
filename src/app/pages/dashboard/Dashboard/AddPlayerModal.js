@@ -53,8 +53,8 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
           enableReinitialize
           initialValues={{
             username: "",
-            exposure: "",
-            commission: "",
+            // exposure: "",
+            commission: userData?.commission || 1,
             password: "",
             confirm_password: "",
             mobile: "",
@@ -98,14 +98,14 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                 </div>
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <CommonInput
-                    isRequired
+                    // isRequired
                     label="Phone"
                     name="mobile"
                     placeholder="Enter"
                     type="number"
                   />
                 </div>
-                <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
+                {/* <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <CommonInput
                     isRequired
                     label="Exposer"
@@ -113,7 +113,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                     placeholder="Enter"
                     type="number"
                   />
-                </div>
+                </div> */}
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <CommonInput
                     isRequired

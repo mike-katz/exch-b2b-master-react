@@ -24,3 +24,18 @@ export const USER_STATUS = [
   { value: "Suspend", label: "SUSPENDED" },
   { value: "Lock", label: "LOCKED" },
 ];
+
+export const BET_STATUS = [
+  { value: "", label: "ALL" },
+  { value: "settle", label: "SETTLE" },
+  { value: "void", label: "UNSETTLE" },
+  { value: "unsettle", label: "VOID" },
+];
+
+export const MARKET_TYPE = [
+  { value: "", label: "ALL" },
+  { value: "match_odds", label: "Match Odds" },
+  { value: "fancy", label: "Fancy" },
+  { value: "sports_book", label: "Sports Book" },
+  { value: "book_maker", label: "Book Maker" },
+];

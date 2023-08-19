@@ -183,3 +183,79 @@ export const getBankTransactionData = async (payload) => {
 
   return data;
 };
+
+export const getSportListData = async () => {
+  const { data } = await Rest.get(APIEndpoint.getSportList);
+
+  return data;
+};
+
+export const getBetHistoryData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.page) {
+    queryParams += `?page=${payload?.page}`;
+  }
+
+  if (payload?.limit) {
+    queryParams += `${queryParams ? "&" : "?"}limit=${payload?.limit}`;
+  }
+
+  if (payload?.userId) {
+    queryParams += `${queryParams ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  if (payload?.sportId) {
+    queryParams += `${queryParams ? "&" : "?"}sportId=${payload?.sportId}`;
+  }
+
+  if (payload?.status) {
+    queryParams += `${queryParams ? "&" : "?"}status=${payload?.status}`;
+  }
+
+  if (payload?.type) {
+    queryParams += `${queryParams ? "&" : "?"}type=${payload?.type}`;
+  }
+
+  if (payload?.from) {
+    queryParams += `${queryParams ? "&" : "?"}from=${payload?.from}`;
+  }
+
+  if (payload?.to) {
+    queryParams += `${queryParams ? "&" : "?"}to=${payload?.to}`;
+  }
+
+  const { data } = await Rest.get(`${APIEndpoint.getBetHistory}${queryParams}`);
+
+  return data;
+};
+
+export const getUserParentListData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.userId) {
+    queryParams += `${queryParams ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getUserParentList}${queryParams}`
+  );
+
+  return data;
+};
+
+export const updateProfileData = async (payload) => {
+  const { data } = await Rest.post(`${APIEndpoint.updateProfile}`, payload);
+
+  showToastMessage(data?.message, 200);
+
+  return data;
+};
+
+export const changePasswordData = async (payload) => {
+  const { data } = await Rest.post(`${APIEndpoint.changePassword}`, payload);
+
+  showToastMessage(data?.message, 200);
+
+  return data;
+};

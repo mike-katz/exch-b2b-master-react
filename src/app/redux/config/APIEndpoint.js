@@ -18,4 +18,9 @@ export default class APIEndpoint {
   static exportCSVFile = "api/user/export";
   static bankingTransaction = "api/banking/transaction";
   static bankingTransactionHistory = "api/banking/transaction-history";
+  static getSportList = "api/beating/get-sports";
+  static getBetHistory = "api/beating/history";
+  static getUserParentList = "api/user/get-parentList";
+  static updateProfile = "api/user/update-profile";
+  static changePassword = "/api/auth/change-password";
 }

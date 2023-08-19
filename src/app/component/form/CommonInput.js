@@ -26,8 +26,10 @@ const CommonInput = (
                 type={type}
                 placeholder={placeholder}
               />
-              {isRequired && (
+              {isRequired ? (
                 <div className="text-[red] text-[18px] ml-2">*</div>
+              ) : (
+                <div className="text-[red] text-[18px] ml-4"></div>
               )}
             </div>
             {meta.touched && meta.error && (

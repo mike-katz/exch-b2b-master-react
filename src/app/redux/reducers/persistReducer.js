@@ -43,6 +43,7 @@ export default (state = initialState, action) => {
           balance: action.data?.balance,
           roles: action.data?.roles,
           status: action.data?.status,
+          commission: action.data?.commission,
         },
       };
 
@@ -62,7 +63,6 @@ export default (state = initialState, action) => {
       return { ...state, signupModalVisibleState: false };
 
     case UPDATE_BALANCE_START:
-      console.log({ action });
       return {
         ...state,
         userData: {

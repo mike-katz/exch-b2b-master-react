@@ -353,7 +353,7 @@ const DownListMaster = () => {
         </div>
       </div>
       <div className="table-responsive">
-        <table className="w-full min-w-max table-auto text-left">
+        <table className="w-full min-w-max table-auto text-left font-bold">
           <thead>
             <tr>
               <th className="">Account</th>
@@ -422,16 +422,13 @@ const DownListMaster = () => {
                         className="flex items-center"
                         // onClick={onClickBalance}
                       >
-                        {amountFormate(item?.balance)}
+                        {amountFormate(Number(item?.balance + item?.exposure))}
 
                         {/* <FaPlusSquare className="ml-1" size={15} /> */}
                       </div>
                     </td>
-
                     <td>{item?.exposure}</td>
-                    <td>
-                      {amountFormate(Number(item?.balance + item?.exposure))}
-                    </td>
+                    <td>{amountFormate(Number(item?.balance))}</td>
                     <td>
                       <div
                         className={`flex items-center ${
@@ -457,7 +454,21 @@ const DownListMaster = () => {
                       </div>
                     </td>
                     <td>
-                      {amountFormate(Number(item?.balance + item?.creditRef))}
+                      {Number(item?.balance - item?.creditRef) >= 0 ? (
+                        <span className="text-[#508d0e]">
+                          {amountFormate(
+                            Number(item?.balance - item?.creditRef)
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-[#d0021b]">
+                          (
+                          {amountFormate(
+                            Number(item?.balance - item?.creditRef)
+                          )}
+                          )
+                        </span>
+                      )}
                     </td>
                     <td>
                       {item?.status === "Active" ? (

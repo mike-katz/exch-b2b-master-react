@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import Pagination from "../../../component/common/Pagination";
 import { getActivityLogData } from "../../../redux/services/DownLineUser";
 import Loader from "../../../component/common/Loader";
+import moment from "moment";
 
 const ActivityLog = () => {
   const [pageData, setPageData] = useState([]);
@@ -27,12 +28,13 @@ const ActivityLog = () => {
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
-            <th className="">2023-07-17 19:25:19</th>
+            <th className="">No</th>
+            <th className="">Date And Time</th>
             <th className="text-right">Login Status</th>
             <th className="text-right">IP Address</th>
             <th className="text-right">ISP</th>
             <th className="text-right">City/State/Country</th>
-            <th className="text-right">User Agent Type</th>
+            {/* <th className="text-right">User Agent Type</th> */}
           </tr>
         </thead>
         <tbody>
@@ -55,14 +57,32 @@ const ActivityLog = () => {
           )}
           {!isLoading &&
             pageData?.map((item, index) => {
+              const ip = JSON.parse(item?.detail);
+              let ipData = [];
+
+              if (Object.keys(ip).length > 0) {
+                ipData = JSON.parse(ip);
+              }
+
               return (
                 <tr key={index}>
-                  <td className="">2023-07-17 17:50:06</td>
-                  <td className="text-right text-[#508d0e]">Login Success</td>
-                  <td className="text-right">152.58.34.25</td>
-                  <td className="text-right">Reliance Jio Infocomm Limited</td>
-                  <td className="text-right">Sikka, Gujarat, IN</td>
-                  <td className="text-right">Browser</td>
+                  <td className="p-4">{index + 1}</td>
+                  <td className="">
+                    {moment(item?.createdAt).format("DD-MM-YYYY hh:MM:ss A")}
+                  </td>
+                  <td
+                    className={`p-4 uppercase ${
+                      item?.status === "success" ? "text-[green]" : "text-[red]"
+                    }`}
+                  >
+                    {item?.status}
+                  </td>
+                  <td className="text-right">{ipData?.query}</td>
+                  <td className="text-right">{ipData?.isp}</td>
+                  <td className="text-right">
+                    {ipData?.city}, {ipData?.regionName}, {ipData?.country}
+                  </td>
+                  {/* <td className="text-right">Browser</td> */}
                 </tr>
               );
             })}

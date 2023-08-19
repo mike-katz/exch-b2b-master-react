@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { FaUser } from "react-icons/fa";
-import { getUserDetailData } from "../../../redux/services/DownLineUser";
+import { FaPencilAlt, FaUser } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { amountFormate } from "../../../utils/helper";
 import Loader from "../../../component/common/Loader";
+import { getUserDetailData } from "../../../redux/services/DownLineUser";
+import { amountFormate } from "../../../utils/helper";
+import ChangePasswordModal from ".//ChangePasswordModal";
+import EditCommissionModal from "./EditCommissionModal";
+import EditExposureLimitModal from "./EditExposureLimitModal";
+import EditMobileNumberModal from "./EditMobileNumberModal";
 
 const AccountSummary = () => {
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
+  const [isVisibleExposureLimit, setIsVisibleExposureLimit] = useState(false);
+  const [isVisibleCommission, setIsVisibleCommission] = useState(false);
+  const [isVisibleMobileNumber, setIsVisibleMobileNumber] = useState(false);
   const [pageData, setPageData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const { userId } = useParams();
 
   useEffect(() => {
-    getUserDetail();
-  }, []);
+    getUserDetail(userId);
+  }, [userId]);
 
-  const getUserDetail = async () => {
+  const getUserDetail = async (userId) => {
     const payload = {
       userId,
     };
@@ -28,8 +36,62 @@ const AccountSummary = () => {
     setIsLoading(false);
   };
 
+  const onShowChangePassword = () => {
+    setIsVisiblePassword(true);
+  };
+
+  const onCloseChangePassword = () => {
+    setIsVisiblePassword(false);
+  };
+
+  const onRefreshTable = () => {
+    getUserDetail(userId);
+  };
+
+  const onCloseExposureLimit = () => {
+    setIsVisibleExposureLimit(false);
+  };
+
+  const onCloseCommission = () => {
+    setIsVisibleCommission(false);
+  };
+
+  const onCloseMobileNumber = () => {
+    setIsVisibleMobileNumber(false);
+  };
+
   return (
     <div>
+      <ChangePasswordModal
+        userId={userId}
+        isVisible={isVisiblePassword}
+        onCloseMenu={onCloseChangePassword}
+      />
+
+      <EditExposureLimitModal
+        activeId={userId}
+        activeExposureLimit={pageData?.exposureLimit}
+        onRefreshTable={onRefreshTable}
+        isVisible={isVisibleExposureLimit}
+        onCloseMenu={onCloseExposureLimit}
+      />
+
+      <EditCommissionModal
+        activeId={userId}
+        activeCommission={pageData?.commission}
+        onRefreshTable={onRefreshTable}
+        isVisible={isVisibleCommission}
+        onCloseMenu={onCloseCommission}
+      />
+
+      <EditMobileNumberModal
+        activeId={userId}
+        activeMobileNumber={pageData?.mobile}
+        onRefreshTable={onRefreshTable}
+        isVisible={isVisibleMobileNumber}
+        onCloseMenu={onCloseMobileNumber}
+      />
+
       <div className="text-[#243a48] text-[16px] font-black">
         Account Summary
       </div>
@@ -85,11 +147,27 @@ const AccountSummary = () => {
                   </div>
                 </div>
                 <div className="w-full">
-                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
                     {pageData?.mobile || "-"}
+                    <div
+                      onClick={() => {
+                        setIsVisibleMobileNumber(true);
+                      }}
+                      className="text-[#2789ce] flex items-center cursor-pointer"
+                    >
+                      Edit
+                      <FaPencilAlt className="ml-1" />
+                    </div>
                   </div>
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
                     <div>********************************</div>
+                    <div
+                      onClick={onShowChangePassword}
+                      className="text-[#2789ce] flex items-center cursor-pointer"
+                    >
+                      Edit
+                      <FaPencilAlt className="ml-1" />
+                    </div>
                   </div>
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
                     IST
@@ -111,11 +189,29 @@ const AccountSummary = () => {
                   </div>
                 </div>
                 <div className="w-full">
-                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
                     {amountFormate(pageData?.exposureLimit) || "-"}
+                    <div
+                      onClick={() => {
+                        setIsVisibleExposureLimit(true);
+                      }}
+                      className="text-[#2789ce] flex items-center cursor-pointer"
+                    >
+                      Edit
+                      <FaPencilAlt className="ml-1" />
+                    </div>
                   </div>
-                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
                     {pageData?.commission || "-"}
+                    <div
+                      onClick={() => {
+                        setIsVisibleCommission(true);
+                      }}
+                      className="text-[#2789ce] flex items-center cursor-pointer"
+                    >
+                      Edit
+                      <FaPencilAlt className="ml-1" />
+                    </div>
                   </div>
                 </div>
               </div>

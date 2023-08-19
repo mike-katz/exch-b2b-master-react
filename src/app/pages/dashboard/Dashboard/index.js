@@ -454,7 +454,7 @@ const DownListMaster = () => {
         })}
       </div>
       <div className="table-responsive">
-        <table className="w-full min-w-max table-auto text-left">
+        <table className="w-full min-w-max table-auto text-left font-bold">
           <thead>
             <tr>
               <th className="">Account</th>
@@ -538,11 +538,13 @@ const DownListMaster = () => {
                       </div>
                     </td>
                     <td className="text-right">
-                      <div>{amountFormate(item?.balance)}</div>
+                      <div>
+                        {amountFormate(Number(item?.balance + item?.exposure))}
+                      </div>
                     </td>
                     <td className="text-right">{item?.exposure}</td>
                     <td className="text-right">
-                      {amountFormate(Number(item?.balance + item?.exposure))}
+                      {amountFormate(Number(item?.balance))}
                     </td>
                     {findUser ? (
                       <td className="text-right">
@@ -566,9 +568,22 @@ const DownListMaster = () => {
                         )}
                       </td>
                     ) : null}
-
                     <td className="text-right">
-                      {amountFormate(Number(item?.balance + item?.creditRef))}
+                      {Number(item?.balance - item?.creditRef) >= 0 ? (
+                        <span className="text-[#508d0e]">
+                          {amountFormate(
+                            Number(item?.balance - item?.creditRef)
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-[#d0021b]">
+                          (
+                          {amountFormate(
+                            Number(item?.balance - item?.creditRef)
+                          )}
+                          )
+                        </span>
+                      )}
                     </td>
                     <td className="text-right">
                       <div className="flex justify-end w-full">
