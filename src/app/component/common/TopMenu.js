@@ -116,45 +116,38 @@ const TopMenu = () => {
             onClick={() => {
               onClickMenu("/my-account");
             }}
-            className="text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer"
+            className={`text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer ${
+              activeMenu === "/my-account"
+                ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                : ""
+            }`}
           >
             My Account
           </div>
-          {/* <Menu placement="bottom-start">
-            <MenuHandler>
-              <Button className="rounded-none bg-transparent text-[12px] text-[#000000] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer py-0 capitalize">
-                My Reports
-                <FaCaretDown color="#000000" className="ml-1" />
-              </Button>
-            </MenuHandler>
-            <MenuList className="bg-[#ffbd14] rounded-none border-none mt-[-5px] p-0 text-[12px] text-[#000000] font-extrabold">
-              <MenuItem className="m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent active:bg-transparent border-t border-[rgba(0,0,0,.2)]">
-                Profit/Loss Report by Downline
-              </MenuItem>
-              <MenuItem className="m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent active:bg-transparent border-t border-b border-[rgba(0,0,0,.2)]">
-                Profit/Loss Report by Market
-              </MenuItem>
-            </MenuList>
-          </Menu> */}
-          {/* <div className="text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer">
+          <div
+            onClick={() => {
+              onClickMenu("/bet-list");
+            }}
+            className={`text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer ${
+              activeMenu === "/bet-list"
+                ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                : ""
+            }`}
+          >
             Bet List
-          </div> */}
-          {/* <Menu placement="bottom-start">
-            <MenuHandler>
-              <Button
-                style={{ fontWeight: 800 }}
-                className="rounded-none bg-transparent text-[12px] text-[#000000] border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer py-0 capitalize"
-              >
-                Risk
-                <FaCaretDown color="#000000" className="ml-1" />
-              </Button>
-            </MenuHandler>
-            <MenuList className="bg-[#ffbd14] rounded-none border-none mt-[-5px] p-0 text-[12px] text-[#000000] font-extrabold">
-              <MenuItem className="m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent active:bg-transparent border-t border-[rgba(0,0,0,.2)]">
-                Risk Management
-              </MenuItem>
-            </MenuList>
-          </Menu> */}
+          </div>
+          <div
+            onClick={() => {
+              onClickMenu("/market-analytics");
+            }}
+            className={`text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer ${
+              activeMenu === "/market-analytics"
+                ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                : ""
+            }`}
+          >
+            Market Analytics
+          </div>
           {userData?.roles?.toString() === "Agent" ? (
             <div
               onClick={() => {

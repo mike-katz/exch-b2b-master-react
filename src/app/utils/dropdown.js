@@ -28,14 +28,14 @@ export const USER_STATUS = [
 export const BET_STATUS = [
   { value: "", label: "ALL" },
   { value: "settle", label: "SETTLE" },
-  { value: "void", label: "UNSETTLE" },
-  { value: "unsettle", label: "VOID" },
+  { value: "unsettle", label: "UNSETTLE" },
+  { value: "void", label: "VOID" },
 ];
 
 export const MARKET_TYPE = [
   { value: "", label: "ALL" },
-  { value: "match_odds", label: "Match Odds" },
-  { value: "fancy", label: "Fancy" },
-  { value: "sports_book", label: "Sports Book" },
-  { value: "book_maker", label: "Book Maker" },
+  { value: "Match Odds", label: "Match Odds" },
+  { value: "Fancy", label: "Fancy" },
+  { value: "Sports Book", label: "Sports Book" },
+  { value: "Book Maker", label: "Book Maker" },
 ];

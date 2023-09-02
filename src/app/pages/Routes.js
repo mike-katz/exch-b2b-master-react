@@ -11,6 +11,9 @@ import MyAccount from "./dashboard/MyAccount";
 import BankingMaster from "./dashboard/Banking/BankingMaster";
 import BankingLogs from "./dashboard/Banking/BankingLogs";
 import AllBankingLogs from "./dashboard/Banking/AllBankingLogs";
+import BetList from "./dashboard/BetList";
+import MarketAnalytics from "./dashboard/MarketAnalytics";
+import MarketAnalyticsDetail from "./dashboard/MarketAnalytics/detail";
 
 const CustomRoutes = () => {
   return (
@@ -102,6 +105,33 @@ const CustomRoutes = () => {
         element={
           <PrivateRoute>
             <BankingMaster />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/bet-list"
+        element={
+          <PrivateRoute>
+            <BetList />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/market-analytics"
+        element={
+          <PrivateRoute>
+            <MarketAnalytics />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/market-analytics/:eventId"
+        element={
+          <PrivateRoute>
+            <MarketAnalyticsDetail />
           </PrivateRoute>
         }
       />
