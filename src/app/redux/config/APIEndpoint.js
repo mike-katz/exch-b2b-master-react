@@ -20,7 +20,13 @@ export default class APIEndpoint {
   static bankingTransactionHistory = "api/banking/transaction-history";
   static getSportList = "api/beating/get-sports";
   static getBetHistory = "api/beating/history";
+  static getBetList = "api/beating/list";
+  static getMarketData = "api/market";
   static getUserParentList = "api/user/get-parentList";
   static updateProfile = "api/user/update-profile";
-  static changePassword = "/api/auth/change-password";
+  static changePassword = "api/auth/change-password";
+  static marketDetails = "api/market/detail";
+  static getChannelData = "api/market/stream";
+  static getBetHistoryData = "api/beating/matchBet";
+  static getBetHistoryLPData = "api/beating/pl";
 }

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  getBetHistoryData,
-  getSportListData,
-} from "../../../redux/services/DownLineUser";
+import { getSportListData } from "../../../redux/services/DownLineUser";
 import Pagination from "../../../component/common/Pagination";
 import Loader from "../../../component/common/Loader";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { BET_STATUS, MARKET_TYPE } from "../../../utils/dropdown";
+import { getBetListData } from "../../../redux/services/BetList";
 
 const BetList = () => {
   const { userId } = useParams();
@@ -51,17 +49,16 @@ const BetList = () => {
       payload = {
         page: currentPage,
         limit: perPage,
-        userId: userId,
-        sportId: sportType,
+        sportName: sportType,
         status: betStatus,
-        type: marketType,
-        // from: fromDate,
-        // to: toDate,
+        marketType: marketType,
+        from: fromDate,
+        to: toDate,
       };
     }
 
     setIsLoadingTable(true);
-    const data = await getBetHistoryData(payload);
+    const data = await getBetListData(payload);
 
     if (data) {
       setTotalPage(data?.data?.totalPages);
@@ -106,10 +103,9 @@ const BetList = () => {
     const payload = {
       page: count,
       limit: perPage,
-      userId: userId,
-      sportId: sportType,
+      sportName: sportType,
       status: betStatus,
-      type: marketType,
+      marketType: marketType,
       from: fromDate,
       to: toDate,
     };
@@ -121,10 +117,9 @@ const BetList = () => {
     const payload = {
       page: currentPage,
       limit: perPage,
-      userId: userId,
-      sportId: sportType,
+      sportName: sportType,
       status: betStatus,
-      type: marketType,
+      marketType: marketType,
       from: fromDate,
       to: toDate,
     };
@@ -146,7 +141,7 @@ const BetList = () => {
             <option value="">All</option>
             {sportListDropdown?.map((item, index) => {
               return (
-                <option key={index} value={item?._id}>
+                <option key={index} value={item?.sportName}>
                   {item?.sportName}
                 </option>
               );

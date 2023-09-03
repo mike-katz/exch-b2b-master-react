@@ -1,12 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { collection, onSnapshot, query, where } from "@firebase/firestore";
+import { firestore } from "../../../../firebaseSetup/firebase";
 import LiveStreaming from "../../../component/common/LiveStriming";
+import {
+  getBetHistoryLPData,
+  getMarketDetailData,
+} from "../../../redux/services/MarketAnalytics";
+import moment from "moment";
+import DetailGameCard from "../../../component/common/DetailGameCard";
+import BetHistory from "../../../component/common/BetHistory";
 
 const MarketAnalyticsDetail = (props) => {
   const navigate = useNavigate();
+  const { eventId } = useParams();
   const [activeStreamingDesktop, setActiveStreamingDesktop] = useState(false);
   const [activeStreamingMobile, setActiveStreamingMobile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageRunnersData, setPageRunnersData] = useState([]);
+  const [pageData, setPageData] = useState([]);
+  const [pageCustomizeData, setPageCustomizeData] = useState([]);
+  const [pagePlData, setPagePlData] = useState([]);
+
+  const liveValue = useRef([]);
+
+  useEffect(() => {
+    liveValue.current = pageRunnersData;
+  }, [pageRunnersData]);
 
   const onClickBack = () => {
     navigate(`/market-analytics`);
@@ -19,6 +40,157 @@ const MarketAnalyticsDetail = (props) => {
   const onChangeMobileLiveStreaming = () => {
     setActiveStreamingMobile(!activeStreamingMobile);
   };
+
+  useEffect(() => {
+    getFirebaseData();
+    getEventMarkets();
+    getBetPl(eventId);
+  }, []);
+
+  const getFirebaseData = async () => {
+    try {
+      setIsLoading(true);
+      const citiesRef = collection(firestore, "marketRates");
+      const q = query(citiesRef, where("exEventId", "==", eventId));
+      onSnapshot(q, (docsSnap) => {
+        const data = [];
+        const runnerData = [];
+        const customizeData = [];
+        docsSnap.forEach((doc) => {
+          data?.push(doc.data());
+        });
+
+        data?.map((item, mainIndex) => {
+          const runnersList = [];
+          const newData = [];
+          Object.keys(item?.runnerData).map((key, index) => {
+            const runners = item?.runners?.find(
+              (item) => item?.selectionId == key
+            )?.exchange;
+
+            runnersList.push([
+              {
+                size: runners?.availableToBack?.[2]?.size || "-",
+                price: runners?.availableToBack?.[2]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[1]?.size || "-",
+                price: runners?.availableToBack?.[1]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[0]?.size || "-",
+                price: runners?.availableToBack?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[0]?.size || "-",
+                price: runners?.availableToLay?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[1]?.size || "-",
+                price: runners?.availableToLay?.[1]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[2]?.size || "-",
+                price: runners?.availableToLay?.[2]?.price || "-",
+              },
+            ]);
+
+            const oldData = liveValue?.current?.[mainIndex]?.[index];
+
+            if (oldData) {
+              newData?.push([
+                oldData?.[0]?.size !==
+                  (runners?.availableToBack?.[2]?.size || "-") ||
+                oldData?.[0]?.price !==
+                  (runners?.availableToBack?.[2]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[1]?.size !==
+                  (runners?.availableToBack?.[1]?.size || "-") ||
+                oldData?.[1]?.price !==
+                  (runners?.availableToBack?.[1]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[2]?.size !==
+                  (runners?.availableToBack?.[0]?.size || "-") ||
+                oldData?.[2]?.price !==
+                  (runners?.availableToBack?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[3]?.size !==
+                  (runners?.availableToLay?.[0]?.size || "-") ||
+                oldData?.[3]?.price !==
+                  (runners?.availableToLay?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[4]?.size !==
+                  (runners?.availableToLay?.[1]?.size || "-") ||
+                oldData?.[4]?.price !==
+                  (runners?.availableToLay?.[1]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[5]?.size !==
+                  (runners?.availableToLay?.[2]?.size || "-") ||
+                oldData?.[5]?.price !==
+                  (runners?.availableToLay?.[2]?.price || "-")
+                  ? true
+                  : false,
+              ]);
+            }
+          });
+          customizeData.push(newData);
+          runnerData.push(runnersList);
+        });
+
+        setPageData(data);
+        setPageRunnersData(runnerData);
+        setPageCustomizeData(customizeData);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      console.warn(err);
+      setIsLoading(false);
+    }
+  };
+
+  const getBetPl = async (exEventId) => {
+    const payload = {
+      exEventId,
+    };
+
+    const data = await getBetHistoryLPData(payload);
+    console.log({ data });
+    if (data?.data) {
+      const cusData = [];
+      data?.data?.map((item) => {
+        const selectionId = {};
+        item?.selectionId?.map((si) => {
+          Object.assign(selectionId, si);
+        });
+
+        cusData?.push({
+          exMarketId: item?.exMarketId,
+          runnerData: selectionId,
+        });
+      });
+      console.log({ cusData });
+      setPagePlData(cusData);
+    }
+  };
+
+  const getEventMarkets = async () => {
+    setIsLoading(true);
+    const data = await getMarketDetailData(eventId);
+    console.log({ data });
+    if (data?.data) {
+      if (pageData?.length === 0) {
+        setPageData(data?.data);
+      }
+    }
+    setIsLoading(false);
+  };
+
+  // console.log({ isLoading, pageCustomizeData });
 
   return (
     <div className="px-2">
@@ -40,480 +212,72 @@ const MarketAnalyticsDetail = (props) => {
               }}
             >
               <div className="text-[14px] font-bold">
-                Northern Superchargers v Birmingham Phoenix
+                {pageData?.[0]?.eventName}
               </div>
-              <div className="text-[12px] font-bold flex justify-between w-full md:w-auto mt-1 md:mt-0 items-center">
+              <div
+                // style={{ color: themeColor?.commonTextColor }}
+                className="text-[12px] font-bold flex justify-between w-full md:w-auto mt-1 md:mt-0 items-center"
+              >
+                <div className="flex items-center">
+                  <div
+                    // onClick={onClickBetsHistoryModal}
+                    className="bg-[#ECAD17] uppercase mr-2 rounded p-[3px] md:hidden"
+                  >
+                    Bets
+                  </div>
+                  <img
+                    className="cursor-pointer ml-1 h-[18px] md:hidden"
+                    onClick={onChangeMobileLiveStreaming}
+                    src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/tv.svg"
+                    style={{ filter: "invert(1)" }}
+                  />
+                </div>
+                <div className="flex items-center">
+                  (
+                  {moment
+                    .utc(pageData?.[0]?.marketTime)
+                    .utcOffset(moment().utcOffset())
+                    .format("DD/MM/YYYY LTS")}
+                  )
+                </div>
+              </div>
+              {/* <div className="text-[12px] font-bold flex justify-between w-full md:w-auto mt-1 md:mt-0 items-center">
+                (
+                {moment
+                  .utc(pageData?.[0]?.marketTime)
+                  .utcOffset(moment().utcOffset())
+                  .format("DD/MM/YYYY LTS")}
+                )
                 <img
-                  className="cursor-pointer ml-1 h-[18px] md:hidden"
+                  className="cursor-pointer ml-1 h-[18px] hidden"
                   onClick={onChangeMobileLiveStreaming}
                   src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/tv.svg"
                   style={{ filter: "invert(1)" }}
                 />
-              </div>
+              </div> */}
+            </div>
+            <div className="md:hidden mb-2">
+              {activeStreamingMobile && (
+                <LiveStreaming eventId={pageData?.[0]?.eventId} />
+              )}
             </div>
 
             <div>
-              <div className="flex items-center mt-2">
-                <div className="bg-[#E4E4E4] min-h-[37px] w-full lg:w-[50%] relative">
-                  <div
-                    style={{
-                      background:
-                        "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
-                    }}
-                    className="absolute left-0 w-[170px] z-[9] h-full flex items-center"
-                  >
-                    <div
-                      style={{
-                        clipPath:
-                          "polygon(0 -1px, 100% -1px, 1px 100%, 0 100%)",
-                        width: "18px",
-                        height: "calc(100% + 0px)",
-                        position: "absolute",
-                        right: "-17px",
-                        top: 0,
-                        background:
-                          "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
-                      }}
-                    ></div>
-                    {/* <img src={props?.icon} className="ml-2 h-[20px] w-[20px]" /> */}
-                    <span className="text-[#FFFFFF] text-[15px] ml-2 font-bold">
-                      {"props?.title"}
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-[#E4E4E4] min-h-[37px] w-[50%] hidden lg:flex items-center">
-                  <div className="w-[33.33%] flex justify-center items-center h-full">
-                    <div className="text-[#333] text-[15px] font-bold">1</div>
-                  </div>
-                  <div className="w-[33.33%] flex justify-center items-center h-full">
-                    <div className="text-[15px] font-bold">x</div>
-                  </div>
-                  <div className="text-[#333] w-[33.33%] flex justify-center items-center h-full">
-                    <div className="text-[#333] text-[15px] font-bold">2</div>
-                  </div>
-                </div>
-              </div>
-              <div className="text-base font-normal p-0">
-                <div className="flex items-center border border-[#f2edf3] grid grid-cols-12">
-                  <div
-                    style={{ background: "#FFFFFF" }}
-                    className="min-h-[37px] flex items-center col-span-6"
-                  ></div>
-                  <div
-                    style={{ background: "#FFFFFF" }}
-                    className="min-h-[37px] flex items-center col-span-6"
-                  >
-                    <div className="w-full sm:block hidden"></div>
-                    <div className="w-full sm:block hidden"></div>
-                    <div className="w-full font-bold text-[11px] text-center">
-                      BACK
-                    </div>
-                    <div className="w-full font-bold text-[11px] text-center">
-                      LAY
-                    </div>
-                    <div className="w-full sm:block hidden"></div>
-                    <div className="w-full sm:block hidden"></div>
-                  </div>
-                </div>
-                {/* {props?.data?.runnerData &&
-                  Object.keys(props?.data?.runnerData).map((key, index) => {
-                    const runners = props?.data?.runners?.find(
-                      (item) => item?.selectionId == key
-                    )?.exchange;
-
-                    const selectionId = props?.data?.runners?.find(
-                      (item) => item?.selectionId == key
-                    )?.selectionId;
-
-                    const status = props?.data?.runners?.find(
-                      (item) => item?.selectionId == key
-                    )?.state?.status;
-
-                    let price = "";
-
-                    if (key === props?.activeSubId) {
-                      if (props?.activeType === "back") {
-                        price = price =
-                          (props?.currentBetRate - 1) * props?.currentBetValue;
-                      } else {
-                        price = price = Number(
-                          -(props?.currentBetRate - 1) * props?.currentBetValue
-                        );
-                      }
-                    } else {
-                      if (props?.activeType === "back") {
-                        price = Number(-props?.currentBetValue);
-                      } else {
-                        price = Number(props?.currentBetValue);
-                      }
-                    }
-
-                    if (props?.oldPrice?.[key] && key && props?.activeSubId) {
-                      price = price + props?.oldPrice?.[key];
-                    }
-
-                    const blinkValue = blinkData?.[index];
-
-                    return (
-                      <>
-                        <div key={index} className="grid grid-cols-12">
-                          <div
-                            className={`bg-[#FFFFFF] border-[#f2edf3] min-h-[37px] col-span-6 flex justify-between px-2 py-1 min-h-[50px] ${
-                              Object.keys(props?.data?.runnerData)?.length ===
-                              index + 1
-                                ? ""
-                                : "border-b"
-                            }`}
-                          >
-                            <div className="flex items-center w-full">
-                              <div className="cursor-pointer flex justify-between flex-col md:flex-row w-full">
-                                <div className="text-[#3B5160] text-[13px] font-bold text-ellipsis">
-                                  {props?.data?.runnerData?.[key]}
-                                </div>
-
-                                <div className="flex items-center font-bold">
-                                  {props?.oldPrice?.[key] ? (
-                                    <span
-                                      className={`text-[10px] mr-2 ${
-                                        Number(props?.oldPrice?.[key]) > 0
-                                          ? "text-[green]"
-                                          : "text-[red]"
-                                      }`}
-                                    >
-                                      {props?.oldPrice?.[key]}
-                                    </span>
-                                  ) : (
-                                    <span
-                                      className={`text-[10px] mr-2 text-[red]`}
-                                    >
-                                      0.0
-                                    </span>
-                                  )}
-
-                                  {price !== "" &&
-                                  props?.currentBetRate &&
-                                  props?.currentBetValue ? (
-                                    <FiArrowRight
-                                      className={`text-[10px] mr-1 ${
-                                        Number(price) > 0
-                                          ? "text-[green]"
-                                          : "text-[red]"
-                                      }`}
-                                    />
-                                  ) : null}
-
-                                  {price !== "" &&
-                                  props?.currentBetRate &&
-                                  props?.currentBetValue ? (
-                                    <span
-                                      className={`text-[10px] mr-2 ${
-                                        Number(price) > 0
-                                          ? "text-[green]"
-                                          : "text-[red]"
-                                      }`}
-                                    >
-                                      ({price?.toFixed(2)})
-                                    </span>
-                                  ) : null}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="min-h-[37px] w-full flex items-center col-span-6 relative">
-                            {status === "ACTIVE" || status === "OPEN" ? null : (
-                              <div className="absolute capitalize text-[13px] text-[red] flex justify-center items-center bg-[#fff] border border-[#ff57222b] opacity-80 h-full w-full font-extrabold">
-                                {status}
-                              </div>
-                            )}
-
-                            <div className="w-full flex items-center sm:flex hidden">
-                              <div
-                                onMouseEnter={() => onBackMouseEnter(1, index)}
-                                onMouseLeave={() => onBackMouseLeave(1, index)}
-                                onClick={() => {
-                                  if (runners?.availableToBack?.[2]?.price) {
-                                    onClickBetData(
-                                      props?.id,
-                                      key,
-                                      "back",
-                                      props?.data?.betLimit?.split(" - ")?.[0],
-                                      props?.data?.betLimit?.split(" - ")?.[1],
-                                      runners?.availableToBack?.[2]?.price,
-                                      selectionId,
-                                      props?.data?.exEventId,
-                                      props?.data?.exMarketId
-                                    );
-                                  }
-                                }}
-                                style={{
-                                  background:
-                                    backHoverColor &&
-                                    activeIndex === `${1}-${index}`
-                                      ? backHoverColor
-                                      : "rgb(199, 238, 255)",
-                                  borderColor: "#FFFFFF",
-                                }}
-                                className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                                  blinkValue?.[0] ? "blink_me" : ""
-                                } ${
-                                  Object.keys(props?.data?.runnerData)
-                                    ?.length ===
-                                  index + 1
-                                    ? ""
-                                    : "border-b"
-                                } border-r`}
-                              >
-                                <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
-                                  {runners?.availableToBack?.[2]?.price || "-"}
-                                </div>
-                                <div className="text-[#1e1e1e] text-[10px] font-bold text-center mt-[-3px]">
-                                  {runners?.availableToBack?.[2]?.size || "-"}
-                                </div>
-                              </div>
-                              <div
-                                onMouseEnter={() => onBackMouseEnter(2, index)}
-                                onMouseLeave={() => onBackMouseLeave(2, index)}
-                                onClick={() => {
-                                  if (runners?.availableToBack?.[1]?.price) {
-                                    onClickBetData(
-                                      props?.id,
-                                      key,
-                                      "back",
-                                      props?.data?.betLimit?.split(" - ")?.[0],
-                                      props?.data?.betLimit?.split(" - ")?.[1],
-                                      runners?.availableToBack?.[1]?.price,
-                                      selectionId,
-                                      props?.data?.exEventId,
-                                      props?.data?.exMarketId
-                                    );
-                                  }
-                                }}
-                                style={{
-                                  background:
-                                    backHoverColor &&
-                                    activeIndex === `${2}-${index}`
-                                      ? backHoverColor
-                                      : "rgb(199, 238, 255)",
-                                  borderColor: "#FFFFFF",
-                                }}
-                                className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                                  blinkValue?.[1] ? "blink_me" : ""
-                                } ${
-                                  Object.keys(props?.data?.runnerData)
-                                    ?.length ===
-                                  index + 1
-                                    ? ""
-                                    : "border-b"
-                                } border-r`}
-                              >
-                                <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
-                                  {runners?.availableToBack?.[1]?.price || "-"}
-                                </div>
-                                <div className="text-[#1e1e1e] text-[10px] font-bold text-center mt-[-3px]">
-                                  {runners?.availableToBack?.[1]?.size || "-"}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="w-full flex items-center">
-                              <div
-                                onMouseEnter={() => onBackMouseEnter(3, index)}
-                                onMouseLeave={() => onBackMouseLeave(3, index)}
-                                onClick={() => {
-                                  if (runners?.availableToBack?.[0]?.price) {
-                                    onClickBetData(
-                                      props?.id,
-                                      key,
-                                      "back",
-                                      props?.data?.betLimit?.split(" - ")?.[0],
-                                      props?.data?.betLimit?.split(" - ")?.[1],
-                                      runners?.availableToBack?.[0]?.price,
-                                      selectionId,
-                                      props?.data?.exEventId,
-                                      props?.data?.exMarketId
-                                    );
-                                  }
-                                }}
-                                style={{
-                                  background:
-                                    backHoverColor &&
-                                    activeIndex === `${3}-${index}`
-                                      ? backHoverColor
-                                      : "rgb(148, 223, 255)",
-                                  borderColor: "#FFFFFF",
-                                }}
-                                className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                                  blinkValue?.[2] ? "blink_me" : ""
-                                } ${
-                                  Object.keys(props?.data?.runnerData)
-                                    ?.length ===
-                                  index + 1
-                                    ? ""
-                                    : "border-b"
-                                } border-r`}
-                              >
-                                <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
-                                  {runners?.availableToBack?.[0]?.price || "-"}
-                                </div>
-                                <div className="text-[#1e1e1e] text-[10px] font-bold text-center mt-[-3px]">
-                                  {runners?.availableToBack?.[0]?.size || "-"}
-                                </div>
-                              </div>
-                              <div
-                                onMouseEnter={() => onLayMouseEnter(4, index)}
-                                onMouseLeave={() => onLayMouseLeave(4, index)}
-                                onClick={() => {
-                                  if (runners?.availableToLay?.[0]?.price) {
-                                    onClickBetData(
-                                      props?.id,
-                                      key,
-                                      "lay",
-                                      props?.data?.betLimit?.split(" - ")?.[0],
-                                      props?.data?.betLimit?.split(" - ")?.[1],
-                                      runners?.availableToLay?.[0]?.price,
-                                      selectionId,
-                                      props?.data?.exEventId,
-                                      props?.data?.exMarketId
-                                    );
-                                  }
-                                }}
-                                style={{
-                                  background:
-                                    layHoveColor &&
-                                    activeIndex === `${4}-${index}`
-                                      ? layHoveColor
-                                      : "rgb(249, 200, 211)",
-                                  borderColor: "#FFFFFF",
-                                }}
-                                className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                                  blinkValue?.[3] ? "blink_me" : ""
-                                } ${
-                                  Object.keys(props?.data?.runnerData)
-                                    ?.length ===
-                                  index + 1
-                                    ? ""
-                                    : "border-b"
-                                } border-r`}
-                              >
-                                <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
-                                  {runners?.availableToLay?.[0]?.price || "-"}
-                                </div>
-                                <div className="text-[#1e1e1e] text-[10px] font-bold text-center mt-[-3px]">
-                                  {runners?.availableToLay?.[0]?.size || "-"}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="w-full flex items-center sm:flex hidden">
-                              <div
-                                onMouseEnter={() => onLayMouseEnter(5, index)}
-                                onMouseLeave={() => onLayMouseLeave(5, index)}
-                                onClick={() => {
-                                  if (runners?.availableToLay?.[1]?.price) {
-                                    onClickBetData(
-                                      props?.id,
-                                      key,
-                                      "lay",
-                                      props?.data?.betLimit?.split(" - ")?.[0],
-                                      props?.data?.betLimit?.split(" - ")?.[1],
-                                      runners?.availableToLay?.[1]?.price,
-                                      selectionId,
-                                      props?.data?.exEventId,
-                                      props?.data?.exMarketId
-                                    );
-                                  }
-                                }}
-                                style={{
-                                  background:
-                                    layHoveColor &&
-                                    activeIndex === `${5}-${index}`
-                                      ? layHoveColor
-                                      : "rgb(239 225 229)",
-                                  borderColor: "#FFFFFF",
-                                }}
-                                className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                                  blinkValue?.[4] ? "blink_me" : ""
-                                } ${
-                                  Object.keys(props?.data?.runnerData)
-                                    ?.length ===
-                                  index + 1
-                                    ? ""
-                                    : "border-b"
-                                } border-r`}
-                              >
-                                <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
-                                  {runners?.availableToLay?.[1]?.price || "-"}
-                                </div>
-                                <div className="text-[#1e1e1e] text-[10px] font-bold text-center mt-[-3px]">
-                                  {runners?.availableToLay?.[1]?.size || "-"}
-                                </div>
-                              </div>
-                              <div
-                                onMouseEnter={() => onLayMouseEnter(6, index)}
-                                onMouseLeave={() => onLayMouseLeave(6, index)}
-                                onClick={() => {
-                                  if (runners?.availableToLay?.[2]?.price) {
-                                    onClickBetData(
-                                      props?.id,
-                                      key,
-                                      "lay",
-                                      props?.data?.betLimit?.split(" - ")?.[0],
-                                      props?.data?.betLimit?.split(" - ")?.[1],
-                                      runners?.availableToLay?.[2]?.price,
-                                      selectionId,
-                                      props?.data?.exEventId,
-                                      props?.data?.exMarketId
-                                    );
-                                  }
-                                }}
-                                style={{
-                                  background:
-                                    layHoveColor &&
-                                    activeIndex === `${6}-${index}`
-                                      ? layHoveColor
-                                      : "rgb(239 225 229)",
-                                  borderColor: "#FFFFFF",
-                                }}
-                                className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                                  blinkValue?.[5] ? "blink_me" : ""
-                                } ${
-                                  Object.keys(props?.data?.runnerData)
-                                    ?.length ===
-                                  index + 1
-                                    ? ""
-                                    : "border-b"
-                                }`}
-                              >
-                                <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
-                                  {runners?.availableToLay?.[2]?.price || "-"}
-                                </div>
-                                <div className="text-[#1e1e1e] text-[10px] font-bold text-center mt-[-3px]">
-                                  {runners?.availableToLay?.[2]?.size || "-"}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {props?.activeMainId === props?.id &&
-                        props?.activeSubId === key ? (
-                          <div className="md:hidden block">
-                            <BetPlace
-                              currentBetValue={props?.currentBetValue}
-                              setBetValue={props?.setBetValue}
-                              setRateValue={props?.setRateValue}
-                              price={props?.price}
-                              min={props?.data?.betLimit?.split(" - ")?.[0]}
-                              max={props?.data?.betLimit?.split(" - ")?.[1]}
-                              onClickCancelBet={props?.onClickCancelBet}
-                              type={props?.activeType}
-                              onClickPlaceBet={props?.onClickPlaceBet}
-                              isLoadingBetPlace={props?.isLoadingBetPlace}
-                            />
-                          </div>
-                        ) : null}
-                      </>
-                    );
-                  })} */}
-              </div>
+              {!isLoading &&
+                pageData?.map((item, index) => {
+                  const runnerData = pagePlData?.find(
+                    (pl) => pl?.exMarketId === item?.exMarketId
+                  );
+                  return (
+                    <DetailGameCard
+                      oldPrice={runnerData?.runnerData}
+                      // oldPrice={[122, -100]}
+                      oldData={pageCustomizeData?.[index]}
+                      data={item}
+                      key={index}
+                    />
+                  );
+                })}
             </div>
           </div>
           <div className="col-span-5 md:col-span-5 xl:col-span-4 hidden md:block">
@@ -540,7 +304,7 @@ const MarketAnalyticsDetail = (props) => {
               </div>
               {activeStreamingDesktop && (
                 <div>
-                  <LiveStreaming />
+                  <LiveStreaming eventId={pageData?.[0]?.eventId} />
                 </div>
               )}
               <div
@@ -555,10 +319,10 @@ const MarketAnalyticsDetail = (props) => {
                 <div className="py-1">Live Bets</div>
               </div>
 
-              {/* <BetHistory
-                renderBetPlace={rerenderBet}
+              <BetHistory
+                // renderBetPlace={rerenderBet}
                 exEventId={pageData?.[0]?.exEventId}
-              /> */}
+              />
             </div>
           </div>
         </div>

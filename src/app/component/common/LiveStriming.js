@@ -1,83 +1,95 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import {
   loginModalVisible,
   signupModalVisible,
 } from "../../redux/actions/persistAction";
+import { getChannelData } from "../../redux/services/MarketAnalytics";
 
 const LiveStreaming = ({ eventId }) => {
   const dispatch = useDispatch();
   const { isLoggedIn, themeColor } = useSelector((state) => state?.persist);
   const [isLoading, setIsLoading] = useState(true);
-  const channelId = "";
-  const noLiveStream = false;
-  // const hours = 10;
+  const [channelId, setChannelId] = useState();
+  const [noLiveStream, setNoLiveStream] = useState(false);
 
-  // useEffect(() => {
-  //   manageChannelId();
-  // }, []);
+  const hours = 10;
 
-  // const manageChannelId = async () => {
-  //   const now = new Date().getTime();
-  //   const data = localStorage.getItem('streamingId');
-  //   if (data) {
-  //     const eventData = JSON.parse(data);
-  //     const currentEventData = eventData?.find((item) => item?.eventId === eventId);
-  //     if (currentEventData) {
-  //       if (now - currentEventData?.time > hours * 60 * 60 * 1000) {
-  //         const customizeEventData = [...eventData];
-  //         customizeEventData?.filter((item) => item?.MatchID !== eventId);
-  //         const channelData = await getChannelData(eventId);
-  //         if (channelData?.Channel) {
-  //           setChannelId(channelData?.Channel);
-  //           customizeEventData.push({
-  //             time: now,
-  //             eventId: eventId,
-  //             channelId: channelData?.Channel
-  //           });
-  //           localStorage.setItem('streamingId', JSON.stringify(customizeEventData));
-  //         } else {
-  //           setNoLiveStream(true);
-  //         }
-  //       } else {
-  //         const channelData = eventData.find((item) => item?.eventId === eventId);
-  //         setChannelId(channelData?.channelId);
-  //       }
-  //     } else {
-  //       const channelData = await getChannelData(eventId);
-  //       // const channelData = DATA;
-  //       if (channelData?.Channel) {
-  //         setChannelId(channelData?.Channel);
-  //         const customizeEventData = [...eventData];
-  //         customizeEventData.push({
-  //           time: now,
-  //           eventId: eventId,
-  //           channelId: channelData?.Channel
-  //         });
-  //         localStorage.setItem('streamingId', JSON.stringify(customizeEventData));
-  //       } else {
-  //         setNoLiveStream(true);
-  //       }
-  //     }
-  //   } else {
-  //     const channelData = await getChannelData(eventId);
-  //     // const channelData = DATA;
-  //     if (channelData?.Channel) {
-  //       setChannelId(channelData?.Channel);
-  //       const newRecord = [
-  //         {
-  //           time: now,
-  //           eventId: eventId,
-  //           channelId: channelData?.Channel
-  //         }
-  //       ];
-  //       localStorage.setItem('streamingId', JSON.stringify(newRecord));
-  //     } else {
-  //       setNoLiveStream(true);
-  //     }
-  //   }
-  // };
+  useEffect(() => {
+    manageChannelId();
+  }, []);
+
+  const manageChannelId = async () => {
+    const now = new Date().getTime();
+    const data = localStorage.getItem("streamingId");
+    if (data) {
+      const eventData = JSON.parse(data);
+      const currentEventData = eventData?.find(
+        (item) => item?.eventId === eventId
+      );
+      if (currentEventData) {
+        if (now - currentEventData?.time > hours * 60 * 60 * 1000) {
+          const customizeEventData = [...eventData];
+          customizeEventData?.filter((item) => item?.MatchID !== eventId);
+          const channelData = await getChannelData(eventId);
+          if (channelData?.Channel) {
+            setChannelId(channelData?.Channel);
+            customizeEventData.push({
+              time: now,
+              eventId: eventId,
+              channelId: channelData?.Channel,
+            });
+            localStorage.setItem(
+              "streamingId",
+              JSON.stringify(customizeEventData)
+            );
+          } else {
+            setNoLiveStream(true);
+          }
+        } else {
+          const channelData = eventData.find(
+            (item) => item?.eventId === eventId
+          );
+          setChannelId(channelData?.channelId);
+        }
+      } else {
+        const channelData = await getChannelData(eventId);
+        // const channelData = DATA;
+        if (channelData?.Channel) {
+          setChannelId(channelData?.Channel);
+          const customizeEventData = [...eventData];
+          customizeEventData.push({
+            time: now,
+            eventId: eventId,
+            channelId: channelData?.Channel,
+          });
+          localStorage.setItem(
+            "streamingId",
+            JSON.stringify(customizeEventData)
+          );
+        } else {
+          setNoLiveStream(true);
+        }
+      }
+    } else {
+      const channelData = await getChannelData(eventId);
+      // const channelData = DATA;
+      if (channelData?.Channel) {
+        setChannelId(channelData?.Channel);
+        const newRecord = [
+          {
+            time: now,
+            eventId: eventId,
+            channelId: channelData?.Channel,
+          },
+        ];
+        localStorage.setItem("streamingId", JSON.stringify(newRecord));
+      } else {
+        setNoLiveStream(true);
+      }
+    }
+  };
 
   const onVisibleSignup = () => {
     dispatch(signupModalVisible());
