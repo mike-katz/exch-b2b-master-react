@@ -63,6 +63,7 @@ const MarketAnalyticsDetail = (props) => {
         data?.map((item, mainIndex) => {
           const runnersList = [];
           const newData = [];
+
           Object.keys(item?.runnerData).map((key, index) => {
             const runners = item?.runners?.find(
               (item) => item?.selectionId == key
@@ -138,6 +139,7 @@ const MarketAnalyticsDetail = (props) => {
               ]);
             }
           });
+          console.log(runnersList);
           customizeData.push(newData);
           runnerData.push(runnersList);
         });
@@ -181,7 +183,7 @@ const MarketAnalyticsDetail = (props) => {
   const getEventMarkets = async () => {
     setIsLoading(true);
     const data = await getMarketDetailData(eventId);
-    console.log({ data });
+
     if (data?.data) {
       if (pageData?.length === 0) {
         setPageData(data?.data);
@@ -261,7 +263,6 @@ const MarketAnalyticsDetail = (props) => {
                 <LiveStreaming eventId={pageData?.[0]?.eventId} />
               )}
             </div>
-
             <div>
               {!isLoading &&
                 pageData?.map((item, index) => {

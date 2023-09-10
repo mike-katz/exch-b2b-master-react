@@ -138,6 +138,18 @@ const TopMenu = () => {
           </div>
           <div
             onClick={() => {
+              onClickMenu("/bet-lock");
+            }}
+            className={`text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer ${
+              activeMenu === "/bet-lock"
+                ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                : ""
+            }`}
+          >
+            Bet Lock
+          </div>
+          <div
+            onClick={() => {
               onClickMenu("/market-analytics");
             }}
             className={`text-[12px] text-[#000000] font-extrabold border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer ${

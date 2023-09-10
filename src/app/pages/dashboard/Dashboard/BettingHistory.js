@@ -119,8 +119,9 @@ const BettingHistory = ({ username }) => {
   };
 
   const onClickSubmit = () => {
+    setCurrentPage(1);
     const payload = {
-      page: currentPage,
+      page: 1,
       limit: perPage,
       userId: userId,
       sportId: sportType,

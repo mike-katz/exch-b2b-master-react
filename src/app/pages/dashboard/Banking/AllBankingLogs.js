@@ -111,7 +111,7 @@ const AllBankingLogs = () => {
                     return (
                       <tr key={index}>
                         <td>
-                          {moment(item?.createdAt)?.format("DD-YY-MM")}
+                          {moment(item?.createdAt)?.format("DD-MM-YYYY")}
                           <br /> {moment(item?.createdAt)?.format("hh:MM:ss A")}
                         </td>
                         <td className="text-right">
@@ -128,7 +128,9 @@ const AllBankingLogs = () => {
                             </span>
                           )}
                         </td>
-                        <td className="text-right">{item?.remark || "-"}</td>
+                        <td className="text-right">
+                          {amountFormate(item?.newBalance) || "-"}
+                        </td>
                         <td className="text-right">{item?.remark || "-"}</td>
                         <td className="text-right">
                           <strong className="ml-4">

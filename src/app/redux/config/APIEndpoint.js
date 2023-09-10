@@ -15,6 +15,8 @@ export default class APIEndpoint {
   static creditRefList = "api/user/creditlogs";
   static updateStatus = "api/user/update-status";
   static editExposureLimit = "api/user/change-exposure";
+
+  // BENKING
   static exportCSVFile = "api/user/export";
   static bankingTransaction = "api/banking/transaction";
   static bankingTransactionHistory = "api/banking/transaction-history";
@@ -29,4 +31,6 @@ export default class APIEndpoint {
   static getChannelData = "api/market/stream";
   static getBetHistoryData = "api/beating/matchBet";
   static getBetHistoryLPData = "api/beating/pl";
+  static getBetLockData = "api/market/events";
+  static betLockData = "api/beating/lock";
 }

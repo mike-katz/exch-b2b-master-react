@@ -4,8 +4,6 @@ import { Navigate } from "react-router-dom";
 export const PrivateRoute = ({ children }) => {
   const { isLoggedIn, userData } = useSelector((state) => state?.persist);
 
-  console.log({ window });
-
   if (window.location.pathname === "/") {
     return <Navigate to="/down-list-master" />;
   }

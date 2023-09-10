@@ -23,7 +23,7 @@ const BetHistory = (props) => {
 
     setIsLoading(true);
     const data = await getBetHistoryData(payload);
-    console.log(data?.data);
+
     if (data?.data) {
       const backData = [];
       const layData = [];
@@ -40,8 +40,6 @@ const BetHistory = (props) => {
       // setPageData(data);
     }
   };
-
-  console.log({ isLoading });
 
   const onClickTab = (menu) => {
     setActiveMenu(menu);

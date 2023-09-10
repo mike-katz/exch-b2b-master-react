@@ -114,8 +114,9 @@ const BetList = () => {
   };
 
   const onClickSubmit = () => {
+    setCurrentPage(1);
     const payload = {
-      page: currentPage,
+      page: 1,
       limit: perPage,
       sportName: sportType,
       status: betStatus,
