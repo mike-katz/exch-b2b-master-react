@@ -309,7 +309,7 @@ const DownListMaster = () => {
         <div className="xl:col-span-2 md:col-span-4 col-span-6 px-2 flex flex-col justify-center bg-[#FFFFFF] border border-[#7e97a7] min-h-[53px]">
           <div className="text-[12px] text-[#9b9b9b]">Total Balance</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR {amountFormate(myBalance?.totalBalance)}
+            IR {amountFormate(myBalance?.totalBalance) || 0}
           </div>
         </div>
         <div className="xl:col-span-2 md:col-span-4 col-span-6 px-2 flex flex-col justify-center bg-[#FFFFFF] border border-[#7e97a7] min-h-[53px]">
@@ -317,7 +317,7 @@ const DownListMaster = () => {
           <div className="text-[#243a48] text-[15px] font-black">
             IR{" "}
             <span className="text-[#d0021b]">
-              ({amountFormate(myBalance?.totalExposure)})
+              ({amountFormate(myBalance?.totalExposure) || 0})
             </span>
           </div>
         </div>
@@ -326,14 +326,14 @@ const DownListMaster = () => {
           <div className="text-[#243a48] text-[15px] font-black">
             IR{" "}
             {amountFormate(
-              Number(myBalance?.totalBalance + myBalance?.totalBalance)
+              Number(myBalance?.totalBalance + myBalance?.totalExposure || 0)
             )}
           </div>
         </div>
         <div className="xl:col-span-2 md:col-span-4 col-span-6 px-2 flex flex-col justify-center bg-[#FFFFFF] border border-[#7e97a7] min-h-[53px]">
           <div className="text-[12px] text-[#9b9b9b]">Balance</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            IR {amountFormate(myBalance?.balance)}
+            IR {amountFormate(myBalance?.balance) || 0}
           </div>
         </div>
         <div className="xl:col-span-2 md:col-span-4 col-span-6 px-2 flex flex-col justify-center bg-[#FFFFFF] border border-[#7e97a7] min-h-[53px]">
@@ -341,14 +341,14 @@ const DownListMaster = () => {
           <div className="text-[#243a48] text-[15px] font-black">
             IR{" "}
             {amountFormate(
-              Number(myBalance?.balance + myBalance?.totalExposure)
+              Number(myBalance?.balance + myBalance?.totalExposure || 0)
             )}
           </div>
         </div>
         <div className="xl:col-span-2 md:col-span-4 col-span-6 px-2 flex flex-col justify-center bg-[#FFFFFF] border border-[#7e97a7] min-h-[53px]">
           <div className="text-[12px] text-[#9b9b9b]">Total Users</div>
           <div className="text-[#243a48] text-[15px] font-black">
-            {myBalance?.totalUser}
+            {myBalance?.totalUser || 0}
           </div>
         </div>
       </div>
