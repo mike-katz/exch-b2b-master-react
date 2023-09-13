@@ -28,8 +28,16 @@ export const getChannelData = async (eventId) => {
 export const getBetHistoryData = async (payload) => {
   let queryParams = "";
 
-  if (payload?.exEventId) {
-    queryParams += `${queryParams ? "&" : "?"}eventId=${payload?.exEventId}`;
+  if (payload?.page) {
+    queryParams += `?page=${payload?.page}`;
+  }
+
+  if (payload?.limit) {
+    queryParams += `${queryParams ? "&" : "?"}limit=${payload?.limit}`;
+  }
+
+  if (payload?.eventId) {
+    queryParams += `${queryParams ? "&" : "?"}eventId=${payload?.eventId}`;
   }
 
   const { data } = await Rest.get(

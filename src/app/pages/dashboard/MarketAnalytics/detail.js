@@ -44,7 +44,14 @@ const MarketAnalyticsDetail = (props) => {
   useEffect(() => {
     getFirebaseData();
     getEventMarkets();
-    getBetPl(eventId);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getBetPl(eventId);
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const getFirebaseData = async () => {
@@ -139,7 +146,7 @@ const MarketAnalyticsDetail = (props) => {
               ]);
             }
           });
-          console.log(runnersList);
+
           customizeData.push(newData);
           runnerData.push(runnersList);
         });
@@ -150,7 +157,6 @@ const MarketAnalyticsDetail = (props) => {
         setIsLoading(false);
       });
     } catch (err) {
-      console.warn(err);
       setIsLoading(false);
     }
   };
@@ -161,7 +167,7 @@ const MarketAnalyticsDetail = (props) => {
     };
 
     const data = await getBetHistoryLPData(payload);
-    console.log({ data });
+
     if (data?.data) {
       const cusData = [];
       data?.data?.map((item) => {
@@ -175,7 +181,7 @@ const MarketAnalyticsDetail = (props) => {
           runnerData: selectionId,
         });
       });
-      console.log({ cusData });
+
       setPagePlData(cusData);
     }
   };
