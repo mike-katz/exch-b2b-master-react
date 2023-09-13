@@ -56,7 +56,7 @@ const MobileMenu = ({ isMenuVisible, onCloseDrawer }) => {
                 >
                   <MenuItem
                     onClick={() => {
-                      onClickMenu("/");
+                      onClickMenu("/down-list-master");
                     }}
                     rootStyles={{ paddingLeft: 5 }}
                   >
@@ -96,6 +96,85 @@ const MobileMenu = ({ isMenuVisible, onCloseDrawer }) => {
                     </div>
                   </div>
                 </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    onClickMenu("/bet-list");
+                  }}
+                >
+                  <div className="flex w-full min-h-[30px]">
+                    <div className="flex items-center justify-between w-full border-b ml-2">
+                      <span className="text-[13px] font-semibold py-1">
+                        {"Bet List"}
+                      </span>
+                    </div>
+                  </div>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    onClickMenu("/bet-lock");
+                  }}
+                >
+                  <div className="flex w-full min-h-[30px]">
+                    <div className="flex items-center justify-between w-full border-b ml-2">
+                      <span className="text-[13px] font-semibold py-1">
+                        {"Bet Lock"}
+                      </span>
+                    </div>
+                  </div>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    onClickMenu("/market-analytics");
+                  }}
+                >
+                  <div className="flex w-full min-h-[30px]">
+                    <div className="flex items-center justify-between w-full border-b ml-2">
+                      <span className="text-[13px] font-semibold py-1">
+                        {"Market Analytics"}
+                      </span>
+                    </div>
+                  </div>
+                </MenuItem>
+                <SubMenu
+                  label={
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"Banking"}
+                        </span>
+                      </div>
+                    </div>
+                  }
+                >
+                  <MenuItem
+                    onClick={() => {
+                      onClickMenu("/banking-master");
+                    }}
+                    rootStyles={{ paddingLeft: 5 }}
+                  >
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full border-b ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"Banking Master"}
+                        </span>
+                      </div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      onClickMenu("/banking-user");
+                    }}
+                    rootStyles={{ paddingLeft: 5 }}
+                  >
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full border-b ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"Banking User"}
+                        </span>
+                      </div>
+                    </div>
+                  </MenuItem>
+                </SubMenu>
               </Menu>
             </Sidebar>
           </div>

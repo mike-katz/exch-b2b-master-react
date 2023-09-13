@@ -8,6 +8,7 @@ import {
 
 const DetailGameCard = (props) => {
   const [blinkData, setBlinkData] = useState([]);
+  const [sortRunners, setSortRunners] = useState([]);
 
   useEffect(() => {
     if (props?.oldData) {
@@ -18,6 +19,21 @@ const DetailGameCard = (props) => {
       }, 300);
     }
   }, [props?.oldData]);
+
+  useEffect(() => {
+    if (props?.data?.runners) {
+      const sortedData = props?.data?.runners?.sort(
+        (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
+      );
+
+      const sortRunnerObject = [];
+      sortedData?.map((item) => {
+        sortRunnerObject.push(item?.selectionId);
+      });
+
+      setSortRunners(sortRunnerObject);
+    }
+  }, [props?.data?.runners]);
 
   return (
     <div className="mb-1">
@@ -113,8 +129,8 @@ const DetailGameCard = (props) => {
             </div>
           </div>
 
-          {props?.data?.runnerData &&
-            Object.keys(props?.data?.runnerData).map((key, index) => {
+          {sortRunners.length > 0 &&
+            sortRunners?.map((key, index) => {
               const runners = props?.data?.runners?.find(
                 (item) => item?.selectionId == key
               )?.exchange;

@@ -198,8 +198,6 @@ const MarketAnalyticsDetail = (props) => {
     setIsLoading(false);
   };
 
-  // console.log({ isLoading, pageCustomizeData });
-
   return (
     <div className="px-2">
       <div className="text-[#243a48] text-[16px] font-black mt-4 flex items-center">

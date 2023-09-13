@@ -17,7 +17,6 @@ const MarketAnalytics = () => {
     setIsLoading(true);
     const data = await getMarketData();
     if (data?.data) {
-      console.log({ data });
       setPageData(data?.data);
     }
     setIsLoading(false);

@@ -19,7 +19,6 @@ const BetLock = () => {
     setIsLoading(true);
     const data = await getBetLockData();
     if (data?.data) {
-      console.log({ data });
       setPageData(data?.data);
     }
     setIsLoading(false);
@@ -108,7 +107,7 @@ const BetLock = () => {
                         background:
                           "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
                       }}
-                      className="uppercase"
+                      className="uppercase flex justify-between"
                     >
                       <div className="flex items-center text-[14px] text-[#FFFFFF]">
                         <img
@@ -117,6 +116,18 @@ const BetLock = () => {
                         />
                         {item?.name}
                       </div>
+                      <button
+                        onClick={() => {
+                          onClickLockBet(
+                            "sport",
+                            item?._id,
+                            item?.status === 1 ? "unlock" : "lock"
+                          );
+                        }}
+                        className="bg-[#feba11] text-[#000000] rounded px-2 text-[13px] h-[25px] font-black"
+                      >
+                        {item?.status === 1 ? "Unlock" : "Lock"}
+                      </button>
                     </th>
                   </tr>
                 </thead>

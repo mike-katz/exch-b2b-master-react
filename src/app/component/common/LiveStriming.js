@@ -23,7 +23,7 @@ const LiveStreaming = ({ eventId }) => {
   const manageChannelId = async () => {
     const now = new Date().getTime();
     const data = localStorage.getItem("streamingId");
-    console.log({ data });
+
     if (data) {
       const eventData = JSON.parse(data);
       const currentEventData = eventData?.find(
@@ -75,7 +75,7 @@ const LiveStreaming = ({ eventId }) => {
       }
     } else {
       const channelData = await getChannelData(eventId);
-      console.log({ channelData });
+
       // const channelData = DATA;
       if (channelData?.data?.Channel) {
         setChannelId(channelData?.data?.Channel);

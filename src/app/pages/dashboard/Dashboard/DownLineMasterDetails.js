@@ -26,7 +26,7 @@ const DownLineMasterDetails = () => {
     const payload = { userId };
 
     const data = await getUserParentListData(payload);
-    console.log({ data });
+
     if (data?.data) {
       setParentListData(data?.data);
     }

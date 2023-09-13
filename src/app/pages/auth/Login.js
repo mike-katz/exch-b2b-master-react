@@ -16,7 +16,6 @@ const Login = () => {
     setIsLoading(true);
 
     const IPData = await getIPAddress();
-    console.log(JSON.stringify(IPData));
 
     const payload = {
       username: values?.user?.toLowerCase(),

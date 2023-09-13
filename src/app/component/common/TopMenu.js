@@ -16,7 +16,7 @@ import MobileMenu from "./MobileMenu";
 const TopMenu = () => {
   const [activeMenu, setActiveMenu] = useState("/");
   const { userData } = useSelector((state) => state?.persist);
-  console.log({ userData });
+
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
