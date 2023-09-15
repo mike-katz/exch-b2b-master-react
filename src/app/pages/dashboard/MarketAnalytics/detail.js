@@ -64,7 +64,9 @@ const MarketAnalyticsDetail = (props) => {
         const runnerData = [];
         const customizeData = [];
         docsSnap.forEach((doc) => {
-          data?.push(doc.data());
+          if (doc.data()?.state?.status !== "CLOSED") {
+            data?.push(doc.data());
+          }
         });
 
         data?.map((item, mainIndex) => {

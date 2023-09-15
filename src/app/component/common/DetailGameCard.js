@@ -176,6 +176,13 @@ const DetailGameCard = (props) => {
                         </div>
                       )}
 
+                      {props?.data?.state?.status === "ACTIVE" ||
+                      props?.data?.state?.status === "OPEN" ? null : (
+                        <div className="absolute capitalize text-[13px] text-[red] flex justify-center items-center bg-[#fff] border border-[#ff57222b] opacity-80 h-full w-full font-extrabold">
+                          {props?.data?.state?.status}
+                        </div>
+                      )}
+
                       <div className="w-full flex items-center sm:flex hidden">
                         <div
                           className={`bg-[#c7eeff] w-[50%] flex flex-col justify-center items-center min-h-[50px] ${

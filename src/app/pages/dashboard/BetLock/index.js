@@ -120,7 +120,7 @@ const BetLock = () => {
                         onClick={() => {
                           onClickLockBet(
                             "sport",
-                            item?._id,
+                            item?.id,
                             item?.status === 1 ? "unlock" : "lock"
                           );
                         }}
