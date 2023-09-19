@@ -308,12 +308,12 @@ const BettingHistory = ({ username }) => {
                     <td className="">
                       {moment(item?.upddatedAt).format("DD/MM/YYYY")}
                       <br />
-                      {moment(item?.upddatedAt).format("hh:MM:ss A")}
+                      {moment(item?.upddatedAt).format("hh:mm:ss A")}
                     </td>
                     <td className="">
                       {moment(item?.upddatedAt).format("DD/MM/YYYY")}
                       <br />
-                      {moment(item?.upddatedAt).format("hh:MM:ss A")}
+                      {moment(item?.upddatedAt).format("hh:mm:ss A")}
                     </td>
                   </tr>
                 );

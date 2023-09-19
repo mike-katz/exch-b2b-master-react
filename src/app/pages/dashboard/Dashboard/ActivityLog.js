@@ -74,7 +74,7 @@ const ActivityLog = () => {
                   <tr key={index}>
                     <td className="p-4">{index + 1}</td>
                     <td className="">
-                      {moment(item?.createdAt).format("DD-MM-YYYY hh:MM:ss A")}
+                      {moment(item?.createdAt).format("DD-MM-YYYY hh:mm:ss A")}
                     </td>
                     <td
                       className={`p-4 uppercase ${

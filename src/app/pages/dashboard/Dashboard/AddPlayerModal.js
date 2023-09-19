@@ -14,9 +14,15 @@ import Loader from "../../../component/common/Loader";
 import CommonInput from "../../../component/form/CommonInput";
 import CommonSelect from "../../../component/form/CommonSelect";
 import { useSelector } from "react-redux";
+import jwtDecode from "jwt-decode";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
-  const { userData } = useSelector((state) => state?.persist);
+  const { userData, token } = useSelector((state) => state?.persist);
+
+  const userDataJWT = jwtDecode(token);
+
+  const role = userDataJWT?.roles?.toString();
+
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const onClickAddPlayer = async (values) => {
     const payload = {
@@ -59,6 +65,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
             confirm_password: "",
             mobile: "",
             roles: "",
+            origin: "",
           }}
           validationSchema={addPlayerMasterSchema}
           onSubmit={onClickAddPlayer}
@@ -80,15 +87,15 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                     isRequired
                     label="User Type"
                     data={
-                      userData?.roles?.toString() === "Admin"
+                      role === "Admin"
                         ? ADMIN_USER_TYPE
-                        : userData?.roles?.toString() === "WhiteLabel"
+                        : role === "WhiteLabel"
                         ? WHITE_LABEL_USER_TYPE
-                        : userData?.roles?.toString() === "Super"
+                        : role === "Super"
                         ? SUPPER_USER_TYPE
-                        : userData?.roles?.toString() === "Master"
+                        : role === "Master"
                         ? MASTER_USER_TYPE
-                        : userData?.roles?.toString() === "Agent"
+                        : role === "Agent"
                         ? []
                         : []
                     }
@@ -96,6 +103,17 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                     placeholder="Select user type"
                   />
                 </div>
+                {values?.roles === "WhiteLabel" && (
+                  <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
+                    <CommonInput
+                      // isRequired
+                      label="Origin"
+                      name="origin"
+                      placeholder="Enter"
+                    />
+                  </div>
+                )}
+
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <CommonInput
                     // isRequired

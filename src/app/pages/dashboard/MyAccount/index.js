@@ -5,10 +5,15 @@ import Profile from "./Profile";
 import ActivityLog from "./ActivityLog";
 import { useSelector } from "react-redux";
 import { roleStatus } from "../../../utils/helper";
+import jwtDecode from "jwt-decode";
 
 const MyAccount = () => {
-  const { userData } = useSelector((state) => state?.persist);
+  const { userData, token } = useSelector((state) => state?.persist);
   const [activeTab, setActiveTab] = useState(1);
+
+  const userDataJWT = jwtDecode(token);
+
+  const role = userDataJWT?.roles?.toString();
 
   const onClickTab = (tab) => {
     setActiveTab(tab);
@@ -17,7 +22,7 @@ const MyAccount = () => {
   return (
     <div className="px-2 mt-2">
       <div className="border border-[#7e97a7] w-fit rounded px-[15px] flex items-center">
-        {roleStatus(userData?.roles?.toString())}
+        {roleStatus(role)}
         <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
           {userData?.username}
         </div>

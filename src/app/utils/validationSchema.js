@@ -41,6 +41,14 @@ export const addPlayerMasterSchema = Yup.object().shape({
   //   .max(100, "Please enter max 100"),
   password: Yup.string().required("Please enter new password"),
   roles: Yup.string().required("Please select user type"),
+  origin: Yup.string().when("roles", {
+    is: (value) => value === "WhiteLabel",
+    then: (schema) =>
+      schema
+        .required("Please select selections")
+        .min(1, "Please select selections"),
+    otherwise: (schema) => schema,
+  }),
   confirm_password: Yup.string()
     .required("Please enter confirm password")
     .oneOf(

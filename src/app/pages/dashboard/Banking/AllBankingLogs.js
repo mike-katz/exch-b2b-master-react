@@ -112,7 +112,7 @@ const AllBankingLogs = () => {
                       <tr key={index}>
                         <td>
                           {moment(item?.createdAt)?.format("DD-MM-YYYY")}
-                          <br /> {moment(item?.createdAt)?.format("hh:MM:ss A")}
+                          <br /> {moment(item?.createdAt)?.format("hh:mm:ss A")}
                         </td>
                         <td className="text-right">
                           {item?.type === "deposit"

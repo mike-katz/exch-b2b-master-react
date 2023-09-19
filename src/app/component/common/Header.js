@@ -5,11 +5,18 @@ import { amountFormate, roleStatusWithoutColor } from "../../utils/helper";
 import { getMyBalanceData } from "../../redux/services/DownLineUser";
 import { updateBalance } from "../../redux/actions/persistAction";
 import Loader from "./Loader";
+import jwtDecode from "jwt-decode";
 
 const Header = () => {
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state?.persist);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { token } = useSelector((state) => state?.persist);
+
+  const userDataJWT = jwtDecode(token);
+
+  const role = userDataJWT?.roles?.toString();
 
   const onRefreshBalance = async () => {
     setIsLoading(true);
@@ -36,7 +43,7 @@ const Header = () => {
         <div className="flex sm:flex-row flex-col items-center justify-center">
           <div className="flex items-center">
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] uppercase font-bold">
-              {roleStatusWithoutColor(userData?.roles?.toString())}
+              {roleStatusWithoutColor(role)}
             </div>
             <div className="text-[#ecad17] text-[12px] font-black ml-2">
               {userData?.username}

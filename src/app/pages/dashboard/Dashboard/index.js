@@ -24,12 +24,13 @@ import AddPlayerModal from "./AddPlayerModal";
 import ChangeStatusModal from "./ChangeStatusModal";
 import CreditRefModal from "./CreditRefModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
+import jwtDecode from "jwt-decode";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state?.persist);
+  const { userData, token } = useSelector((state) => state?.persist);
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
   // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
   const [isVisibleEditStatus, setIsVisibleEditStatus] = useState(false);
@@ -57,13 +58,17 @@ const DownListMaster = () => {
   const [activePageId, setActivePageId] = useState("");
   const [activePageRole, setActivePageRole] = useState([]);
 
+  const userDataJWT = jwtDecode(token);
+
+  const role = userDataJWT?.roles?.toString();
+
   useEffect(() => {
     getDownLineMaster();
     getMyBalance();
     if (activePageRole?.length === 0) {
       const customizeActivePageRole = [...activePageRole];
       customizeActivePageRole.push({
-        role: userData?.roles?.toString(),
+        role: role,
         username: userData?.username,
       });
       setActivePageRole(customizeActivePageRole);

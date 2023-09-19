@@ -12,15 +12,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../redux/actions/persistAction";
 import MobileMenu from "./MobileMenu";
+import jwtDecode from "jwt-decode";
 
 const TopMenu = () => {
   const [activeMenu, setActiveMenu] = useState("/");
-  const { userData } = useSelector((state) => state?.persist);
 
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { token } = useSelector((state) => state?.persist);
+
+  const userData = jwtDecode(token);
+
+  const role = userData?.roles?.toString();
+
   const onClickMenu = (menu) => {
     navigate(menu);
   };
@@ -57,7 +64,7 @@ const TopMenu = () => {
           <FiMenu onClick={onOpenDrawer} size={25} />
         </div>
         <div className="items-center lg:flex hidden">
-          {userData?.roles?.toString() === "Agent" ? (
+          {role === "Agent" ? (
             <div
               onClick={() => {
                 onClickMenu("/down-list-user");
@@ -160,7 +167,7 @@ const TopMenu = () => {
           >
             Market Analytics
           </div>
-          {userData?.roles?.toString() === "Agent" ? (
+          {role === "Agent" ? (
             <div
               onClick={() => {
                 onClickMenu("/banking-user");
@@ -212,6 +219,35 @@ const TopMenu = () => {
               </MenuList>
             </Menu>
           )}
+
+          <Menu placement="bottom-start">
+            <MenuHandler>
+              <Button
+                className={`rounded-none bg-transparent text-[12px] text-[#000000] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer py-0 capitalize ${
+                  activeMenu === "/news"
+                    ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                    : ""
+                }`}
+              >
+                Extra
+                <FaCaretDown color="#000000" className="ml-1" />
+              </Button>
+            </MenuHandler>
+            <MenuList className="bg-[#ffbd14] rounded-none border-none mt-[-5px] p-0 text-[12px] text-[#000000] font-extrabold">
+              <MenuItem
+                onClick={() => {
+                  onClickMenu("/news");
+                }}
+                className={`m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent ${
+                  activeMenu === "/news"
+                    ? "bg-[#ffdc7a] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                    : ""
+                } border-t border-[rgba(0,0,0,.2)]`}
+              >
+                News
+              </MenuItem>
+            </MenuList>
+          </Menu>
           {/* <Menu placement="bottom-start">
             <MenuHandler>
               <Button className="rounded-none bg-transparent text-[12px] text-[#000000] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer py-0 capitalize">

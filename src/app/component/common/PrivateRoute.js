@@ -1,14 +1,25 @@
+import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 export const PrivateRoute = ({ children }) => {
-  const { isLoggedIn, userData } = useSelector((state) => state?.persist);
+  const { isLoggedIn } = useSelector((state) => state?.persist);
 
-  if (window.location.pathname === "/") {
+  const { token } = useSelector((state) => state?.persist);
+
+  let userData;
+
+  if (token) {
+    userData = jwtDecode(token);
+  }
+
+  const role = userData?.roles?.toString();
+
+  if (isLoggedIn && window.location.pathname === "/") {
     return <Navigate to="/down-list-master" />;
   }
 
-  if (userData?.roles?.toString() === "Agent") {
+  if (isLoggedIn && role === "Agent") {
     if (window.location.pathname === "/down-list-master") {
       return <Navigate to="/down-list-user" />;
     }
