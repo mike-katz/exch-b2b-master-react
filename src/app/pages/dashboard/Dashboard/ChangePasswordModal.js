@@ -13,8 +13,8 @@ const ChangePasswordModal = ({ isVisible, onCloseMenu, userId }) => {
   const onSubmitNewPassword = async (values) => {
     const payload = {
       userId: userId,
-      password: values?.old_password,
-      myPassword: values?.new_password,
+      myPassword: values?.old_password,
+      password: values?.new_password,
     };
 
     setIsLoading(true);

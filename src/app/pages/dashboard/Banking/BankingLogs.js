@@ -115,30 +115,28 @@ const BankingLogs = () => {
                           <br /> {moment(item?.createdAt)?.format("hh:mm:ss A")}
                         </td>
                         <td className="text-right">
-                          {item?.type === "deposit"
-                            ? amountFormate(item?.balance)
+                          {item?.method === "Deposit"
+                            ? amountFormate(item?.amount)
                             : "-"}
                         </td>
                         <td className="text-right">
-                          {item?.type === "deposit" ? (
+                          {item?.method === "Deposit" ? (
                             "-"
                           ) : (
                             <span className="text-[red]">
-                              ({amountFormate(item?.balance)})
+                              ({amountFormate(item?.amount)})
                             </span>
                           )}
                         </td>
-                        <td className="text-right">
-                          {amountFormate(item?.newBalance) || "-"}
-                        </td>
+                        <td className="text-right">{item?.balance || "-"}</td>
                         <td className="text-right">{item?.remark || "-"}</td>
                         <td className="text-right">
                           <strong className="ml-4">
-                            {item?.fromId?.username}
+                            {item?.sender_id?.username}
                           </strong>
                           <span className="fromto absolute"></span>
                           <strong className="ml-4">
-                            {item?.toId?.username}
+                            {item?.receiver_id?.username}
                           </strong>
                         </td>
                       </tr>

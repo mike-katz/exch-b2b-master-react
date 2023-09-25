@@ -11,8 +11,6 @@ const News = () => {
   }, []);
 
   const getFirebaseData = async () => {
-    console.log(window.location.origin);
-
     try {
       const citiesRef = collection(firestore, "news");
       const q = query(citiesRef, where("origin", "==", window.location.origin));
