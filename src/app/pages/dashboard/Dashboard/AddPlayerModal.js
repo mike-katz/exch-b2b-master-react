@@ -5,6 +5,7 @@ import Model from "../../../component/common/Modal";
 import {
   ADMIN_USER_TYPE,
   MASTER_USER_TYPE,
+  SUPPER_SUPPER_USER_TYPE,
   SUPPER_USER_TYPE,
   WHITE_LABEL_USER_TYPE,
 } from "../../../utils/dropdown";
@@ -91,6 +92,8 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                         ? ADMIN_USER_TYPE
                         : role === "WhiteLabel"
                         ? WHITE_LABEL_USER_TYPE
+                        : role === "SupperSupper"
+                        ? SUPPER_SUPPER_USER_TYPE
                         : role === "Super"
                         ? SUPPER_USER_TYPE
                         : role === "Master"

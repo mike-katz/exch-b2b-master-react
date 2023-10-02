@@ -38,9 +38,15 @@ export const roleStatus = (role = "") => {
           WL
         </div>
       );
+    case "SuperSuper":
+      return (
+        <div className="bg-[#d12cff] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
+          SS
+        </div>
+      );
     case "Super":
       return (
-        <div className="bg-[#a762b5] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
+        <div className="bg-[#b5b562] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
           SUP
         </div>
       );

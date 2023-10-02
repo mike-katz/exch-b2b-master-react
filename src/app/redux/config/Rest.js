@@ -30,6 +30,7 @@ export default class Rest {
         return res;
       })
       .catch((error) => {
+        console.log({ error });
         if (error?.response?.status === 401) {
           console.clear();
           store.dispatch(logoutUser());

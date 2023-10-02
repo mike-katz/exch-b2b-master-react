@@ -36,4 +36,19 @@ export default class APIEndpoint {
 
   // NEWS
   static news = "api/extra/news";
+
+  // PL
+  static getSportPl = "api/pl/userSportsProfitloss";
+  static getMarketPl = "api/pl/userEventsProfitloss";
+  static getEventPl = "api/pl/userMarketsProfitloss";
+  static getBetListPl = "api/pl/getUserBetList";
+  static getAviatorSport = "api/pl/aviator/total";
+  static getAviatorPl = "api/pl/aviator/pl";
+  static getSt8CategoryTotalPL = "api/pl/st8/getCategoryTotalPL";
+  static getSt8Categories = "api/pl/st8/getCategories";
+  static getSt8GameList = "api/pl/st8/getGameList";
+  static getAuraSportPl = "api/pl/userSportsProfitlossAura";
+  static getAuraEventPl = "api/pl/userEventsProfitlossAura";
+  static getAuraMarketPl = "api/pl/userMarketsProfitlossAura";
+  static getAuraBetListPl = "api/pl/getUserBetListAura";
 }

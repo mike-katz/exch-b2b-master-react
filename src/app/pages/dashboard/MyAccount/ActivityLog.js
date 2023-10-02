@@ -66,7 +66,7 @@ const ActivityLog = () => {
 
               return (
                 <tr key={index}>
-                  <td className="p-4">{index + 1}</td>
+                  <td className="px-4 py-2">{index + 1}</td>
                   <td className="">
                     {moment(item?.createdAt).format("DD-MM-YYYY hh:mm:ss A")}
                   </td>
