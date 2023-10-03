@@ -24,8 +24,8 @@ export const getSportPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(`${APIEndpoint.getSportPl}${queryString}`);
@@ -60,8 +60,8 @@ export const getEventPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(`${APIEndpoint.getMarketPl}${queryString}`);
@@ -96,8 +96,8 @@ export const getMarketPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(`${APIEndpoint.getEventPl}${queryString}`);
@@ -136,8 +136,8 @@ export const getBetListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(`${APIEndpoint.getBetListPl}${queryString}`);
@@ -168,8 +168,8 @@ export const getAviatorSportData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -202,8 +202,8 @@ export const getAviatorPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(`${APIEndpoint.getAviatorPl}${queryString}`);
@@ -234,8 +234,8 @@ export const getCategoryTotalPLData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -268,8 +268,8 @@ export const getSt8CategoriesData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -306,8 +306,8 @@ export const getSt8GameListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -340,8 +340,8 @@ export const getAuraSportPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -375,8 +375,8 @@ export const getAuraEventPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -414,8 +414,8 @@ export const getAuraMarketPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
@@ -453,8 +453,8 @@ export const getAuraBetListPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.username) {
-    queryString += `${queryString ? "&" : "?"}username=${payload?.username}`;
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(

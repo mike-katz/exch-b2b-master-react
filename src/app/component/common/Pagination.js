@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 
 // Example items, to simulate fetching from another resources.
 
-function Pagination({ itemsPerPage, onChange }) {
+function Pagination({ itemsPerPage, onChange, currentPage }) {
   // const pageCount = Math.ceil(totalPage / itemsPerPage);
 
   const handlePageClick = (event) => {
@@ -13,6 +13,7 @@ function Pagination({ itemsPerPage, onChange }) {
   return (
     <>
       <ReactPaginate
+        forcePage={currentPage - 1}
         breakLabel="..."
         nextLabel="Next"
         onPageChange={handlePageClick}

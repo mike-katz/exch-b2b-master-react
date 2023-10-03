@@ -53,7 +53,6 @@ const DownListMaster = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
-  const [paginationPage, setPaginationPage] = useState(1);
 
   const [activePageId, setActivePageId] = useState("");
   const [activePageRole, setActivePageRole] = useState([]);
@@ -95,7 +94,6 @@ const DownListMaster = () => {
       setTotalPage(data?.data?.totalPages);
       setPerPage(data?.data?.limit);
       setCurrentPage(data?.data?.page);
-      setPaginationPage(data?.data?.totalPages);
       setPageData(data?.data?.results);
     }
     setIsLoadingTable(false);
@@ -662,8 +660,8 @@ const DownListMaster = () => {
       </div>
       <div className="flex justify-center my-7 mb:pb-0 pb-20">
         <Pagination
-          itemsPerPage={paginationPage}
-          totalPage={totalPage}
+          currentPage={currentPage || 1}
+          itemsPerPage={totalPage || 1}
           onChange={onRefreshPagination}
         />
       </div>

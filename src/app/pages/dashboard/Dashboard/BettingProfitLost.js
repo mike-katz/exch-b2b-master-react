@@ -17,9 +17,11 @@ import {
   getSt8GameListData,
 } from "../../../redux/services/pl";
 import Loader from "../../../component/common/Loader";
-import { IconButton, Typography } from "@material-tailwind/react";
+import Pagination from "../../../component/common/Pagination";
+import { useParams } from "react-router-dom";
 
 const BettingProfitLost = () => {
+  const { userId } = useParams();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions(); // eslint-disable-line
   const [pageData, setPageData] = useState([]);
   const [aviatorData, setAviatorData] = useState();
@@ -40,17 +42,10 @@ const BettingProfitLost = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const next = () => {
-    if (currentPage === totalPage) return;
-    // const payload = {
-    //   limit: perPage,
-    //   page: currentPage + 1,
-    //   from: fromDate,
-    //   to: toDate
-    // };
+  const onRefreshPagination = (count) => {
+    setCurrentPage(count);
 
     const lastRecord = navigationData?.[navigationData?.length - 1];
-    setCurrentPage(currentPage + 1);
 
     onClickPl(
       lastRecord?.id,
@@ -58,32 +53,7 @@ const BettingProfitLost = () => {
       lastRecord?.name,
       lastRecord?.type,
       navigationData,
-      currentPage + 1
-    );
-    // getAllPl(payload);
-  };
-
-  const prev = () => {
-    if (currentPage === 1) return;
-    // const payload = {
-    //   limit: perPage,
-    //   page: currentPage - 1,
-    //   from: fromDate,
-    //   to: toDate
-    // };
-    // getAllPl(payload);
-    // setCurrentPage(currentPage - 1);
-    const lastRecord = navigationData?.[navigationData?.length - 1];
-    setCurrentPage(currentPage - 1);
-
-    onClickPl(
-      lastRecord?.id,
-      lastRecord?.sportId,
-      lastRecord?.name,
-      lastRecord?.type,
-      navigationData,
-      currentPage - 1,
-      true
+      count
     );
   };
 
@@ -102,7 +72,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
     }
 
@@ -138,7 +108,6 @@ const BettingProfitLost = () => {
       // setTotalPage(data?.data?.totalPages);
       // setPerPage(data?.data?.limit);
       // setCurrentPage(Number(data?.data?.page));
-      // setPaginationPage(data?.data?.data?.totalPages);
       setPageData(data?.data);
     }
 
@@ -161,7 +130,7 @@ const BettingProfitLost = () => {
       from: fromDate,
       to: toDate,
       timeZone: timeZone,
-      username: "am",
+      userId,
     };
 
     getAllPl(payload);
@@ -197,7 +166,7 @@ const BettingProfitLost = () => {
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         category: id,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -230,7 +199,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -257,7 +226,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -291,7 +260,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -325,7 +294,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -360,7 +329,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -393,7 +362,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -427,7 +396,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -461,7 +430,7 @@ const BettingProfitLost = () => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        username: "am",
+        userId,
       };
 
       setIsLoading(true);
@@ -591,7 +560,7 @@ const BettingProfitLost = () => {
           </button>
         </div>
       </div>
-      <div className="mt-4 flex items-center">
+      <div className="mt-4 flex items-center mb-2">
         <div className="text-[#568bc8] flex items-center">
           <div
             onClick={() => {
@@ -1347,164 +1316,18 @@ const BettingProfitLost = () => {
                 </td>
               </tr>
             )}
-
-            {/* <tr className="even:bg-blue-gray-50/50">
-              <td className="">1</td>
-              <td className="">02-02-2222 TO 02-02-2222</td>
-              <td className="">50000</td>
-              <td className="">20000</td>
-              <td className="">20000</td>
-              <td className="">Test test test test</td>
-              <td className="">Test test test test</td>
-              <td className=" w-[150px]">
-                <button
-                  onClick={onShowBetDetail}
-                  className="bg-[#000000] text-[#ffffff] uppercase text-[11px] w-full h-[30px] rounded">
-                  show bet
-                </button>
-              </td>
-            </tr> */}
           </tbody>
         </table>
+        {navigationData?.length > 0 && (
+          <div className="flex justify-center my-7 mb:pb-0 pb-20">
+            <Pagination
+              currentPage={currentPage || 1}
+              itemsPerPage={totalPage || 1}
+              onChange={onRefreshPagination}
+            />
+          </div>
+        )}
       </div>
-      {pageData?.length > 0 && (
-        <div className="flex items-center gap-8 mt-4 justify-center">
-          <IconButton
-            size="sm"
-            variant="outlined"
-            color="blue-gray"
-            onClick={prev}
-            disabled={currentPage === 1}
-          >
-            {/* <FiArrowLeft strokeWidth={2} className="h-4 w-4" /> */}
-          </IconButton>
-          <Typography color="gray" className="font-normal">
-            Page <strong className="text-blue-gray-900">{currentPage}</strong>{" "}
-            of <strong className="text-blue-gray-900">{totalPage}</strong>
-          </Typography>
-          <IconButton
-            size="sm"
-            variant="outlined"
-            color="blue-gray"
-            onClick={next}
-            disabled={currentPage === totalPage}
-          >
-            {/* <FiArrowRight strokeWidth={2} className="h-4 w-4" /> */}
-          </IconButton>
-        </div>
-      )}
-      {/* <div className="table-responsive">
-        <table className="w-full min-w-max table-auto text-left">
-          <thead>
-            <tr>
-              <th className="">Market</th>
-              <th className="text-right">Start Time</th>
-              <th className="text-right">Settled date</th>
-              <th className="text-right">Profit/Loss</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                CRICKET
-                <span className="fromto absolute"></span>
-                <strong className="ml-4">
-                  Pretoria Capitals S d sd s RL T20 v Paarl Royals SRL T20
-                </strong>
-                <span className="fromto absolute"></span>
-                <span className="ml-4">FANCY BET</span>
-              </td>
-              <td className="text-right">2023-07-26 10:32:23</td>
-              <td className="text-right">2023-07-26 10:32:23</td>
-              <td className="text-right">
-                <div className="flex items-center justify-end">
-                  <div className="font-semibold">1288446886</div>
-                  {isVisibleHistory ? (
-                    <FaMinusSquare
-                      onClick={onClickHideHistory}
-                      fill="#4c5e6d"
-                      className="ml-1"
-                    />
-                  ) : (
-                    <FaPlusSquare
-                      onClick={onClickShowHistory}
-                      fill="#4c5e6d"
-                      className="ml-1"
-                    />
-                  )}
-                </div>
-              </td>
-            </tr>
-            {isVisibleHistory && (
-              <tr className="">
-                <td
-                  className="bg-[#e2e8ed] p-0 border-b border-[#7e97a7]"
-                  colSpan="4"
-                >
-                  <table className="border-l border-r border-[#7e97a7] w-[78%] ml-[20%] ">
-                    <tr className="border-b  border-[#7e97a7]">
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Bet ID
-                      </th>
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Selection
-                      </th>
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Odds
-                      </th>
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Stake
-                      </th>
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Type
-                      </th>
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Placed
-                      </th>
-                      <th className="font-black px-[10px] py-[8px] text-right">
-                        Profit/Loss
-                      </th>
-                    </tr>
-                    <tr className="bg-[#f2f4f7]">
-                      <th className="text-right font-normal">1288566533</th>
-                      <th className="text-right font-normal">-</th>
-                      <th className="text-right font-normal">21/90</th>
-                      <th className="text-right font-normal">100.00</th>
-                      <th className="text-right font-normal">Yes</th>
-                      <th className="text-right font-normal">
-                        2023-07-26 16:26:20
-                      </th>
-                      <th className="px-[10px] py-[8px] text-right">
-                        (100.00)
-                      </th>
-                    </tr>
-                    <tr className="bg-[aliceblue] border-t border-[#7e97a7]">
-                      <th colSpan={6} className="text-right font-normal">
-                        <div>Total Stakes</div>
-                        <div>Yes Subtotal</div>
-                        <div>No Subtotal</div>
-                        <div>Market Subtotal</div>
-                        <div className="border-t border-[#7e97a7] py-1 mt-1">
-                          Net Market Total
-                        </div>
-                      </th>
-                      <th className="text-right font-normal pr-2">
-                        <div>300.00</div>
-                        <div>255.00</div>
-                        <div>0.00</div>
-                        <div>255.00</div>
-                        <div className="border-t border-[#7e97a7] py-1 mt-1">
-                          255.00
-                        </div>
-                      </th>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div> */}
     </div>
   );
 };
