@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { collection, onSnapshot, query, where } from "@firebase/firestore";
-import { firestore } from "../../../../firebaseSetup/firebase";
 import LiveStreaming from "../../../component/common/LiveStriming";
 import {
   getBetHistoryLPData,
@@ -11,8 +10,11 @@ import {
 import moment from "moment";
 import DetailGameCard from "../../../component/common/DetailGameCard";
 import BetHistory from "../../../component/common/BetHistory";
+import { fireStoreCricket } from "../../../../firebaseSetup/firebaseCricket";
+import { fireStoreSoccer } from "../../../../firebaseSetup/firebaseSoccer";
+import { fireStoreTennis } from "../../../../firebaseSetup/firebaseTennis";
 
-const MarketAnalyticsDetail = (props) => {
+const MarketAnalyticsDetail = () => {
   const navigate = useNavigate();
   const { eventId } = useParams();
   const [activeStreamingDesktop, setActiveStreamingDesktop] = useState(false);
@@ -42,7 +44,6 @@ const MarketAnalyticsDetail = (props) => {
   };
 
   useEffect(() => {
-    getFirebaseData();
     getEventMarkets();
   }, []);
 
@@ -54,10 +55,20 @@ const MarketAnalyticsDetail = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  const getFirebaseData = async () => {
+  const getFirebaseData = async (sportsId) => {
+    let currentFireStore;
+
+    if (sportsId === "4") {
+      currentFireStore = fireStoreCricket;
+    } else if (sportsId === "1") {
+      currentFireStore = fireStoreSoccer;
+    } else if (sportsId === "2") {
+      currentFireStore = fireStoreTennis;
+    }
+
     try {
       setIsLoading(true);
-      const citiesRef = collection(firestore, "marketRates");
+      const citiesRef = collection(currentFireStore, "marketRates");
       const q = query(citiesRef, where("exEventId", "==", eventId));
       onSnapshot(q, (docsSnap) => {
         const data = [];
@@ -196,6 +207,9 @@ const MarketAnalyticsDetail = (props) => {
       if (pageData?.length === 0) {
         setPageData(data?.data);
       }
+      // console.log(data?.data?.[0]?.sportsId);
+
+      getFirebaseData(data?.data?.[0]?.sportsId);
     }
     setIsLoading(false);
   };

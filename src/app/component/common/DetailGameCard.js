@@ -16,7 +16,7 @@ const DetailGameCard = (props) => {
 
       setTimeout(() => {
         setBlinkData([]);
-      }, 300);
+      }, 100);
     }
   }, [props?.oldData]);
 

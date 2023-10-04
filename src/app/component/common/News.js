@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { collection, onSnapshot, query, where } from "@firebase/firestore";
+import { collection, onSnapshot, or, query, where } from "@firebase/firestore";
 import { FiMic } from "react-icons/fi";
-import { firestore } from "../../../firebaseSetup/firebase";
+import { fireStoreOthers } from "../../../firebaseSetup/firebaseOthers";
 
 const News = () => {
   const [newsData, setNewsData] = useState({});
@@ -12,8 +12,21 @@ const News = () => {
 
   const getFirebaseData = async () => {
     try {
-      const citiesRef = collection(firestore, "news");
-      const q = query(citiesRef, where("origin", "==", window.location.origin));
+      const citiesRef = collection(fireStoreOthers, "news");
+      // const q = query(
+      //   citiesRef,
+      //   or(
+      //     where("origin", "==", `http://localhost:3002/`),
+      //     where("origin", "==", `http://localhost:3002`)
+      //   )
+      // );
+      const q = query(
+        citiesRef,
+        or(
+          where("origin", "==", `https://${window.location.hostname}`),
+          where("origin", "==", `https://${window.location.hostname}/`)
+        )
+      );
       onSnapshot(q, (docsSnap) => {
         docsSnap.forEach((doc) => {
           setNewsData(doc.data());
