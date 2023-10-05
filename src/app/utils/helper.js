@@ -85,6 +85,8 @@ export const roleStatusWithoutColor = (role = "") => {
       return "AD";
     case "WhiteLabel":
       return "WL";
+    case "SuperSuper":
+      return "SS";
     case "Super":
       return "SUP";
     case "Master":

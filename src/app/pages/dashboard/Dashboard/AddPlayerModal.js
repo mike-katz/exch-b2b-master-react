@@ -92,7 +92,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                         ? ADMIN_USER_TYPE
                         : role === "WhiteLabel"
                         ? WHITE_LABEL_USER_TYPE
-                        : role === "SupperSupper"
+                        : role === "SuperSuper"
                         ? SUPPER_SUPPER_USER_TYPE
                         : role === "Super"
                         ? SUPPER_USER_TYPE
