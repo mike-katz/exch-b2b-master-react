@@ -1,13 +1,13 @@
 export const ADMIN_USER_TYPE = [
   { value: "WhiteLabel", label: "White Label" },
-  { value: "SuperSupper", label: "Super Supper" },
+  { value: "SuperSuper", label: "Super Super" },
   { value: "Super", label: "Super" },
   { value: "Master", label: "Master" },
   { value: "Agent", label: "Agent" },
 ];
 
 export const WHITE_LABEL_USER_TYPE = [
-  { value: "SuperSupper", label: "Super Supper" },
+  { value: "SuperSuper", label: "Super Super" },
   { value: "Super", label: "Super" },
   { value: "Master", label: "Master" },
   { value: "Agent", label: "Agent" },
