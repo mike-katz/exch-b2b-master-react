@@ -7,6 +7,8 @@ import TransactionHistory from "./TransactionHistory";
 import ActivityLog from "./ActivityLog";
 import { getUserParentListData } from "../../../redux/services/DownLineUser";
 import { roleStatus } from "../../../utils/helper";
+import jwtDecode from "jwt-decode";
+import { useSelector } from "react-redux";
 // import AccountStatement from "./AccountStatement";
 // import Profile from "./Profile";
 // import ActivityLog from "./ActivityLog";
@@ -15,6 +17,14 @@ const DownLineMasterDetails = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(1);
   const [parentListData, setParentListData] = useState([]);
+
+  const { token } = useSelector((state) => state?.persist);
+
+  const userDataJWT = jwtDecode(token);
+
+  const role = userDataJWT?.roles?.toString();
+
+  console.log({ role });
 
   const { activeName, userId } = useParams();
 
@@ -48,32 +58,39 @@ const DownLineMasterDetails = () => {
     navigate(`/down-list-master/details/${activeName}/${id}`);
   };
 
+  let enableRole = false;
+
   return (
     <div className="px-2 mt-2">
       <div className="flex items-center border border-[#7e97a7] w-fit">
         {parentListData?.map((item, index) => {
-          return (
-            <div
-              onClick={() => {
-                if (index !== 0) {
-                  onClickUser(item?._id);
-                }
-              }}
-              key={index}
-              className={`w-fit rounded px-[15px] flex items-center ${
-                index === 0
-                  ? "agent_path-L"
-                  : parentListData?.length === index + 1
-                  ? ""
-                  : "agent_path-L cursor-pointer"
-              }`}
-            >
-              {roleStatus(item?.roles?.toString())}
-              <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
-                {item?.username}
+          if (item?.roles?.toString() === role) {
+            enableRole = true;
+          }
+          if (enableRole) {
+            return (
+              <div
+                onClick={() => {
+                  if (index !== 0) {
+                    onClickUser(item?._id);
+                  }
+                }}
+                key={index}
+                className={`w-fit rounded px-[15px] flex items-center ${
+                  index === 0
+                    ? "agent_path-L"
+                    : parentListData?.length === index + 1
+                    ? ""
+                    : "agent_path-L cursor-pointer"
+                }`}
+              >
+                {roleStatus(item?.roles?.toString())}
+                <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
+                  {item?.username}
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
         })}
         {/* <div className="w-fit rounded px-[15px] flex items-center agent_path-L">
           <div className="bg-[#85b352] uppercase text-[#FFFFFF] text-[10px] rounded px-1 mr-2">
@@ -107,8 +124,7 @@ const DownLineMasterDetails = () => {
             <div className="bg-[#243a48] text-[#FFFFFF] px-[10px] border-b border-[#eee1c0] leading-[25px]">
               Performance
             </div>
-            {parentListData[parentListData?.length - 1]?.roles?.toString() ===
-            "User" ? (
+            {[parentListData?.length - 1]?.roles?.toString() === "User" ? (
               <>
                 <div
                   onClick={() => {
