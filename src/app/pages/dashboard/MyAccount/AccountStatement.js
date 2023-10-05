@@ -105,25 +105,29 @@ const AccountStatement = () => {
                       <br /> {moment(item?.createdAt)?.format("hh:mm:ss A")}
                     </td>
                     <td className="text-right">
-                      {item?.type === "deposit"
-                        ? amountFormate(item?.balance)
+                      {item?.method === "Deposit"
+                        ? amountFormate(item?.amount)
                         : "-"}
                     </td>
                     <td className="text-right">
-                      {item?.type === "deposit" ? (
+                      {item?.method === "Deposit" ? (
                         "-"
                       ) : (
                         <span className="text-[red]">
-                          ({amountFormate(item?.balance)})
+                          ({amountFormate(item?.amount)})
                         </span>
                       )}
                     </td>
-                    <td className="text-right">{item?.remark || "-"}</td>
+                    <td className="text-right">{item?.balance || "-"}</td>
                     <td className="text-right">{item?.remark || "-"}</td>
                     <td className="text-right">
-                      <strong className="ml-4">{item?.fromId?.username}</strong>
+                      <strong className="ml-4">
+                        {item?.sender_id?.username}
+                      </strong>
                       <span className="fromto absolute"></span>
-                      <strong className="ml-4">{item?.toId?.username}</strong>
+                      <strong className="ml-4">
+                        {item?.receiver_id?.username}
+                      </strong>
                     </td>
                   </tr>
                 );

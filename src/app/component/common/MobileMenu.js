@@ -18,7 +18,7 @@ const MobileMenu = ({ isMenuVisible, onCloseDrawer }) => {
       <div className="overflow-hidden overflow-y-auto top-0 left-0 z-[9999] xl:hidden">
         <Drawer open={isMenuVisible} onClose={onCloseDrawer}>
           <div
-            style={{ backgroundColor: themeColor?.topHeaderBgColor }}
+            style={{ background: themeColor?.topHeaderBgColor }}
             className="h-full"
           >
             <div className="h-[50px] flex justify-center items-center">

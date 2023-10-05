@@ -21,7 +21,7 @@ const initialState = {
       "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
     commonActiveColor: "#C10930",
     commonBgColor: "#343435",
-    commonHeighLightColor: "#6D081D",
+    commonHeighLightColor: "#EBDA8D",
     commonTextColor: "#FFFFFF",
     loginSignupBg: "#005098",
     loginSignupText: "#FFFFFF",

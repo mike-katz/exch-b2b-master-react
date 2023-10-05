@@ -57,11 +57,19 @@ const ActivityLog = () => {
           )}
           {!isLoading &&
             pageData?.map((item, index) => {
-              const ip = JSON.parse(item?.detail);
+              // const ip = JSON.parse(item?.detail);
+              // let ipData = [];
+
+              // if (Object.keys(ip).length > 0) {
+              //   ipData = JSON.parse(ip);
+              // }
+
               let ipData = [];
 
-              if (Object.keys(ip).length > 0) {
-                ipData = JSON.parse(ip);
+              try {
+                ipData = JSON.parse(item?.detail);
+              } catch (e) {
+                ipData = {};
               }
 
               return (
@@ -77,10 +85,12 @@ const ActivityLog = () => {
                   >
                     {item?.status}
                   </td>
-                  <td className="text-right">{ipData?.query}</td>
-                  <td className="text-right">{ipData?.isp}</td>
+                  <td className="text-right">{ipData?.query || "-"}</td>
+                  <td className="text-right">{ipData?.isp || "-"}</td>
                   <td className="text-right">
-                    {ipData?.city}, {ipData?.regionName}, {ipData?.country}
+                    {ipData?.city
+                      ? `${ipData?.city}, ${ipData?.regionName}, ${ipData?.country}`
+                      : "-"}
                   </td>
                   {/* <td className="text-right">Browser</td> */}
                 </tr>

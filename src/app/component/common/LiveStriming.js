@@ -144,7 +144,7 @@ const LiveStreaming = ({ eventId }) => {
               <div className="border-[#C10930] border w-fit p-[1px] md:rounded-full rounded bg-[#FFFFFF]">
                 <button
                   style={{
-                    backgroundColor: themeColor?.commonBgColor,
+                    background: themeColor?.commonBgColor,
                     color: themeColor?.commonTextColor,
                   }}
                   onClick={onVisibleSignup}
@@ -156,7 +156,7 @@ const LiveStreaming = ({ eventId }) => {
               <div className="border-[#C10930] border w-fit p-[1px] md:rounded-full rounded md:ml-1 ml-2 bg-[#FFFFFF]">
                 <button
                   style={{
-                    backgroundColor: themeColor?.commonBgColor,
+                    background: themeColor?.commonBgColor,
                     color: themeColor?.commonTextColor,
                   }}
                   onClick={onVisibleLogin}

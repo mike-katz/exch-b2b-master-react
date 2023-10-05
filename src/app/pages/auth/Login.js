@@ -20,7 +20,7 @@ const Login = () => {
     const payload = {
       username: values?.user?.toLowerCase(),
       password: values?.password,
-      ip: JSON.stringify(IPData),
+      ip: IPData,
     };
 
     const callback = () => {
@@ -40,7 +40,7 @@ const Login = () => {
       <div className="bg-color-absolute"></div>
       <div
         style={{
-          backgroundColor: themeColor?.loginSignupBg,
+          background: themeColor?.loginSignupBg,
           boxShadow: "rgba(0, 80, 152, 0.2) 0px 2px 20px 10px",
         }}
         className="md:w-[540px] h-fit w-full rounded-lg z-[2]"
