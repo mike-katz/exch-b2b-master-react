@@ -118,7 +118,9 @@ const TransactionHistory = () => {
                         </span>
                       )}
                     </td>
-                    <td className="text-right">{item?.balance || "-"}</td>
+                    <td className="text-right">
+                      {amountFormate(item?.balance) || "-"}
+                    </td>
                     <td className="text-right">{item?.remark || "-"}</td>
                     <td className="text-right">
                       <strong className="ml-4">

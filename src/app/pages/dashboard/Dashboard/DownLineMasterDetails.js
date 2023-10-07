@@ -24,8 +24,6 @@ const DownLineMasterDetails = () => {
 
   const role = userDataJWT?.roles?.toString();
 
-  console.log({ role });
-
   const { activeName, userId } = useParams();
 
   useEffect(() => {

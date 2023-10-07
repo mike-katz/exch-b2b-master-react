@@ -284,3 +284,7 @@ button[disabled] {
     background: yellow;
   }
 }
+
+.bg-cross {
+  clip-path: polygon(0px 0px, 100% 0%, 85% 100%, 0% 100%);
+}

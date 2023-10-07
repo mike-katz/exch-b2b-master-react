@@ -425,7 +425,11 @@ const DownListMaster = () => {
                         {/* <FaPlusSquare className="ml-1" size={15} /> */}
                       </div>
                     </td>
-                    <td>{item?.exposure}</td>
+                    <td>
+                      <span className="text-[#d0021b]">
+                        ({amountFormate(item?.exposure) || 0})
+                      </span>
+                    </td>
                     <td>{amountFormate(Number(item?.balance))}</td>
                     <td>
                       <div

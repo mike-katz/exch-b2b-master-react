@@ -15,7 +15,7 @@ export const amountFormate = (amount = "") => {
   if (value) {
     const sanitizedValue = value.replace(/,/g, "");
 
-    const formattedValue = Number(sanitizedValue).toLocaleString();
+    const formattedValue = Number(sanitizedValue)?.toFixed(2)?.toLocaleString();
 
     return formattedValue;
   } else {
@@ -98,4 +98,22 @@ export const roleStatusWithoutColor = (role = "") => {
     default:
       return <span className="text-[red]">-NA-</span>;
   }
+};
+
+export const formatCash = (num) => {
+  const n = Number(num);
+  if (n < 1e3) return n?.toFixed(2);
+  if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
+  if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
+  if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
+  if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
+};
+
+export const formatCashRound = (num) => {
+  const n = Number(num);
+  if (n < 1e3) return n;
+  if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
+  if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
+  if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
+  if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
 };

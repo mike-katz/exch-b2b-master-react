@@ -2,10 +2,13 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { getBetHistoryData } from "../../redux/services/MarketAnalytics";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const BetHistory = (props) => {
+  const { eventId } = useParams();
+
   const [activeMenu, setActiveMenu] = useState("matched");
+  const [pageBackAllData, setPageBackAllData] = useState([]);
   // const [pageBackData, setPageBackData] = useState([]);
   // const [pageLayData, setPageLayData] = useState([]);
   const [pageData, setPageData] = useState([]);
@@ -14,52 +17,66 @@ const BetHistory = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (props?.exEventId) {
+    if (activeMenu && pageBackAllData?.length > 0) {
+      let filterData = [];
+      if (activeMenu === "matched") {
+        filterData = pageBackAllData?.filter(
+          (bet) => bet?.type === "lay" || bet?.type === "back"
+        );
+      } else {
+        filterData = pageBackAllData?.filter(
+          (bet) => bet?.type === "yes" || bet?.type === "no"
+        );
+      }
+      setPageData(filterData);
+    }
+  }, [activeMenu, pageBackAllData]);
+
+  useEffect(() => {
+    if (eventId) {
       setIsLoading(true);
 
       const payload = {
         page: 1,
         limit: 20,
-        eventId: props?.exEventId,
+        eventId: eventId,
       };
 
       getBetHistory(payload);
     }
-  }, [props?.exEventId]);
+  }, [eventId]);
 
   useEffect(() => {
-    if (props?.exEventId) {
+    if (eventId) {
       const interval = setInterval(() => {
         const payload = {
           page: 1,
           limit: 20,
-          eventId: props?.exEventId,
+          eventId: eventId,
         };
         getBetHistory(payload);
       }, 2000);
 
       return () => clearInterval(interval);
     }
-  }, [props?.exEventId]);
+  }, [eventId]);
 
   const getBetHistory = async (payload) => {
     const data = await getBetHistoryData(payload);
 
     if (data?.data) {
-      // const backData = [];
-      // const layData = [];
-      // data?.data?.map((item) => {
-      //   if (item?.type === "lay") {
-      //     layData.push(item);
-      //   } else {
-      //     backData.push(item);
-      //   }
-      // });
-      // setPageBackData(backData);
-      // setPageLayData(layData);
-      setPageData(data?.data?.results);
+      const backData = [];
+      const layData = [];
+      data?.data?.results?.map((item) => {
+        if (item?.type === "lay") {
+          layData.push(item);
+        } else {
+          backData.push(item);
+        }
+      });
+      setPageBackAllData(backData);
+      setPageData(layData);
       setIsLoading(false);
-      // setPageData(data);
     }
   };
 
@@ -76,7 +93,7 @@ const BetHistory = (props) => {
       <div className="p-2">
         {/* <div className="flex justify-end"> */}
         <Link
-          to={`/bet-history/${props?.exEventId}`}
+          to={`/bet-history/${eventId}`}
           className="w-full text-[14px] cursor-pointer bg-[#000000] text-[#feba11] rounded px-2 h-[25px] font-black flex items-center justify-center"
         >
           View All
@@ -137,7 +154,7 @@ const BetHistory = (props) => {
             <tbody className="relative">
               {isLoading && (
                 <tr>
-                  <td colSpan={4}>
+                  <td colSpan={6}>
                     <div className="flex justify-center items-center h-[100px]">
                       <Loader size={25} color="#6D081D" />
                     </div>
@@ -146,7 +163,7 @@ const BetHistory = (props) => {
               )}
               {!isLoading && pageData?.length === 0 && (
                 <tr>
-                  <td colSpan={4}>
+                  <td colSpan={6}>
                     <div className="flex justify-center items-center h-[100px]">
                       No Data Found
                     </div>

@@ -13,6 +13,9 @@ import BetHistory from "../../../component/common/BetHistory";
 import { fireStoreCricket } from "../../../../firebaseSetup/firebaseCricket";
 import { fireStoreSoccer } from "../../../../firebaseSetup/firebaseSoccer";
 import { fireStoreTennis } from "../../../../firebaseSetup/firebaseTennis";
+import LineGameCard from "../../../component/common/LineGameCard";
+import FancyGameCard from "../../../component/common/FancyGameCard";
+import Loader from "../../../component/common/Loader";
 
 const MarketAnalyticsDetail = () => {
   const navigate = useNavigate();
@@ -20,16 +23,43 @@ const MarketAnalyticsDetail = () => {
   const [activeStreamingDesktop, setActiveStreamingDesktop] = useState(false);
   const [activeStreamingMobile, setActiveStreamingMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pageRunnersData, setPageRunnersData] = useState([]);
   const [pageData, setPageData] = useState([]);
+  const [pageRunnersData, setPageRunnersData] = useState([]);
   const [pageCustomizeData, setPageCustomizeData] = useState([]);
+  const [pageRunnersFancyData, setPageRunnersFancyData] = useState([]);
+  const [pageCustomizeFancyData, setPageCustomizeFancyData] = useState([]);
+  const [pageRunnersLineData, setPageRunnersLineData] = useState([]);
+  const [pageCustomizeLineData, setPageCustomizeLineData] = useState([]);
   const [pagePlData, setPagePlData] = useState([]);
+  const [fancyPageData, setFancyPageData] = useState([]);
+  const [linePageData, setLinePageData] = useState([]);
+  const [fancyPlData, setFancyPlData] = useState([]);
+  const [fancyPlArray, setFancyPlArray] = useState([]);
+  const [linePlData, setLinePlData] = useState([]);
+  const [linePlArray, setLinePlArray] = useState([]);
 
   const liveValue = useRef([]);
+  const liveFancyValue = useRef([]);
+  const liveLineValue = useRef([]);
+
+  const liveFancyOdds = useRef();
+  const liveLineOdds = useRef();
+
+  const unsubscribeFromMessagesRef = useRef();
+
+  const firstTimeRender = useRef(true);
 
   useEffect(() => {
     liveValue.current = pageRunnersData;
   }, [pageRunnersData]);
+
+  useEffect(() => {
+    liveFancyValue.current = pageRunnersFancyData;
+  }, [pageRunnersFancyData]);
+
+  useEffect(() => {
+    liveLineValue.current = pageRunnersLineData;
+  }, [pageRunnersLineData]);
 
   const onClickBack = () => {
     navigate(`/market-analytics`);
@@ -44,8 +74,14 @@ const MarketAnalyticsDetail = () => {
   };
 
   useEffect(() => {
-    getEventMarkets();
-  }, []);
+    setPageData([]);
+    getEventMarkets(eventId);
+
+    return () => {
+      unsubscribeFromMessagesRef.current &&
+        unsubscribeFromMessagesRef.current();
+    };
+  }, [eventId, unsubscribeFromMessagesRef]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -72,11 +108,44 @@ const MarketAnalyticsDetail = () => {
       const q = query(citiesRef, where("exEventId", "==", eventId));
       onSnapshot(q, (docsSnap) => {
         const data = [];
+        const fancyMarket = [];
+        const lineMarket = [];
         const runnerData = [];
         const customizeData = [];
+
+        const runnerFancyData = [];
+        const customizeFancyData = [];
+        const runnerLineData = [];
+        const customizeLineData = [];
+
+        const fancyMarketOdds = [];
+        const lineMarketOdds = [];
+
         docsSnap.forEach((doc) => {
           if (doc.data()?.state?.status !== "CLOSED") {
-            data?.push(doc.data());
+            if (doc?.data()?.type === "fancy") {
+              fancyMarket.push(doc.data());
+              fancyMarketOdds.push({
+                exMarketId: doc.data().exMarketId,
+                odds:
+                  doc.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
+                    ?.price ||
+                  doc.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
+                    ?.Price,
+              });
+            } else if (doc?.data()?.type === "line_market") {
+              lineMarket.push(doc.data());
+              lineMarketOdds.push({
+                exMarketId: doc?.data().exMarketId,
+                odds:
+                  doc?.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
+                    ?.price ||
+                  doc?.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
+                    ?.Price,
+              });
+            } else {
+              data?.push(doc.data());
+            }
           }
         });
 
@@ -164,9 +233,211 @@ const MarketAnalyticsDetail = () => {
           runnerData.push(runnersList);
         });
 
+        setFancyPageData(fancyMarket);
+        setLinePageData(lineMarket);
+
+        fancyMarket?.map((item, mainIndex) => {
+          const runnersList = [];
+          const newData = [];
+          const sortedData = item?.runners?.sort(
+            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
+          );
+
+          const sortRunnerObject = [];
+          sortedData?.map((item) => {
+            sortRunnerObject.push(item?.selectionId);
+          });
+
+          sortRunnerObject?.map((key, index) => {
+            const runners = item?.runners?.find(
+              (item) => item?.selectionId == key
+            )?.exchange;
+
+            runnersList.push([
+              {
+                size: runners?.availableToBack?.[2]?.size || "-",
+                price: runners?.availableToBack?.[2]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[1]?.size || "-",
+                price: runners?.availableToBack?.[1]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[0]?.size || "-",
+                price: runners?.availableToBack?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[0]?.size || "-",
+                price: runners?.availableToLay?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[1]?.size || "-",
+                price: runners?.availableToLay?.[1]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[2]?.size || "-",
+                price: runners?.availableToLay?.[2]?.price || "-",
+              },
+            ]);
+
+            const oldData = liveFancyValue?.current?.[mainIndex]?.[index];
+
+            if (oldData) {
+              newData?.push([
+                oldData?.[0]?.size !==
+                  (runners?.availableToBack?.[2]?.size || "-") ||
+                oldData?.[0]?.price !==
+                  (runners?.availableToBack?.[2]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[1]?.size !==
+                  (runners?.availableToBack?.[1]?.size || "-") ||
+                oldData?.[1]?.price !==
+                  (runners?.availableToBack?.[1]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[2]?.size !==
+                  (runners?.availableToBack?.[0]?.size || "-") ||
+                oldData?.[2]?.price !==
+                  (runners?.availableToBack?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[3]?.size !==
+                  (runners?.availableToLay?.[0]?.size || "-") ||
+                oldData?.[3]?.price !==
+                  (runners?.availableToLay?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[4]?.size !==
+                  (runners?.availableToLay?.[1]?.size || "-") ||
+                oldData?.[4]?.price !==
+                  (runners?.availableToLay?.[1]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[5]?.size !==
+                  (runners?.availableToLay?.[2]?.size || "-") ||
+                oldData?.[5]?.price !==
+                  (runners?.availableToLay?.[2]?.price || "-")
+                  ? true
+                  : false,
+              ]);
+            }
+          });
+
+          customizeFancyData.push(newData);
+          runnerFancyData.push(runnersList);
+        });
+
+        lineMarket?.map((item, mainIndex) => {
+          const runnersList = [];
+          const newData = [];
+          const sortedData = item?.runners?.sort(
+            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
+          );
+
+          const sortRunnerObject = [];
+          sortedData?.map((item) => {
+            sortRunnerObject.push(item?.selectionId);
+          });
+
+          sortRunnerObject?.map((key, index) => {
+            const runners = item?.runners?.find(
+              (item) => item?.selectionId == key
+            )?.exchange;
+
+            runnersList.push([
+              {
+                size: runners?.availableToBack?.[2]?.size || "-",
+                price: runners?.availableToBack?.[2]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[1]?.size || "-",
+                price: runners?.availableToBack?.[1]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[0]?.size || "-",
+                price: runners?.availableToBack?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[0]?.size || "-",
+                price: runners?.availableToLay?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[1]?.size || "-",
+                price: runners?.availableToLay?.[1]?.price || "-",
+              },
+              {
+                size: runners?.availableToLay?.[2]?.size || "-",
+                price: runners?.availableToLay?.[2]?.price || "-",
+              },
+            ]);
+
+            const oldData = liveLineValue?.current?.[mainIndex]?.[index];
+
+            if (oldData) {
+              newData?.push([
+                oldData?.[0]?.size !==
+                  (runners?.availableToBack?.[2]?.size || "-") ||
+                oldData?.[0]?.price !==
+                  (runners?.availableToBack?.[2]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[1]?.size !==
+                  (runners?.availableToBack?.[1]?.size || "-") ||
+                oldData?.[1]?.price !==
+                  (runners?.availableToBack?.[1]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[2]?.size !==
+                  (runners?.availableToBack?.[0]?.size || "-") ||
+                oldData?.[2]?.price !==
+                  (runners?.availableToBack?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[3]?.size !==
+                  (runners?.availableToLay?.[0]?.size || "-") ||
+                oldData?.[3]?.price !==
+                  (runners?.availableToLay?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[4]?.size !==
+                  (runners?.availableToLay?.[1]?.size || "-") ||
+                oldData?.[4]?.price !==
+                  (runners?.availableToLay?.[1]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[5]?.size !==
+                  (runners?.availableToLay?.[2]?.size || "-") ||
+                oldData?.[5]?.price !==
+                  (runners?.availableToLay?.[2]?.price || "-")
+                  ? true
+                  : false,
+              ]);
+            }
+          });
+
+          customizeLineData.push(newData);
+          runnerLineData.push(runnersList);
+        });
+
+        liveFancyOdds.current = fancyMarketOdds;
+
+        liveLineOdds.current = lineMarketOdds;
+
+        if (firstTimeRender?.current) {
+          firstTimeRender.current = false;
+          getBetPl(eventId);
+        }
+
         setPageData(data);
         setPageRunnersData(runnerData);
         setPageCustomizeData(customizeData);
+
+        setPageRunnersFancyData(runnerFancyData);
+        setPageCustomizeFancyData(customizeFancyData);
+
+        setPageRunnersLineData(runnerLineData);
+        setPageCustomizeLineData(customizeLineData);
         setIsLoading(false);
       });
     } catch (err) {
@@ -183,19 +454,82 @@ const MarketAnalyticsDetail = () => {
 
     if (data?.data) {
       const cusData = [];
+      const cusFancyData = [];
+      const cusLineData = [];
+      const cusSelectionIdArray = [];
+      const cusLineSelectionIdArray = [];
       data?.data?.map((item) => {
         const selectionId = {};
-        item?.selectionId?.map((si) => {
-          Object.assign(selectionId, si);
+        const fancySelectionId = {};
+        const lineSelectionId = {};
+        const selectionIdArray = [];
+
+        item?.selectionId?.map((si, index) => {
+          if (item?.type === "fancy") {
+            const fancyOdds = liveFancyOdds.current?.find(
+              (odds) => odds?.exMarketId === item?.exMarketId
+            );
+
+            if (index >= fancyOdds?.odds - 5 && index <= fancyOdds?.odds + 5) {
+              selectionIdArray.push(si);
+            }
+            Object.assign(fancySelectionId, {
+              [item?.exMarketId]: item?.selectionId.reduce((a, b) =>
+                Math.min(a, b)
+              ),
+            });
+          } else if (item?.type === "line_market") {
+            const lineOdds = liveLineOdds.current?.find(
+              (odds) => odds?.exMarketId === item?.exMarketId
+            );
+
+            if (index >= lineOdds?.odds - 5 && index <= lineOdds?.odds + 5) {
+              selectionIdArray.push(si);
+            }
+            Object.assign(lineSelectionId, {
+              [item?.exMarketId]: item?.selectionId.reduce((a, b) =>
+                Math.min(a, b)
+              ),
+            });
+          } else {
+            Object.assign(selectionId, si);
+          }
         });
 
         cusData?.push({
           exMarketId: item?.exMarketId,
           runnerData: selectionId,
         });
+
+        if (Object.keys(fancySelectionId)?.length > 0) {
+          cusFancyData?.push({
+            exMarketId: item?.exMarketId,
+            runnerData: fancySelectionId,
+          });
+          cusSelectionIdArray.push({
+            exMarketId: item?.exMarketId,
+            runnerData: selectionIdArray,
+          });
+        }
+
+        if (Object.keys(lineSelectionId)?.length > 0) {
+          cusLineData?.push({
+            exMarketId: item?.exMarketId,
+            runnerData: lineSelectionId,
+          });
+          cusLineSelectionIdArray.push({
+            exMarketId: item?.exMarketId,
+            runnerData: selectionIdArray,
+          });
+        }
       });
 
       setPagePlData(cusData);
+      setFancyPlData(cusFancyData);
+      setFancyPlArray(cusSelectionIdArray);
+
+      setLinePlData(cusLineData);
+      setLinePlArray(cusLineSelectionIdArray);
     }
   };
 
@@ -204,12 +538,51 @@ const MarketAnalyticsDetail = () => {
     const data = await getMarketDetailData(eventId);
 
     if (data?.data) {
-      if (pageData?.length === 0) {
-        setPageData(data?.data);
-      }
-      // console.log(data?.data?.[0]?.sportsId);
+      const fancyMarket = [];
+      const lineMarket = [];
+      const fancyMarketOdds = [];
+      const lineMarketOdds = [];
+      const market = [];
 
-      getFirebaseData(data?.data?.[0]?.sportsId);
+      data?.data?.map((item) => {
+        if (item?.type === "fancy") {
+          fancyMarket.push(item);
+          fancyMarketOdds.push({
+            exMarketId: item.exMarketId,
+            odds:
+              item?.runners?.[0]?.exchange?.availableToLay?.[0]?.price ||
+              item?.runners?.[0]?.exchange?.availableToLay?.[0]?.Price,
+          });
+        } else if (item?.type === "line_market") {
+          lineMarket.push(item);
+          lineMarketOdds.push({
+            exMarketId: item.exMarketId,
+            odds:
+              item?.runners?.[0]?.exchange?.availableToLay?.[0]?.price ||
+              item?.runners?.[0]?.exchange?.availableToLay?.[0]?.Price,
+          });
+        } else {
+          market.push(item);
+        }
+      });
+
+      liveFancyOdds.current = fancyMarketOdds;
+      liveLineOdds.current = lineMarketOdds;
+
+      if (firstTimeRender?.current) {
+        firstTimeRender.current = false;
+        getBetPl(eventId);
+      }
+
+      unsubscribeFromMessagesRef.current &&
+        unsubscribeFromMessagesRef.current();
+      getFirebaseData(market?.[0]?.sportsId);
+
+      setPageData(market);
+      setFancyPageData(fancyMarket);
+      setLinePageData(lineMarket);
+
+      // getFirebaseData(data?.data?.[0]?.sportsId);
     }
     setIsLoading(false);
   };
@@ -227,79 +600,97 @@ const MarketAnalyticsDetail = () => {
       <div>
         <div className="grid grid-cols-12 gap-4 mt-4">
           <div className="col-span-12 md:col-span-7 xl:col-span-8">
-            <div
-              className={`flex justify-between items-start md:items-center md:flex-row flex-col px-4 py-1 border-b border-[#FFFFFF] text-[#FFFFFF]`}
-              style={{
-                background: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
-              }}
-            >
-              <div className="text-[14px] font-bold">
-                {pageData?.[0]?.eventName}
+            {isLoading && (
+              <div className="flex justify-center items-center my-4">
+                <Loader color="#C10930" size={25} />
               </div>
-              <div
-                // style={{ color: themeColor?.commonTextColor }}
-                className="text-[12px] font-bold flex justify-between w-full md:w-auto mt-1 md:mt-0 items-center"
-              >
-                <div className="flex items-center">
+            )}
+
+            {!isLoading &&
+              (pageData?.length > 0 ||
+                linePageData?.length > 0 ||
+                fancyPageData?.length > 0) && (
+                <>
                   <div
-                    // onClick={onClickBetsHistoryModal}
-                    className="bg-[#ECAD17] uppercase mr-2 rounded p-[3px] md:hidden"
+                    className={`flex justify-between items-start md:items-center md:flex-row flex-col px-4 py-1 border-b border-[#FFFFFF] text-[#FFFFFF]`}
+                    style={{
+                      background:
+                        "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+                    }}
                   >
-                    Bets
+                    <div className="text-[14px] font-bold">
+                      {pageData?.[0]?.eventName}
+                    </div>
+                    <div
+                      // style={{ color: themeColor?.commonTextColor }}
+                      className="text-[12px] font-bold flex justify-between w-full md:w-auto mt-1 md:mt-0 items-center"
+                    >
+                      <div className="flex items-center">
+                        <div
+                          // onClick={onClickBetsHistoryModal}
+                          className="bg-[#ECAD17] uppercase mr-2 rounded p-[3px] md:hidden"
+                        >
+                          Bets
+                        </div>
+                        <img
+                          className="cursor-pointer ml-1 h-[18px] md:hidden"
+                          onClick={onChangeMobileLiveStreaming}
+                          src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/tv.svg"
+                          style={{ filter: "invert(1)" }}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        (
+                        {moment
+                          .utc(pageData?.[0]?.marketTime)
+                          .utcOffset(moment().utcOffset())
+                          .format("DD/MM/YYYY LTS")}
+                        )
+                      </div>
+                    </div>
                   </div>
-                  <img
-                    className="cursor-pointer ml-1 h-[18px] md:hidden"
-                    onClick={onChangeMobileLiveStreaming}
-                    src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/tv.svg"
-                    style={{ filter: "invert(1)" }}
-                  />
-                </div>
-                <div className="flex items-center">
-                  (
-                  {moment
-                    .utc(pageData?.[0]?.marketTime)
-                    .utcOffset(moment().utcOffset())
-                    .format("DD/MM/YYYY LTS")}
-                  )
-                </div>
-              </div>
-              {/* <div className="text-[12px] font-bold flex justify-between w-full md:w-auto mt-1 md:mt-0 items-center">
-                (
-                {moment
-                  .utc(pageData?.[0]?.marketTime)
-                  .utcOffset(moment().utcOffset())
-                  .format("DD/MM/YYYY LTS")}
-                )
-                <img
-                  className="cursor-pointer ml-1 h-[18px] hidden"
-                  onClick={onChangeMobileLiveStreaming}
-                  src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/tv.svg"
-                  style={{ filter: "invert(1)" }}
-                />
-              </div> */}
-            </div>
-            <div className="md:hidden mb-2">
-              {activeStreamingMobile && (
-                <LiveStreaming eventId={pageData?.[0]?.eventId} />
+                  <div className="md:hidden mb-2">
+                    {activeStreamingMobile && (
+                      <LiveStreaming eventId={pageData?.[0]?.eventId} />
+                    )}
+                  </div>
+                  <div>
+                    {!isLoading &&
+                      pageData?.map((item, index) => {
+                        const runnerData = pagePlData?.find(
+                          (pl) => pl?.exMarketId === item?.exMarketId
+                        );
+                        return (
+                          <DetailGameCard
+                            oldPrice={runnerData?.runnerData}
+                            // oldPrice={[122, -100]}
+                            oldData={pageCustomizeData?.[index]}
+                            data={item}
+                            key={index}
+                          />
+                        );
+                      })}
+
+                    {linePageData?.length > 0 && (
+                      <LineGameCard
+                        linePlArray={linePlArray}
+                        oldPrice={linePlData}
+                        oldData={pageCustomizeLineData}
+                        data={linePageData}
+                      />
+                    )}
+
+                    {fancyPageData?.length > 0 && (
+                      <FancyGameCard
+                        fancyPlArray={fancyPlArray}
+                        oldPrice={fancyPlData}
+                        oldData={pageCustomizeFancyData}
+                        data={fancyPageData}
+                      />
+                    )}
+                  </div>
+                </>
               )}
-            </div>
-            <div>
-              {!isLoading &&
-                pageData?.map((item, index) => {
-                  const runnerData = pagePlData?.find(
-                    (pl) => pl?.exMarketId === item?.exMarketId
-                  );
-                  return (
-                    <DetailGameCard
-                      oldPrice={runnerData?.runnerData}
-                      // oldPrice={[122, -100]}
-                      oldData={pageCustomizeData?.[index]}
-                      data={item}
-                      key={index}
-                    />
-                  );
-                })}
-            </div>
           </div>
           <div className="col-span-5 md:col-span-5 xl:col-span-4 hidden md:block">
             <div className="mb-2">
@@ -340,10 +731,7 @@ const MarketAnalyticsDetail = () => {
                 <div className="py-1">Live Bets</div>
               </div>
 
-              <BetHistory
-                // renderBetPlace={rerenderBet}
-                exEventId={pageData?.[0]?.exEventId}
-              />
+              <BetHistory />
             </div>
           </div>
         </div>

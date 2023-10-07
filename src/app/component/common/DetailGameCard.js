@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiChevronUp, FiInfo, FiStar } from "react-icons/fi";
+import { FiChevronUp, FiInfo } from "react-icons/fi";
 import {
   Accordion,
   AccordionHeader,
@@ -99,7 +99,6 @@ const DetailGameCard = (props) => {
               </div>
             </div>
             <div className="ml-[20px] flex items-center">
-              <FiStar color="#C10930" />
               <button className="bg-[yellow] uppercase text-[13px] font-bold border italic px-1 rounded-sm ml-2">
                 cashout
               </button>

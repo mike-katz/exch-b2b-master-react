@@ -21,18 +21,18 @@ const AllBetHistory = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      transactionsHistory();
+      transactionsHistory(false, currentPage, perPage);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentPage, perPage]);
 
   useEffect(() => {
     setIsLoading(true);
-    transactionsHistory();
-  }, []);
+    transactionsHistory(false, currentPage, perPage);
+  }, [currentPage, perPage]);
 
-  const transactionsHistory = async (payloadParams) => {
+  const transactionsHistory = async (payloadParams, currentPage, perPage) => {
     let payload = {};
     if (payloadParams) {
       payload = payloadParams;
@@ -98,12 +98,12 @@ const AllBetHistory = () => {
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
-                  <th className="">Date/Time </th>
-                  <th className="text-right">Deposit</th>
-                  <th className="text-right">Withdraw</th>
-                  <th className="text-right">Balance</th>
-                  <th className="text-right">Remark</th>
-                  <th className="text-right">From/To</th>
+                  <th className="">Username</th>
+                  <th className="">Market Name</th>
+                  <th className="">Odds</th>
+                  <th className="">Amount</th>
+                  <th className="">Place Time</th>
+                  <th className="">Match Time</th>
                 </tr>
               </thead>
               <tbody>

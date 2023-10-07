@@ -545,7 +545,12 @@ const DownListMaster = () => {
                         {amountFormate(Number(item?.balance + item?.exposure))}
                       </div>
                     </td>
-                    <td className="text-right">{item?.exposure}</td>
+                    <td className="text-right">
+                      <span className="text-[#d0021b]">
+                        ({amountFormate(item?.exposure) || 0})
+                      </span>
+                    </td>
+
                     <td className="text-right">
                       {amountFormate(Number(item?.balance))}
                     </td>
