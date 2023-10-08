@@ -16,6 +16,7 @@ import CommonInput from "../../../component/form/CommonInput";
 import CommonSelect from "../../../component/form/CommonSelect";
 import { useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { Switch } from "@material-tailwind/react";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
   const { userData, token } = useSelector((state) => state?.persist);
@@ -29,6 +30,13 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
     const payload = {
       ...values,
       confirm_password: undefined,
+      isCasino: values?.roles === "WhiteLabel" ? values?.isCasino : undefined,
+      isIntCasino:
+        values?.roles === "WhiteLabel" ? values?.isIntCasino : undefined,
+      isSportBook:
+        values?.roles === "WhiteLabel" ? values?.isSportBook : undefined,
+      isAviator: values?.roles === "WhiteLabel" ? values?.isAviator : undefined,
+      origin: values?.roles === "WhiteLabel" ? values?.origin : undefined,
     };
 
     setIsLoadingSubmit(true);
@@ -67,6 +75,10 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
             mobile: "",
             roles: "",
             origin: "",
+            isCasino: false,
+            isIntCasino: false,
+            isSportBook: false,
+            isAviator: false,
           }}
           validationSchema={addPlayerMasterSchema}
           onSubmit={onClickAddPlayer}
@@ -74,6 +86,7 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
         >
           {({ values, errors, touched, setFieldValue, handleSubmit }) => (
             <Form>
+              {console.log({ values })}
               <div className="border-b border-t border-[#ccc] px-[40px] pt-[15px]">
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <CommonInput
@@ -162,7 +175,92 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                     type="password"
                   />
                 </div>
+                {values?.roles === "WhiteLabel" && (
+                  <>
+                    <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
+                      <div className="col-span-5 text-[12px] text-[#1e1e1e] font-semibold">
+                        Is Enable Casino
+                      </div>
+                      <div className="col-span-7 text-[12px] text-[#1e1e1e] font-semibold">
+                        <Switch
+                          ripple={false}
+                          color="#ecad17"
+                          className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+                          circleProps={{
+                            className: "before:hidden border-none",
+                          }}
+                          value={values?.isCasino}
+                          checked={values?.isCasino}
+                          onChange={(e) => {
+                            setFieldValue("isCasino", e?.target?.checked);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
+                      <div className="col-span-5 text-[12px] text-[#1e1e1e] font-semibold">
+                        Is Enable Int Casino
+                      </div>
+                      <div className="col-span-7 text-[12px] text-[#1e1e1e] font-semibold">
+                        <Switch
+                          ripple={false}
+                          color="#ecad17"
+                          className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+                          circleProps={{
+                            className: "before:hidden border-none",
+                          }}
+                          value={values?.isIntCasino}
+                          checked={values?.isIntCasino}
+                          onChange={(e) => {
+                            setFieldValue("isIntCasino", e?.target?.checked);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
+                      <div className="col-span-5 text-[12px] text-[#1e1e1e] font-semibold">
+                        Is Enable Sport Book
+                      </div>
+                      <div className="col-span-7 text-[12px] text-[#1e1e1e] font-semibold">
+                        <Switch
+                          ripple={false}
+                          color="#ecad17"
+                          className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+                          circleProps={{
+                            className: "before:hidden border-none",
+                          }}
+                          value={values?.isSportBook}
+                          checked={values?.isSportBook}
+                          onChange={(e) => {
+                            setFieldValue("isSportBook", e?.target?.checked);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
+                      <div className="col-span-5 text-[12px] text-[#1e1e1e] font-semibold">
+                        Is Enable Aviator
+                      </div>
+                      <div className="col-span-7 text-[12px] text-[#1e1e1e] font-semibold">
+                        <Switch
+                          ripple={false}
+                          color="#ecad17"
+                          className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+                          circleProps={{
+                            className: "before:hidden border-none",
+                          }}
+                          value={values?.isAviator}
+                          checked={values?.isAviator}
+                          onChange={(e) => {
+                            setFieldValue("isAviator", e?.target?.checked);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
+
               <div className="flex items-center justify-center p-[15px]">
                 <button
                   type="submit"

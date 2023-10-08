@@ -5,6 +5,7 @@ import Loader from "../../../component/common/Loader";
 import { getUserDetailData } from "../../../redux/services/DownLineUser";
 import { amountFormate } from "../../../utils/helper";
 import ChangePasswordModal from ".//ChangePasswordModal";
+import EditCasinoEnable from "./EditCasinoEnable";
 import EditCommissionModal from "./EditCommissionModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
 import EditMobileNumberModal from "./EditMobileNumberModal";
@@ -14,6 +15,7 @@ const AccountSummary = () => {
   const [isVisibleExposureLimit, setIsVisibleExposureLimit] = useState(false);
   const [isVisibleCommission, setIsVisibleCommission] = useState(false);
   const [isVisibleMobileNumber, setIsVisibleMobileNumber] = useState(false);
+  const [isVisibleEnableCasino, setIsVisibleEnableCasino] = useState(false);
   const [pageData, setPageData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,6 +62,28 @@ const AccountSummary = () => {
     setIsVisibleMobileNumber(false);
   };
 
+  const onCloseCasinoEnable = () => {
+    setIsVisibleEnableCasino(false);
+  };
+
+  const enableLength = [];
+
+  if (pageData?.isCasino) {
+    enableLength.push(1);
+  }
+
+  if (pageData?.isIntCasino) {
+    enableLength.push(1);
+  }
+
+  if (pageData?.isAviator) {
+    enableLength.push(1);
+  }
+
+  if (pageData?.isSportBook) {
+    enableLength.push(1);
+  }
+
   return (
     <div>
       <ChangePasswordModal
@@ -90,6 +114,17 @@ const AccountSummary = () => {
         onRefreshTable={onRefreshTable}
         isVisible={isVisibleMobileNumber}
         onCloseMenu={onCloseMobileNumber}
+      />
+
+      <EditCasinoEnable
+        activeId={userId}
+        isCasino={pageData?.isCasino}
+        isAviator={pageData?.isAviator}
+        isIntCasino={pageData?.isIntCasino}
+        isSportBook={pageData?.isSportBook}
+        onRefreshTable={onRefreshTable}
+        isVisible={isVisibleEnableCasino}
+        onCloseMenu={onCloseCasinoEnable}
       />
 
       <div className="text-[#243a48] text-[16px] font-black">
@@ -187,6 +222,9 @@ const AccountSummary = () => {
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
                     Commission
                   </div>
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
+                    Enabled
+                  </div>
                 </div>
                 <div className="w-full">
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
@@ -206,6 +244,37 @@ const AccountSummary = () => {
                     <div
                       onClick={() => {
                         setIsVisibleCommission(true);
+                      }}
+                      className="text-[#2789ce] flex items-center cursor-pointer"
+                    >
+                      Edit
+                      <FaPencilAlt className="ml-1" />
+                    </div>
+                  </div>
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
+                    {pageData?.isCasino
+                      ? enableLength?.length > 0
+                        ? "Casino, "
+                        : "Casino."
+                      : ""}
+                    {pageData?.isIntCasino
+                      ? enableLength?.length > 1
+                        ? "Int Casino, "
+                        : "Int Casino."
+                      : ""}
+                    {pageData?.isSportBook
+                      ? enableLength?.length > 2
+                        ? "Sport Book, "
+                        : "Sport Book."
+                      : ""}
+                    {pageData?.isAviator
+                      ? enableLength?.length > 3
+                        ? "Aviator, "
+                        : "Aviator."
+                      : ""}
+                    <div
+                      onClick={() => {
+                        setIsVisibleEnableCasino(true);
                       }}
                       className="text-[#2789ce] flex items-center cursor-pointer"
                     >

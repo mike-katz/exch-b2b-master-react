@@ -73,6 +73,5 @@ export const editCommissionSchema = Yup.object().shape({
 });
 
 export const editMobileSchema = Yup.object().shape({
-  mobile: Yup.string().required("Please enter mobile"),
   password: Yup.string().required("Please enter password"),
 });
