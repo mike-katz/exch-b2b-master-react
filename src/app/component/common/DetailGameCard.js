@@ -70,7 +70,11 @@ const DetailGameCard = (props) => {
         className="border border-blue-gray-100 rounded-lg mb-2"
       >
         <AccordionHeader
-          className={`bg-[#e9eff8] flex w-full justify-between items-center p-0`}
+          style={{
+            background: "#e9eff8",
+            color: "#FFFFFF",
+          }}
+          className={`flex w-full justify-between items-center p-0`}
         >
           <div className="flex items-center">
             <div className="bg-[#e9eff8] min-h-[37px] w-full relative">
@@ -79,29 +83,12 @@ const DetailGameCard = (props) => {
                   background:
                     "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
                 }}
-                className="absolute left-0 w-[170px] z-[9] h-full flex items-center"
+                className="bg-cross min-h-[37px] left-0 z-[9] h-full flex items-center pl-1 pr-8 md:min-w-[200px]"
               >
-                <div
-                  style={{
-                    clipPath: "polygon(0 -1px, 100% -1px, 1px 100%, 0 100%)",
-                    width: "18px",
-                    height: "calc(100% + 0px)",
-                    position: "absolute",
-                    right: "-17px",
-                    top: 0,
-                    background:
-                      "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
-                  }}
-                ></div>
                 <span className="text-[#FFFFFF] text-[15px] ml-1 font-bold">
                   {props?.data?.marketName}
                 </span>
               </div>
-            </div>
-            <div className="ml-[20px] flex items-center">
-              <button className="bg-[yellow] uppercase text-[13px] font-bold border italic px-1 rounded-sm ml-2">
-                cashout
-              </button>
             </div>
           </div>
         </AccordionHeader>

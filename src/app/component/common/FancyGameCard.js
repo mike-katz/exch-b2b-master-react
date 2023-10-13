@@ -97,18 +97,20 @@ const FancyGameCard = (props) => {
                   </tr>
                 )}
                 {plModalData?.plArray?.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{plModalData?.odds - 6 + index}</td>
-                      <td
-                        className={`${
-                          Number(item) > 0 ? "text-[green]" : "text-[red]"
-                        }`}
-                      >
-                        {item}
-                      </td>
-                    </tr>
-                  );
+                  if (item?.odds >= 0) {
+                    return (
+                      <tr key={index}>
+                        <td>{item?.odds}</td>
+                        <td
+                          className={`${
+                            Number(item?.si) > 0 ? "text-[green]" : "text-[red]"
+                          }`}
+                        >
+                          {item?.si}
+                        </td>
+                      </tr>
+                    );
+                  }
                 })}
               </tbody>
             </table>
@@ -127,7 +129,27 @@ const FancyGameCard = (props) => {
           </div>
         </div>
       </Model> */}
-      <div className="flex items-center">
+      <div
+        style={{
+          background: "#e9eff8",
+          color: "#FFFFFF",
+        }}
+        className={`flex w-full justify-between items-center p-0`}
+      >
+        <div className="flex items-center">
+          <div className="min-h-[37px] w-full relative">
+            <div
+              style={{
+                background: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+              }}
+              className="bg-cross min-h-[37px] left-0 z-[9] h-full flex items-center pl-1 pr-8 md:min-w-[200px]"
+            >
+              <span className="text-[15px] ml-1 font-bold">Fancy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="flex items-center">
         <div
           style={{
             background: "#e9eff8",
@@ -144,7 +166,7 @@ const FancyGameCard = (props) => {
             <span className="text-[15px] ml-1 font-bold">Fancy</span>
           </div>
         </div>
-      </div>
+      </div> */}
       <div
         style={{
           background: themeColor?.commonBgColor,

@@ -471,7 +471,7 @@ const MarketAnalyticsDetail = () => {
             );
 
             if (index >= fancyOdds?.odds - 5 && index <= fancyOdds?.odds + 5) {
-              selectionIdArray.push(si);
+              selectionIdArray.push({ odds: index, si });
             }
             Object.assign(fancySelectionId, {
               [item?.exMarketId]: item?.selectionId.reduce((a, b) =>
@@ -484,7 +484,7 @@ const MarketAnalyticsDetail = () => {
             );
 
             if (index >= lineOdds?.odds - 5 && index <= lineOdds?.odds + 5) {
-              selectionIdArray.push(si);
+              selectionIdArray.push({ odds: index, si });
             }
             Object.assign(lineSelectionId, {
               [item?.exMarketId]: item?.selectionId.reduce((a, b) =>

@@ -222,9 +222,11 @@ const AccountSummary = () => {
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
                     Commission
                   </div>
-                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
-                    Enabled
-                  </div>
+                  {pageData?.roles?.toString() === "WhiteLabel" && (
+                    <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
+                      Enabled
+                    </div>
+                  )}
                 </div>
                 <div className="w-full">
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
@@ -251,37 +253,45 @@ const AccountSummary = () => {
                       <FaPencilAlt className="ml-1" />
                     </div>
                   </div>
-                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
-                    {pageData?.isCasino
-                      ? enableLength?.length > 0
-                        ? "Casino, "
-                        : "Casino."
-                      : ""}
-                    {pageData?.isIntCasino
-                      ? enableLength?.length > 1
-                        ? "Int Casino, "
-                        : "Int Casino."
-                      : ""}
-                    {pageData?.isSportBook
-                      ? enableLength?.length > 2
-                        ? "Sport Book, "
-                        : "Sport Book."
-                      : ""}
-                    {pageData?.isAviator
-                      ? enableLength?.length > 3
-                        ? "Aviator, "
-                        : "Aviator."
-                      : ""}
+                  {pageData?.roles?.toString() === "WhiteLabel" && (
                     <div
-                      onClick={() => {
-                        setIsVisibleEnableCasino(true);
-                      }}
-                      className="text-[#2789ce] flex items-center cursor-pointer"
+                      className={`text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center ${
+                        enableLength?.length > 0
+                          ? "justify-between"
+                          : "justify-end"
+                      }`}
                     >
-                      Edit
-                      <FaPencilAlt className="ml-1" />
+                      {pageData?.isCasino
+                        ? enableLength?.length > 0
+                          ? "Casino, "
+                          : "Casino."
+                        : ""}
+                      {pageData?.isIntCasino
+                        ? enableLength?.length > 1
+                          ? "Int Casino, "
+                          : "Int Casino."
+                        : ""}
+                      {pageData?.isSportBook
+                        ? enableLength?.length > 2
+                          ? "Sport Book, "
+                          : "Sport Book."
+                        : ""}
+                      {pageData?.isAviator
+                        ? enableLength?.length > 3
+                          ? "Aviator, "
+                          : "Aviator."
+                        : ""}
+                      <div
+                        onClick={() => {
+                          setIsVisibleEnableCasino(true);
+                        }}
+                        className="text-[#2789ce] flex items-center cursor-pointer"
+                      >
+                        Edit
+                        <FaPencilAlt className="ml-1" />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               <tr>

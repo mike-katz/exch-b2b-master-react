@@ -122,7 +122,8 @@ const DownLineMasterDetails = () => {
             <div className="bg-[#243a48] text-[#FFFFFF] px-[10px] border-b border-[#eee1c0] leading-[25px]">
               Performance
             </div>
-            {[parentListData?.length - 1]?.roles?.toString() === "User" ? (
+            {parentListData[parentListData?.length - 1]?.roles?.toString() ===
+            "User" ? (
               <>
                 <div
                   onClick={() => {

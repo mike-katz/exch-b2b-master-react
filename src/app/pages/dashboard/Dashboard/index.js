@@ -615,22 +615,27 @@ const DownListMaster = () => {
                     </td>
                     <td className="text-right w-[100px]">
                       <div className="flex items-center justify-end">
-                        <div
-                          onClick={() => {
-                            onClickMenu("beating-profit-lost", item?._id);
-                          }}
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
-                        >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
-                        </div>
-                        <div
-                          onClick={() => {
-                            onClickMenu("beating-history", item?._id);
-                          }}
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
-                        >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
-                        </div>
+                        {item?.roles?.toString() === "User" && (
+                          <>
+                            <div
+                              onClick={() => {
+                                onClickMenu("beating-profit-lost", item?._id);
+                              }}
+                              className="h-[26px] w-[26px] cursor-pointer ml-1"
+                            >
+                              <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
+                            </div>
+                            <div
+                              onClick={() => {
+                                onClickMenu("beating-history", item?._id);
+                              }}
+                              className="h-[26px] w-[26px] cursor-pointer ml-1"
+                            >
+                              <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
+                            </div>
+                          </>
+                        )}
+
                         {activePageId || !currentStatusActive ? null : (
                           <div
                             className="h-[26px] w-[26px] cursor-pointer ml-1"

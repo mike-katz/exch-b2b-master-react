@@ -68,18 +68,20 @@ const LineGameCard = (props) => {
                   </tr>
                 )}
                 {plModalData?.plArray?.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{plModalData?.odds - 6 + index}</td>
-                      <td
-                        className={`${
-                          Number(item) > 0 ? "text-[green]" : "text-[red]"
-                        }`}
-                      >
-                        {item}
-                      </td>
-                    </tr>
-                  );
+                  if (item?.odds >= 0) {
+                    return (
+                      <tr key={index}>
+                        <td>{item?.odds}</td>
+                        <td
+                          className={`${
+                            Number(item?.si) > 0 ? "text-[green]" : "text-[red]"
+                          }`}
+                        >
+                          {item?.si}
+                        </td>
+                      </tr>
+                    );
+                  }
                 })}
               </tbody>
             </table>
@@ -91,16 +93,18 @@ const LineGameCard = (props) => {
           background: "#e9eff8",
           color: "#FFFFFF",
         }}
-        className="flex items-center"
+        className={`flex w-full justify-between items-center p-0`}
       >
-        <div className="min-h-[37px] w-full relative">
-          <div
-            style={{
-              background: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
-            }}
-            className="bg-cross absolute left-0 z-[9] h-full flex items-center pl-4 pr-8"
-          >
-            <span className="text-[15px] ml-1 font-bold">Line Market</span>
+        <div className="flex items-center">
+          <div className="min-h-[37px] w-full relative">
+            <div
+              style={{
+                background: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+              }}
+              className="bg-cross min-h-[37px] left-0 z-[9] h-full flex items-center pl-1 pr-8 md:min-w-[200px]"
+            >
+              <span className="text-[15px] ml-1 font-bold">Line Market</span>
+            </div>
           </div>
         </div>
       </div>
@@ -132,8 +136,6 @@ const LineGameCard = (props) => {
           props?.oldPrice?.find(
             (plData) => plData?.exMarketId === item?.exMarketId
           )?.runnerData?.[item?.exMarketId] || 0;
-
-        console.log({ price });
 
         const blinkValue = blinkData?.[index]?.[0];
 

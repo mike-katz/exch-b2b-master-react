@@ -86,7 +86,6 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
         >
           {({ values, errors, touched, setFieldValue, handleSubmit }) => (
             <Form>
-              {console.log({ values })}
               <div className="border-b border-t border-[#ccc] px-[40px] pt-[15px]">
                 <div className="grid grid-cols-12 gap-3 items-center mb-[10px]">
                   <CommonInput
