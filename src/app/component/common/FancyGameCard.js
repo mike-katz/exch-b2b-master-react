@@ -9,11 +9,10 @@ import { formatCashRound } from "../../utils/helper";
 const DATA = [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }, { id: "5" }];
 
 const TAB_DATA = [
-  { name: "all" },
-  { name: "sessions" },
-  { name: "w/p market" },
-  { name: "odd/even" },
-  { name: "xtra market" },
+  { name: "all", value: "all" },
+  { name: "sessions", value: "sessions" },
+  { name: "w/p market", value: "wp_market" },
+  { name: "others", value: "xtra_market" },
 ];
 
 const FancyGameCard = (props) => {
@@ -192,18 +191,19 @@ const FancyGameCard = (props) => {
           return (
             <div
               style={{
-                background: index === activeTabs ? "#6D081D" : "#343435",
+                background: item?.value === activeTabs ? "#6D081D" : "#343435",
               }}
               key={index}
               className="py-[6px] px-[19px] cursor-pointer"
               onClick={() => {
-                onClickActiveTab(index);
+                onClickActiveTab(item?.value);
               }}
             >
               <div
                 style={{
-                  backgroundColor: index === activeTabs ? "#6D081D" : "#343435",
-                  color: index === activeTabs ? "#ffffff" : "#ffffff",
+                  backgroundColor:
+                    item?.value === activeTabs ? "#6D081D" : "#343435",
+                  color: item?.value === activeTabs ? "#ffffff" : "#ffffff",
                 }}
                 className="text-[12px] uppercase whitespace-nowrap"
               >

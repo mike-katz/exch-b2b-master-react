@@ -20,7 +20,7 @@ import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
 import { useParams } from "react-router-dom";
 
-const BettingProfitLost = () => {
+const BettingProfitLost = (props) => {
   const { userId } = useParams();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions(); // eslint-disable-line
   const [pageData, setPageData] = useState([]);
@@ -499,7 +499,7 @@ const BettingProfitLost = () => {
       </div>
       <div className="flex items-center my-2">
         <FaUser color="#7e97a6" className="mr-1" />
-        12340ss
+        {props?.username}
       </div>
       <div className="grid grid-cols-12 gap-4 items-end mb-4 mt-4 bg-[#e0e6e6] p-3 pt-2 rounded">
         <div className="col-span-6 lg:col-span-2">

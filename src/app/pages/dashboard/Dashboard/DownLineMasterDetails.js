@@ -190,7 +190,13 @@ const DownLineMasterDetails = () => {
                   }
                 />
               )}
-              {activeTab === "beating-profit-lost" && <BettingProfitLost />}
+              {activeTab === "beating-profit-lost" && (
+                <BettingProfitLost
+                  username={
+                    parentListData[parentListData?.length - 1]?.username
+                  }
+                />
+              )}
             </>
           ) : null}
           {activeTab === "transactions-history" && <TransactionHistory />}

@@ -10,6 +10,7 @@ const CreditRefLogs = () => {
 
   const [pageData, setPageData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState(false);
 
   useEffect(() => {
     creditRefList();
@@ -26,6 +27,7 @@ const CreditRefLogs = () => {
 
     if (data?.data) {
       setPageData(data?.data);
+      setUsername(data?.username);
     }
 
     setIsLoading(false);
@@ -39,7 +41,7 @@ const CreditRefLogs = () => {
             Credit Reference Logs
           </div>
           <div className="bg-[#fff] text-[#243a48] text-[15px] py-[1px] px-[8px] rounded mx-[5px] font-black">
-            12340ss
+            {username}
           </div>
         </div>
 

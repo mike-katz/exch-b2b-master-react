@@ -212,6 +212,7 @@ const BetList = () => {
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>
+              <th className="">Username</th>
               <th className="">Sport Name</th>
               <th className="">Event Name</th>
               <th className="">Market Name</th>
@@ -261,9 +262,10 @@ const BetList = () => {
                           />
                         )} */}
 
-                        <div className="font-semibold">1288446886</div>
+                        <div className="font-semibold">{item?.username}</div>
                       </div>
                     </td>
+                    <td>{item?.sportName}</td>
                     <td>{item?.eventName}</td>
                     <td className="">{item?.marketType}</td>
                     {/* <td className="max-w-[200px]">
