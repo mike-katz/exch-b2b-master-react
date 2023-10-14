@@ -149,7 +149,14 @@ const MarketAnalyticsDetail = () => {
           }
         });
 
-        data?.map((item, mainIndex) => {
+        const sortedData = fancyMarket.sort(
+          (a, b) => a?.sequence - b?.sequence
+        );
+
+        setFancyPageData(sortedData);
+        setLinePageData(lineMarket);
+
+        sortedData?.map((item, mainIndex) => {
           const runnersList = [];
           const newData = [];
 
@@ -233,8 +240,8 @@ const MarketAnalyticsDetail = () => {
           runnerData.push(runnersList);
         });
 
-        setFancyPageData(fancyMarket);
-        setLinePageData(lineMarket);
+        // setFancyPageData(fancyMarket);
+        // setLinePageData(lineMarket);
 
         fancyMarket?.map((item, mainIndex) => {
           const runnersList = [];
@@ -458,7 +465,12 @@ const MarketAnalyticsDetail = () => {
       const cusLineData = [];
       const cusSelectionIdArray = [];
       const cusLineSelectionIdArray = [];
-      data?.data?.map((item) => {
+
+      const sortedAllData = data?.data?.sort(
+        (a, b) => a?.sequence - b?.sequence
+      );
+
+      sortedAllData?.map((item) => {
         const selectionId = {};
         const fancySelectionId = {};
         const lineSelectionId = {};
@@ -544,7 +556,11 @@ const MarketAnalyticsDetail = () => {
       const lineMarketOdds = [];
       const market = [];
 
-      data?.data?.map((item) => {
+      const sortedAllData = data?.data?.sort(
+        (a, b) => a?.sequence - b?.sequence
+      );
+
+      sortedAllData?.map((item) => {
         if (item?.type === "fancy") {
           fancyMarket.push(item);
           fancyMarketOdds.push({

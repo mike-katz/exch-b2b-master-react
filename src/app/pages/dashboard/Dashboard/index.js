@@ -409,7 +409,8 @@ const DownListMaster = () => {
           <div className="text-[#243a48] text-[15px] font-black">
             IR{" "}
             {amountFormate(
-              Number(myBalance?.totalBalance + myBalance?.totalExposure || 0)
+              Number(myBalance?.totalBalance || 0) +
+                Number(myBalance?.totalExposure || 0)
             )}
           </div>
         </div>

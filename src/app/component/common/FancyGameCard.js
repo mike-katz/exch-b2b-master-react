@@ -23,10 +23,12 @@ const FancyGameCard = (props) => {
   //   navigate('/sports/details/123');
   // };
 
-  const [activeTabs, setActiveTabs] = useState(0);
+  const [activeTabs, setActiveTabs] = useState("all");
   const [blinkData, setBlinkData] = useState([]);
   const [plModalData, setPlModalData] = useState([]);
   const [isVisiblePlData, setIsVisiblePlData] = useState(false);
+  const [pageData, setPageData] = useState([]);
+
   // const [isVisibleMinMaxData, setIsVisibleMinMaxData] = useState(false);
   // const [minMaxRange, setMinMaxRange] = useState({});
 
@@ -39,6 +41,19 @@ const FancyGameCard = (props) => {
       }, 100);
     }
   }, [props?.oldData]);
+
+  useEffect(() => {
+    if (activeTabs === "all") {
+      const sortedData = props?.data.sort((a, b) => a?.sequence - b?.sequence);
+      setPageData(sortedData);
+    } else {
+      const data = props?.data?.filter(
+        (item) => item?.marketType === activeTabs
+      );
+      const sortedData = data.sort((a, b) => a?.sequence - b?.sequence);
+      setPageData(sortedData);
+    }
+  }, [props?.data, activeTabs]);
 
   // const [activeDataId, setActiveDataId] = useState('');
 
@@ -215,7 +230,7 @@ const FancyGameCard = (props) => {
           className="min-h-[37px] flex items-center md:col-span-2 hidden md:block"
         ></div>
       </div>
-      {props?.data.map((item, index) => {
+      {pageData?.map((item, index) => {
         const runners = item?.runners?.[0]?.exchange;
         const key = item?.runners?.[0]?.selectionId;
 

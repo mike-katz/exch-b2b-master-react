@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   FaCircle,
   FaDownload,
+  FaMinusSquare,
   FaPencilAlt,
+  FaPlusSquare,
   // FaPlusSquare,
   FaUndo,
   FaUserPlus,
@@ -31,7 +33,7 @@ const DownListMaster = () => {
   const { userData } = useSelector((state) => state?.persist);
 
   const [isVisibleEditCreditRef, setIsVisibleEditCreditRef] = useState(false);
-  // const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
+  const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
   const [isVisibleEditStatus, setIsVisibleEditStatus] = useState(false);
   const [isVisibleExposureLimit, setIsVisibleExposureLimit] = useState(false);
   const [isVisibleAddPlayer, setIsVisibleAddPlayer] = useState(false);
@@ -213,6 +215,14 @@ const DownListMaster = () => {
     }
   };
 
+  const onClickBalance = (username) => {
+    if (username === isEnableBalanceView) {
+      setIsEnableBalanceView(false);
+    } else {
+      setIsEnableBalanceView(username);
+    }
+  };
+
   const currentStatusActive = userData?.status === "Active";
 
   return (
@@ -324,7 +334,8 @@ const DownListMaster = () => {
           <div className="text-[#243a48] text-[15px] font-black">
             IR{" "}
             {amountFormate(
-              Number(myBalance?.totalBalance + myBalance?.totalExposure || 0)
+              Number(myBalance?.totalBalance || 0) +
+                Number(myBalance?.totalExposure || 0)
             )}
           </div>
         </div>
@@ -387,154 +398,214 @@ const DownListMaster = () => {
             {!isLoadingTable &&
               pageData?.map((item, index) => {
                 return (
-                  <tr key={index}>
-                    <td>
-                      <div className="flex items-center">
-                        <span className="w-[30px]">
-                          {/* {index + 1} */}
-                          {(currentPage - 1) * perPage + index + 1}.
-                        </span>{" "}
-                        {roleStatus(item?.roles?.toString())}
-                        {item?.username}
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        className={`flex items-center ${
-                          currentStatusActive ? "underline text-[#2789ce]" : ""
-                        } cursor-pointer w-fit`}
-                        onClick={() => {
-                          if (currentStatusActive) {
-                            onClickEditCreditRef(item?.creditRef, item?._id);
-                          }
-                        }}
-                      >
-                        {amountFormate(item?.creditRef)}
-                        {currentStatusActive ? (
-                          <FaPencilAlt className="ml-1" />
-                        ) : null}
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        className="flex items-center"
-                        // onClick={onClickBalance}
-                      >
-                        {amountFormate(Number(item?.balance + item?.exposure))}
-
-                        {/* <FaPlusSquare className="ml-1" size={15} /> */}
-                      </div>
-                    </td>
-                    <td>
-                      <span className="text-[#d0021b]">
-                        ({amountFormate(item?.exposure) || 0})
-                      </span>
-                    </td>
-                    <td>{amountFormate(Number(item?.balance))}</td>
-                    <td>
-                      <div
-                        className={`flex items-center ${
-                          currentStatusActive
-                            ? "underline text-[#2789ce] cursor-pointer"
-                            : ""
-                        } w-fit`}
-                        onClick={() => {
-                          if (currentStatusActive) {
-                            onClickEditExposureLimit(
-                              item?.exposureLimit,
-                              item?._id
-                            );
-                          }
-                        }}
-                      >
-                        {amountFormate(item?.exposureLimit)}
-                        {currentStatusActive ? (
-                          <FaPencilAlt className="ml-1" />
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      {Number(item?.balance - item?.creditRef) >= 0 ? (
-                        <span className="text-[#508d0e]">
+                  <>
+                    <tr key={index}>
+                      <td>
+                        <div className="flex items-center">
+                          <span className="w-[30px]">
+                            {/* {index + 1} */}
+                            {(currentPage - 1) * perPage + index + 1}.
+                          </span>{" "}
+                          {roleStatus(item?.roles?.toString())}
+                          {item?.username}
+                        </div>
+                      </td>
+                      <td>
+                        <div
+                          className={`flex items-center ${
+                            currentStatusActive
+                              ? "underline text-[#2789ce]"
+                              : ""
+                          } cursor-pointer w-fit`}
+                          onClick={() => {
+                            if (currentStatusActive) {
+                              onClickEditCreditRef(item?.creditRef, item?._id);
+                            }
+                          }}
+                        >
+                          {amountFormate(item?.creditRef)}
+                          {currentStatusActive ? (
+                            <FaPencilAlt className="ml-1" />
+                          ) : null}
+                        </div>
+                      </td>
+                      <td>
+                        <div
+                          className="flex items-center text-[#2789ce] cursor-pointer"
+                          onClick={() => {
+                            onClickBalance(item?.username);
+                          }}
+                        >
                           {amountFormate(
-                            Number(item?.balance - item?.creditRef)
+                            Number(item?.balance + item?.exposure)
                           )}
-                        </span>
-                      ) : (
+                          {isEnableBalanceView === item?.username ? (
+                            <FaMinusSquare className="ml-1" size={15} />
+                          ) : (
+                            <FaPlusSquare className="ml-1" size={15} />
+                          )}
+                        </div>
+                      </td>
+                      <td>
                         <span className="text-[#d0021b]">
-                          (
-                          {amountFormate(
-                            Number(item?.balance - item?.creditRef)
-                          )}
-                          )
+                          ({amountFormate(item?.exposure) || 0})
                         </span>
-                      )}
-                    </td>
-                    <td>
-                      {item?.status === "Active" ? (
-                        <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                          <FaCircle size={8} className="mr-1" />
-                          Active
-                        </div>
-                      ) : item?.status === "Suspend" ? (
-                        <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                          <FaCircle size={8} className="mr-1" />
-                          Suspended
-                        </div>
-                      ) : (
-                        <div className="border border-[#b9c5cd] text-[#5a7384] text-[11px] bg-[#e3e8eb] w-fit flex items-center font-black px-1 py-[2px] rounded">
-                          <FaCircle size={8} className="mr-1" />
-                          Locked
-                        </div>
-                      )}
-                    </td>
-                    <td className="text-right w-[100px]">
-                      <div className="flex items-center justify-end">
+                      </td>
+                      <td>{amountFormate(Number(item?.balance))}</td>
+                      <td>
                         <div
+                          className={`flex items-center ${
+                            currentStatusActive
+                              ? "underline text-[#2789ce] cursor-pointer"
+                              : ""
+                          } w-fit`}
                           onClick={() => {
-                            onClickMenu("beating-profit-lost", item?._id);
-                          }}
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
-                        >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
-                        </div>
-                        <div
-                          onClick={() => {
-                            onClickMenu("beating-history", item?._id);
-                          }}
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
-                        >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
-                        </div>
-                        {currentStatusActive ? (
-                          <div
-                            className="h-[26px] w-[26px] cursor-pointer ml-1"
-                            onClick={() => {
-                              onClickEditStatus(
-                                item?.status,
-                                item?._id,
-                                item?.username,
-                                item?.roles?.toString()
+                            if (currentStatusActive) {
+                              onClickEditExposureLimit(
+                                item?.exposureLimit,
+                                item?._id
                               );
-                            }}
-                          >
-                            <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
-                          </div>
-                        ) : null}
-
-                        <div
-                          onClick={() => {
-                            onClickMenu("account-summery", item?._id);
+                            }
                           }}
-                          className="h-[26px] w-[26px] cursor-pointer ml-1"
                         >
-                          <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/person.png" />
+                          {amountFormate(item?.exposureLimit)}
+                          {currentStatusActive ? (
+                            <FaPencilAlt className="ml-1" />
+                          ) : (
+                            ""
+                          )}
                         </div>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                      <td>
+                        {Number(item?.balance - item?.creditRef) >= 0 ? (
+                          <span className="text-[#508d0e]">
+                            {amountFormate(
+                              Number(item?.balance - item?.creditRef)
+                            )}
+                          </span>
+                        ) : (
+                          <span className="text-[#d0021b]">
+                            (
+                            {amountFormate(
+                              Number(item?.balance - item?.creditRef)
+                            )}
+                            )
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        {item?.status === "Active" ? (
+                          <div className="border border-[#bedca7] text-[#508d0e] text-[11px] bg-[#e5f1dc] w-fit flex items-center font-black px-1 py-[2px] rounded">
+                            <FaCircle size={8} className="mr-1" />
+                            Active
+                          </div>
+                        ) : item?.status === "Suspend" ? (
+                          <div className="border border-[#deb6c0] text-[#d0021b] text-[11px] bg-[#f2e2e6] w-fit flex items-center font-black px-1 py-[2px] rounded">
+                            <FaCircle size={8} className="mr-1" />
+                            Suspended
+                          </div>
+                        ) : (
+                          <div className="border border-[#b9c5cd] text-[#5a7384] text-[11px] bg-[#e3e8eb] w-fit flex items-center font-black px-1 py-[2px] rounded">
+                            <FaCircle size={8} className="mr-1" />
+                            Locked
+                          </div>
+                        )}
+                      </td>
+                      <td className="text-right w-[100px]">
+                        <div className="flex items-center justify-end">
+                          <div
+                            onClick={() => {
+                              onClickMenu("beating-profit-lost", item?._id);
+                            }}
+                            className="h-[26px] w-[26px] cursor-pointer ml-1"
+                          >
+                            <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/p_l.png" />
+                          </div>
+                          <div
+                            onClick={() => {
+                              onClickMenu("beating-history", item?._id);
+                            }}
+                            className="h-[26px] w-[26px] cursor-pointer ml-1"
+                          >
+                            <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/betting_history.png" />
+                          </div>
+                          {currentStatusActive ? (
+                            <div
+                              className="h-[26px] w-[26px] cursor-pointer ml-1"
+                              onClick={() => {
+                                onClickEditStatus(
+                                  item?.status,
+                                  item?._id,
+                                  item?.username,
+                                  item?.roles?.toString()
+                                );
+                              }}
+                            >
+                              <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/status.png" />
+                            </div>
+                          ) : null}
+
+                          <div
+                            onClick={() => {
+                              onClickMenu("account-summery", item?._id);
+                            }}
+                            className="h-[26px] w-[26px] cursor-pointer ml-1"
+                          >
+                            <img src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/icons/person.png" />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    {isEnableBalanceView === item?.username && (
+                      <tr className="">
+                        <td className="bg-[#e2e8ed]" colSpan="3"></td>
+                        <td className="bg-[#e2e8ed] p-0" colSpan="6">
+                          <table className="border-l border-[#7e97a7] w-full">
+                            <tr className="border-b  border-[#7e97a7]">
+                              <th
+                                width="12%"
+                                className="font-black px-[10px] py-[8px]"
+                              >
+                                Game
+                              </th>
+                              <th
+                                width="13%"
+                                className="font-black px-[10px] py-[8px ] text-right"
+                              >
+                                Balance
+                              </th>
+                              <th
+                                width="8%"
+                                className="px-[10px] py-[8px] text-right"
+                              ></th>
+                              <th></th>
+                            </tr>
+
+                            <tr>
+                              <th width="12%" className="px-[10px] py-[8px]">
+                                Casino
+                              </th>
+                              <th
+                                width="13%"
+                                className="px-[10px] py-[8px] text-right"
+                              >
+                                0
+                              </th>
+                              <th
+                                width="8%"
+                                className="px-[10px] py-[8px] text-right"
+                              >
+                                <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
+                                  Recall
+                                </div>
+                              </th>
+                              <th></th>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 );
               })}
           </tbody>
