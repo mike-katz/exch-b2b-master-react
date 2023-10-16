@@ -1,6 +1,7 @@
 import { showToastMessage } from "../../utils/helper";
 import APIEndpoint from "../config/APIEndpoint";
 import Rest from "../config/Rest";
+import ST8Rest from "../config/ST8Rest";
 
 export const registerUser = async (payload) => {
   const { data } = await Rest.post(APIEndpoint.register, payload);
@@ -256,6 +257,34 @@ export const changePasswordData = async (payload) => {
   const { data } = await Rest.post(`${APIEndpoint.changePassword}`, payload);
 
   showToastMessage(data?.message, 200);
+
+  return data;
+};
+
+export const getUserSt8BalanceData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.username) {
+    queryParams += `${queryParams ? "&" : "?"}username=${payload?.username}`;
+  }
+
+  const { data } = await ST8Rest.get(
+    `${APIEndpoint.getSt8Balance}${queryParams}`
+  );
+
+  return data;
+};
+
+export const withdrawUserSt8BalanceData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.username) {
+    queryParams += `${queryParams ? "&" : "?"}username=${payload?.username}`;
+  }
+
+  const { data } = await ST8Rest.get(
+    `${APIEndpoint.withdrawSt8Balance}${queryParams}`
+  );
 
   return data;
 };

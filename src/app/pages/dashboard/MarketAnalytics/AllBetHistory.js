@@ -131,7 +131,7 @@ const AllBetHistory = () => {
                         <tr key={index}>
                           <td
                             className={`${
-                              item?.type === "back"
+                              item?.type === "back" || item?.type === "yes"
                                 ? "bg-[#c7eeff]"
                                 : "bg-[#efe1e5]"
                             } `}
@@ -149,7 +149,7 @@ const AllBetHistory = () => {
                           </td>
                           <td
                             className={`${
-                              item?.type === "back"
+                              item?.type === "back" || item?.type === "yes"
                                 ? "bg-[#c7eeff]"
                                 : "bg-[#efe1e5]"
                             } `}
@@ -162,7 +162,7 @@ const AllBetHistory = () => {
                           </td>
                           <td
                             className={`${
-                              item?.type === "back"
+                              item?.type === "back" || item?.type === "yes"
                                 ? "bg-[#c7eeff]"
                                 : "bg-[#efe1e5]"
                             } `}
@@ -171,7 +171,7 @@ const AllBetHistory = () => {
                           </td>
                           <td
                             className={`${
-                              item?.type === "back"
+                              item?.type === "back" || item?.type === "yes"
                                 ? "bg-[#c7eeff]"
                                 : "bg-[#efe1e5]"
                             } `}
@@ -182,7 +182,7 @@ const AllBetHistory = () => {
                           </td>
                           <td
                             className={`${
-                              item?.type === "back"
+                              item?.type === "back" || item?.type === "yes"
                                 ? "bg-[#c7eeff]"
                                 : "bg-[#efe1e5]"
                             } `}
@@ -193,7 +193,7 @@ const AllBetHistory = () => {
                           </td>
                           <td
                             className={`${
-                              item?.type === "back"
+                              item?.type === "back" || item?.type === "yes"
                                 ? "bg-[#c7eeff]"
                                 : "bg-[#efe1e5]"
                             } `}

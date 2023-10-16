@@ -856,7 +856,9 @@ const BettingProfitLost = (props) => {
                     <tr
                       key={index}
                       className={`${
-                        item?.type === "back" ? "bg-[#93e9ff]" : "bg-[#f8c8d3]"
+                        item?.type === "back" || item?.type === "yes"
+                          ? "bg-[#93e9ff]"
+                          : "bg-[#f8c8d3]"
                       }`}
                     >
                       <td className="">{item?.sportName}</td>
@@ -865,7 +867,7 @@ const BettingProfitLost = (props) => {
                       <td className="">{item?.selectionName}</td>
                       <td
                         className={` capitalize font-black ${
-                          item?.type === "back"
+                          item?.type === "back" || item?.type === "yes"
                             ? "text-[#024f99]"
                             : "text-[#6D081D]"
                         }`}
@@ -1136,7 +1138,9 @@ const BettingProfitLost = (props) => {
                     <tr
                       key={index}
                       className={`${
-                        item?.type === "back" ? "bg-[#93e9ff]" : "bg-[#f8c8d3]"
+                        item?.type === "back" || item?.type === "yes"
+                          ? "bg-[#93e9ff]"
+                          : "bg-[#f8c8d3]"
                       }`}
                     >
                       <td className="">{item?.sportName}</td>
@@ -1145,7 +1149,7 @@ const BettingProfitLost = (props) => {
                       <td className="">{item?.selectionName}</td>
                       <td
                         className={` capitalize font-black ${
-                          item?.type === "back"
+                          item?.type === "back" || item?.type === "yes"
                             ? "text-[#024f99]"
                             : "text-[#6D081D]"
                         }`}

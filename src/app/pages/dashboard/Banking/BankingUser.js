@@ -5,6 +5,8 @@ import {
   addBankTransactionData,
   getDownLineUserData,
   getMyBalanceData,
+  getUserSt8BalanceData,
+  withdrawUserSt8BalanceData,
 } from "../../../redux/services/DownLineUser";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
@@ -13,6 +15,7 @@ import { Link } from "react-router-dom";
 import { USER_STATUS } from "../../../utils/dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBalance } from "../../../redux/actions/persistAction";
+import { FaMinusSquare, FaPlusSquare } from "react-icons/fa";
 
 const BankingMaster = () => {
   const { userData } = useSelector((state) => state?.persist);
@@ -23,6 +26,10 @@ const BankingMaster = () => {
   const [pageSubmitData, setPageSubmitData] = useState([]);
   const [changeCount, setChangeCount] = useState(0);
   const [pageData, setPageData] = useState([]);
+  const [casinoBalance, setCasinoBalance] = useState(0);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
+  const [isLoadingRecall, setIsLoadingRecall] = useState(false);
+  const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
 
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -313,6 +320,48 @@ const BankingMaster = () => {
     getDownLineUser(payload);
   };
 
+  const onClickBalance = async (username) => {
+    if (username === isEnableBalanceView) {
+      setIsEnableBalanceView(false);
+    } else {
+      setIsLoadingBalance(username);
+      const payload = {
+        username,
+      };
+      const data = await getUserSt8BalanceData(payload);
+
+      if (data?.data) {
+        setCasinoBalance(data?.data?.balance);
+      }
+
+      setIsLoadingBalance(false);
+
+      setIsEnableBalanceView(username);
+    }
+  };
+
+  const onClickRecallCasino = async (username) => {
+    if (Number(casinoBalance)) {
+      setIsLoadingRecall(true);
+      const payload = {
+        username,
+      };
+      const data = await withdrawUserSt8BalanceData(payload);
+
+      if (data?.data) {
+        const payload = {
+          page: currentPage,
+          limit: perPage,
+          search: searchParams,
+          status: statusParams,
+        };
+
+        getDownLineUser(payload);
+      }
+      setIsLoadingRecall(false);
+    }
+  };
+
   return (
     <div className="relative px-2">
       <div className="grid grid-cols-12 gap-4 mt-2">
@@ -401,22 +450,47 @@ const BankingMaster = () => {
             )}
             {pageData?.map((item, index) => {
               return (
-                <tr key={index}>
-                  <td>
-                    <div className="flex items-center">
-                      <span className="w-[30px]">
-                        {(currentPage - 1) * perPage + index + 1}.
-                      </span>{" "}
-                      {roleStatus(item?.roles?.toString())}
-                      {item?.username}
-                    </div>
-                  </td>
-                  <td className="text-right">{amountFormate(item?.balance)}</td>
-                  <td className="text-right">
-                    {amountFormate(Number(item?.balance + item?.exposure))}
-                  </td>
-                  <td className="text-right">{item?.exposure}</td>
-                  {/* <td
+                <>
+                  <tr key={index}>
+                    <td>
+                      <div className="flex items-center">
+                        <span className="w-[30px]">
+                          {(currentPage - 1) * perPage + index + 1}.
+                        </span>{" "}
+                        {roleStatus(item?.roles?.toString())}
+                        {item?.username}
+                      </div>
+                    </td>
+                    <td className="text-right">
+                      <td>
+                        <div
+                          className="flex items-center text-[#2789ce] cursor-pointer"
+                          onClick={() => {
+                            onClickBalance(item?.username);
+                          }}
+                        >
+                          {amountFormate(
+                            Number(item?.balance + item?.exposure)
+                          )}
+                          {isLoadingBalance === item?.username ? (
+                            <Loader
+                              color={"#2789ce"}
+                              className="ml-1"
+                              size={10}
+                            />
+                          ) : isEnableBalanceView === item?.username ? (
+                            <FaMinusSquare className="ml-1" size={15} />
+                          ) : (
+                            <FaPlusSquare className="ml-1" size={15} />
+                          )}
+                        </div>
+                      </td>
+                    </td>
+                    <td className="text-right">
+                      {amountFormate(Number(item?.balance + item?.exposure))}
+                    </td>
+                    <td className="text-right">{item?.exposure}</td>
+                    {/* <td
                     className="text-right border-l border-r border-[#7e97a7]"
                     width={200}
                   >
@@ -428,134 +502,200 @@ const BankingMaster = () => {
                       <div>13</div>
                     </div>
                   </td> */}
-                  <td className="text-center border-r border-l border-r-[#7e97a7] border-l-[#7e97a7] flex items-center justify-center">
-                    <div className="flex items-center">
-                      <button
-                        onClick={() => {
-                          onClickD("D", index);
-                        }}
-                        className={`w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black border-r-0 border border-[#bbb] rounded-l ${
-                          pageSubmitData?.[index]?.type === "D"
-                            ? "deposit-button-active"
-                            : "deposit-withdraw-button"
-                        }`}
-                      >
-                        D
-                      </button>
-                      <button
-                        onClick={() => {
-                          onClickW("W", index);
-                        }}
-                        className={`w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black  border border-[#bbb] rounded-r ${
-                          pageSubmitData?.[index]?.type === "W"
-                            ? "withdraw-button-active"
-                            : "deposit-withdraw-button"
-                        }`}
-                      >
-                        W
-                      </button>
-                    </div>
-                    <div className="mx-2 relative">
-                      <input
-                        readOnly={!pageSubmitData?.[index]?.type}
-                        type="number"
-                        onChange={(e) => {
-                          onChangeDW(e?.target?.value, index);
-                        }}
-                        value={pageSubmitData?.[index]?.dw || ""}
-                        placeholder="0"
-                        style={{
-                          boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
-                        }}
-                        className="text-right w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] font-black text-[14px]"
-                      />
-                      {pageSubmitData?.[index]?.type === "D" ? (
-                        <div className="absolute left-2 top-[4px] text-[15px] text-[#5bab03]">
-                          +
-                        </div>
-                      ) : pageSubmitData?.[index]?.type === "W" ? (
-                        <div className="absolute left-2 top-[4px] text-[15px] text-[#d0021b]">
-                          -
-                        </div>
-                      ) : null}
-                    </div>
-                    <div>
-                      <button
-                        onClick={() => {
-                          onClickFull(item?.balance, index);
-                        }}
-                        disabled={pageSubmitData?.[index]?.type !== "W"}
-                        className="w-[45px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
-                      >
-                        Full
-                      </button>
-                    </div>
-                  </td>
-                  <td className="text-right w-[200px]">
-                    <div className="flex items-center justify-end">
-                      {pageSubmitData?.[index]?.isVisibleCreditRef ? (
+                    <td className="text-center border-r border-l border-r-[#7e97a7] border-l-[#7e97a7] flex items-center justify-center">
+                      <div className="flex items-center">
+                        <button
+                          onClick={() => {
+                            onClickD("D", index);
+                          }}
+                          className={`w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black border-r-0 border border-[#bbb] rounded-l ${
+                            pageSubmitData?.[index]?.type === "D"
+                              ? "deposit-button-active"
+                              : "deposit-withdraw-button"
+                          }`}
+                        >
+                          D
+                        </button>
+                        <button
+                          onClick={() => {
+                            onClickW("W", index);
+                          }}
+                          className={`w-[30px] h-[30px] text-[14px] text-[#3b5160] flex justify-center items-center font-black  border border-[#bbb] rounded-r ${
+                            pageSubmitData?.[index]?.type === "W"
+                              ? "withdraw-button-active"
+                              : "deposit-withdraw-button"
+                          }`}
+                        >
+                          W
+                        </button>
+                      </div>
+                      <div className="mx-2 relative">
                         <input
+                          readOnly={!pageSubmitData?.[index]?.type}
                           type="number"
                           onChange={(e) => {
-                            onChangeCreditRef(e?.target?.value, index);
+                            onChangeDW(e?.target?.value, index);
                           }}
-                          value={pageSubmitData?.[index]?.creditRef || ""}
+                          value={pageSubmitData?.[index]?.dw || ""}
                           placeholder="0"
                           style={{
                             boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
                           }}
-                          className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right font-black text-[14px]"
+                          className="text-right w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] font-black text-[14px]"
                         />
-                      ) : (
+                        {pageSubmitData?.[index]?.type === "D" ? (
+                          <div className="absolute left-2 top-[4px] text-[15px] text-[#5bab03]">
+                            +
+                          </div>
+                        ) : pageSubmitData?.[index]?.type === "W" ? (
+                          <div className="absolute left-2 top-[4px] text-[15px] text-[#d0021b]">
+                            -
+                          </div>
+                        ) : null}
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => {
+                            onClickFull(item?.balance, index);
+                          }}
+                          disabled={pageSubmitData?.[index]?.type !== "W"}
+                          className="w-[45px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
+                        >
+                          Full
+                        </button>
+                      </div>
+                    </td>
+                    <td className="text-right w-[200px]">
+                      <div className="flex items-center justify-end">
+                        {pageSubmitData?.[index]?.isVisibleCreditRef ? (
+                          <input
+                            type="number"
+                            onChange={(e) => {
+                              onChangeCreditRef(e?.target?.value, index);
+                            }}
+                            value={pageSubmitData?.[index]?.creditRef || ""}
+                            placeholder="0"
+                            style={{
+                              boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
+                            }}
+                            className="w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right font-black text-[14px]"
+                          />
+                        ) : (
+                          <Link
+                            target="_blank"
+                            to={`/credit-ref-logs/${item?._id}`}
+                            className="flex items-center underline text-[#2789ce] cursor-pointer w-fit mr-2"
+                          >
+                            {amountFormate(item?.creditRef)}
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => {
+                            onClickEnableEdit(
+                              !pageSubmitData?.[index]?.isVisibleCreditRef,
+                              index
+                            );
+                          }}
+                          className="w-[48px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
+                        >
+                          {pageSubmitData?.[index]?.isVisibleCreditRef
+                            ? "Cancel"
+                            : "Edit"}
+                        </button>
+                      </div>
+                    </td>
+                    <td className="text-right border-r border-r-[#7e97a7]">
+                      {amountFormate(Number(item?.balance + item?.creditRef))}
+                    </td>
+                    <td className="text-right border-r border-r-[#7e97a7]">
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          onChangeRemark(e?.target?.value, index);
+                        }}
+                        value={pageSubmitData?.[index]?.remark || ""}
+                        placeholder="Remark"
+                        style={{
+                          boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
+                        }}
+                        className="rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right w-[100px]"
+                      />
+                    </td>
+                    <td className="text-center">
+                      <button className="common-button h-[28px] font-black w-[58px]">
                         <Link
                           target="_blank"
-                          to={`/credit-ref-logs/${item?._id}`}
-                          className="flex items-center underline text-[#2789ce] cursor-pointer w-fit mr-2"
+                          to={`/banking-logs/${item?._id}`}
+                          className=""
                         >
-                          {amountFormate(item?.creditRef)}
+                          Log
                         </Link>
-                      )}
-                      <button
-                        onClick={() => {
-                          onClickEnableEdit(
-                            !pageSubmitData?.[index]?.isVisibleCreditRef,
-                            index
-                          );
-                        }}
-                        className="w-[48px] h-[30px] text-[12px] text-[#3b5160] flex justify-center items-center font-black border border-[#bbb] rounded"
-                      >
-                        {pageSubmitData?.[index]?.isVisibleCreditRef
-                          ? "Cancel"
-                          : "Edit"}
                       </button>
-                    </div>
-                  </td>
-                  <td className="text-right border-r border-r-[#7e97a7]">
-                    {amountFormate(Number(item?.balance + item?.creditRef))}
-                  </td>
-                  <td className="text-right border-r border-r-[#7e97a7]">
-                    <input
-                      onChange={(e) => {
-                        onChangeRemark(e?.target?.value, index);
-                      }}
-                      value={pageSubmitData?.[index]?.remark || ""}
-                      placeholder="Remark"
-                      style={{ boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)" }}
-                      className="rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right w-[100px]"
-                    />
-                  </td>
-                  <td className="text-center">
-                    <button className="common-button h-[28px] font-black w-[58px]">
-                      <Link
-                        target="_blank"
-                        to={`/banking-logs/${item?._id}`}
-                        className=""
-                      >
-                        Log
-                      </Link>
-                    </button>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                  {isEnableBalanceView === item?.username && (
+                    <tr className="">
+                      <td className="bg-[#e2e8ed]" colSpan="3"></td>
+                      <td className="bg-[#e2e8ed] p-0" colSpan="6">
+                        <table className="border-l border-[#7e97a7] w-full">
+                          <tr className="border-b  border-[#7e97a7]">
+                            <th
+                              width="12%"
+                              className="font-black px-[10px] py-[8px]"
+                            >
+                              Game
+                            </th>
+                            <th
+                              width="13%"
+                              className="font-black px-[10px] py-[8px ] text-right"
+                            >
+                              Balance
+                            </th>
+                            <th
+                              width="8%"
+                              className="px-[10px] py-[8px] text-right"
+                            ></th>
+                            <th></th>
+                          </tr>
+
+                          <tr>
+                            <th width="12%" className="px-[10px] py-[8px]">
+                              Casino
+                            </th>
+                            <th
+                              width="13%"
+                              className="px-[10px] py-[8px] text-right"
+                            >
+                              {casinoBalance}
+                            </th>
+                            <th
+                              width="8%"
+                              className="px-[10px] py-[8px] text-right"
+                            >
+                              <button
+                                disabled={!Number(casinoBalance)}
+                                onClick={() => {
+                                  onClickRecallCasino(item?.username);
+                                }}
+                                className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap cursor-pointer"
+                              >
+                                {isLoadingRecall && (
+                                  <Loader
+                                    color={"#2789ce"}
+                                    className="ml-1"
+                                    size={10}
+                                  />
+                                )}
+                                Recall
+                              </button>
+                            </th>
+                            <th></th>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  )}
+                </>
               );
             })}
           </tbody>

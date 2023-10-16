@@ -292,7 +292,7 @@ const BettingHistory = ({ username }) => {
                     <td className="">{item?.selectionName}</td>
                     <td
                       className={`capitalize font-black ${
-                        item?.type === "back"
+                        item?.type === "back" || item?.type === "yes"
                           ? "text-[#024f99]"
                           : "text-[#6D081D]"
                       }`}

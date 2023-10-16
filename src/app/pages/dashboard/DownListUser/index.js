@@ -20,6 +20,8 @@ import {
   exportCSVFileData,
   getDownLineUserData,
   getMyBalanceData,
+  getUserSt8BalanceData,
+  withdrawUserSt8BalanceData,
 } from "../../../redux/services/DownLineUser";
 import Loader from "../../../component/common/Loader";
 import { amountFormate, roleStatus } from "../../../utils/helper";
@@ -40,6 +42,9 @@ const DownListMaster = () => {
   const [pageData, setPageData] = useState([]);
   const [myBalance, setMyBalance] = useState([]);
   const [isLoadingTable, setIsLoadingTable] = useState(false);
+  const [casinoBalance, setCasinoBalance] = useState(0);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
+  const [isLoadingRecall, setIsLoadingRecall] = useState(false);
 
   const [activeId, setActiveId] = useState("");
   const [activeStatus, setActiveStatus] = useState("");
@@ -215,11 +220,45 @@ const DownListMaster = () => {
     }
   };
 
-  const onClickBalance = (username) => {
+  const onClickBalance = async (username) => {
     if (username === isEnableBalanceView) {
       setIsEnableBalanceView(false);
     } else {
+      setIsLoadingBalance(username);
+      const payload = {
+        username,
+      };
+      const data = await getUserSt8BalanceData(payload);
+
+      if (data?.data) {
+        setCasinoBalance(data?.data?.balance);
+      }
+
+      setIsLoadingBalance(false);
+
       setIsEnableBalanceView(username);
+    }
+  };
+
+  const onClickRecallCasino = async (username) => {
+    if (Number(casinoBalance)) {
+      setIsLoadingRecall(true);
+      const payload = {
+        username,
+      };
+      const data = await withdrawUserSt8BalanceData(payload);
+
+      if (data?.data) {
+        const payload = {
+          page: currentPage,
+          limit: perPage,
+          search: searchParams,
+          status: statusParams,
+        };
+
+        getDownLineUser(payload);
+      }
+      setIsLoadingRecall(false);
     }
   };
 
@@ -439,7 +478,13 @@ const DownListMaster = () => {
                           {amountFormate(
                             Number(item?.balance + item?.exposure)
                           )}
-                          {isEnableBalanceView === item?.username ? (
+                          {isLoadingBalance === item?.username ? (
+                            <Loader
+                              color={"#2789ce"}
+                              className="ml-1"
+                              size={10}
+                            />
+                          ) : isEnableBalanceView === item?.username ? (
                             <FaMinusSquare className="ml-1" size={15} />
                           ) : (
                             <FaPlusSquare className="ml-1" size={15} />
@@ -589,15 +634,28 @@ const DownListMaster = () => {
                                 width="13%"
                                 className="px-[10px] py-[8px] text-right"
                               >
-                                0
+                                {casinoBalance}
                               </th>
                               <th
                                 width="8%"
                                 className="px-[10px] py-[8px] text-right"
                               >
-                                <div className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap">
+                                <button
+                                  disabled={!Number(casinoBalance)}
+                                  onClick={() => {
+                                    onClickRecallCasino(item?.username);
+                                  }}
+                                  className="text-[#3b5160] bg-[rgba(94,190,255,.15)] border border-[#7e97a7] font-extrabold rounded text-[11px] flex justify-center items-center w-[70px] h-[25px] whitespace-nowrap cursor-pointer"
+                                >
+                                  {isLoadingRecall && (
+                                    <Loader
+                                      color={"#2789ce"}
+                                      className="ml-1"
+                                      size={10}
+                                    />
+                                  )}
                                   Recall
-                                </div>
+                                </button>
                               </th>
                               <th></th>
                             </tr>

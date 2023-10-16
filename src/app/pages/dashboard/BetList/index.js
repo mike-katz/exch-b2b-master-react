@@ -227,7 +227,7 @@ const BetList = () => {
           <tbody>
             {isLoadingTable && (
               <tr>
-                <td className="h-[200px] text-center" colSpan={9}>
+                <td className="h-[200px] text-center" colSpan={10}>
                   <Loader color={"#FEBA11"} size={25} />
                 </td>
               </tr>
@@ -236,7 +236,7 @@ const BetList = () => {
               <tr>
                 <td
                   className="h-[200px] text-center text-[16px] font-black"
-                  colSpan={9}
+                  colSpan={10}
                 >
                   No Record Found
                 </td>
@@ -280,7 +280,7 @@ const BetList = () => {
                     <td className="">{item?.selectionName}</td>
                     <td
                       className={`capitalize font-black ${
-                        item?.type === "back"
+                        item?.type === "back" || item?.type === "yes"
                           ? "text-[#024f99]"
                           : "text-[#6D081D]"
                       }`}

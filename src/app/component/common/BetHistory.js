@@ -177,7 +177,7 @@ const BetHistory = (props) => {
                       <tr key={index}>
                         <td
                           className={`${
-                            item?.type === "back"
+                            item?.type === "back" || item?.type === "yes"
                               ? "bg-[#c7eeff]"
                               : "bg-[#efe1e5]"
                           } `}
@@ -195,7 +195,7 @@ const BetHistory = (props) => {
                         </td>
                         <td
                           className={`${
-                            item?.type === "back"
+                            item?.type === "back" || item?.type === "yes"
                               ? "bg-[#c7eeff]"
                               : "bg-[#efe1e5]"
                           } `}
@@ -208,7 +208,7 @@ const BetHistory = (props) => {
                         </td>
                         <td
                           className={`${
-                            item?.type === "back"
+                            item?.type === "back" || item?.type === "yes"
                               ? "bg-[#c7eeff]"
                               : "bg-[#efe1e5]"
                           } `}
@@ -217,7 +217,7 @@ const BetHistory = (props) => {
                         </td>
                         <td
                           className={`${
-                            item?.type === "back"
+                            item?.type === "back" || item?.type === "yes"
                               ? "bg-[#c7eeff]"
                               : "bg-[#efe1e5]"
                           } `}
@@ -226,7 +226,7 @@ const BetHistory = (props) => {
                         </td>
                         <td
                           className={`${
-                            item?.type === "back"
+                            item?.type === "back" || item?.type === "yes"
                               ? "bg-[#c7eeff]"
                               : "bg-[#efe1e5]"
                           } `}
@@ -237,7 +237,7 @@ const BetHistory = (props) => {
                         </td>
                         <td
                           className={`${
-                            item?.type === "back"
+                            item?.type === "back" || item?.type === "yes"
                               ? "bg-[#c7eeff]"
                               : "bg-[#efe1e5]"
                           } `}

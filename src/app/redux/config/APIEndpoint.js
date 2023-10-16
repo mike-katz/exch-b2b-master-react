@@ -33,6 +33,8 @@ export default class APIEndpoint {
   static getBetHistoryLPData = "api/beating/pl";
   static getBetLockData = "api/market/events";
   static betLockData = "api/beating/lock";
+  static getSt8Balance = "master/st8/balance";
+  static withdrawSt8Balance = "master/st8/withdraw";
 
   // NEWS
   static news = "api/extra/news";
