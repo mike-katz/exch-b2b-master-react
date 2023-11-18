@@ -15,8 +15,13 @@ const DetailGameCard = (props) => {
       setBlinkData(props?.oldData);
 
       setTimeout(() => {
-        setBlinkData([]);
-      }, 100);
+        const customizeBlinkData = [];
+        props?.oldData?.map((item) => {
+          customizeBlinkData.push([false, false, false, false, false, false]);
+        });
+
+        setBlinkData(customizeBlinkData);
+      }, 200);
     }
   }, [props?.oldData]);
 
@@ -127,6 +132,8 @@ const DetailGameCard = (props) => {
 
               const blinkValue = blinkData?.[index];
 
+              // console.log({ blinkValue });
+
               return (
                 <>
                   <div key={index} className="grid grid-cols-12">
@@ -156,16 +163,33 @@ const DetailGameCard = (props) => {
                       </div>
                     </div>
                     <div className="min-h-[37px] w-full flex items-center col-span-6 relative">
-                      {status === "ACTIVE" || status === "OPEN" ? null : (
+                      {status === "ACTIVE" || status === "OPEN" ? (
+                        props?.data?.state?.status === "ACTIVE" ||
+                        props?.data?.state?.status === "OPEN" ? null : (
+                          <div className="absolute capitalize text-[13px] text-[red] flex justify-center items-center bg-[#fff] border border-[#ff57222b] opacity-80 h-full w-full font-extrabold">
+                            {props?.data?.state?.status}
+                          </div>
+                        )
+                      ) : (
                         <div className="absolute capitalize text-[13px] text-[red] flex justify-center items-center bg-[#fff] border border-[#ff57222b] opacity-80 h-full w-full font-extrabold">
                           {status}
                         </div>
                       )}
 
-                      {props?.data?.state?.status === "ACTIVE" ||
-                      props?.data?.state?.status === "OPEN" ? null : (
+                      {runners?.availableToBack?.[0]?.price ||
+                      runners?.availableToBack?.[0]?.Price ||
+                      runners?.availableToBack?.[1]?.price ||
+                      runners?.availableToBack?.[1]?.Price ||
+                      runners?.availableToBack?.[2]?.price ||
+                      runners?.availableToBack?.[2]?.Price ||
+                      runners?.availableToLay?.[0]?.price ||
+                      runners?.availableToLay?.[0]?.Price ||
+                      runners?.availableToLay?.[1]?.price ||
+                      runners?.availableToLay?.[1]?.Price ||
+                      runners?.availableToLay?.[2]?.price ||
+                      runners?.availableToLay?.[2]?.Price ? null : (
                         <div className="absolute capitalize text-[13px] text-[red] flex justify-center items-center bg-[#fff] border border-[#ff57222b] opacity-80 h-full w-full font-extrabold">
-                          {props?.data?.state?.status}
+                          SUSPENDED
                         </div>
                       )}
 

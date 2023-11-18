@@ -275,7 +275,7 @@ button[disabled] {
 }
 
 .blink_me {
-  animation: blinker 100ms linear infinite;
+  animation: blinker 200ms linear normal;
 }
 
 @keyframes blinker {

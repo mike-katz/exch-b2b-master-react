@@ -1,21 +1,21 @@
+import { collection, onSnapshot, query, where } from "@firebase/firestore";
+import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { collection, onSnapshot, query, where } from "@firebase/firestore";
+import { fireStoreCricket } from "../../../../firebaseSetup/firebaseCricket";
+import { fireStoreSoccer } from "../../../../firebaseSetup/firebaseSoccer";
+import { fireStoreTennis } from "../../../../firebaseSetup/firebaseTennis";
+import BetHistory from "../../../component/common/BetHistory";
+import DetailGameCard from "../../../component/common/DetailGameCard";
+import FancyGameCard from "../../../component/common/FancyGameCard";
+import LineGameCard from "../../../component/common/LineGameCard";
 import LiveStreaming from "../../../component/common/LiveStriming";
+import Loader from "../../../component/common/Loader";
 import {
   getBetHistoryLPData,
   getMarketDetailData,
 } from "../../../redux/services/MarketAnalytics";
-import moment from "moment";
-import DetailGameCard from "../../../component/common/DetailGameCard";
-import BetHistory from "../../../component/common/BetHistory";
-import { fireStoreCricket } from "../../../../firebaseSetup/firebaseCricket";
-import { fireStoreSoccer } from "../../../../firebaseSetup/firebaseSoccer";
-import { fireStoreTennis } from "../../../../firebaseSetup/firebaseTennis";
-import LineGameCard from "../../../component/common/LineGameCard";
-import FancyGameCard from "../../../component/common/FancyGameCard";
-import Loader from "../../../component/common/Loader";
 
 const MarketAnalyticsDetail = () => {
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ const MarketAnalyticsDetail = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const getFirebaseData = async (sportsId) => {
+  const getFirebaseData = async (eventId, sportsId) => {
     let currentFireStore;
 
     if (sportsId === "4") {
@@ -105,8 +105,12 @@ const MarketAnalyticsDetail = () => {
     try {
       setIsLoading(true);
       const citiesRef = collection(currentFireStore, "marketRates");
-      const q = query(citiesRef, where("exEventId", "==", eventId));
-      onSnapshot(q, (docsSnap) => {
+      const q = query(
+        citiesRef,
+        where("exEventId", "==", eventId),
+        where("state.status", "!=", "CLOSED")
+      );
+      unsubscribeFromMessagesRef.current = onSnapshot(q, (docsSnap) => {
         const data = [];
         const fancyMarket = [];
         const lineMarket = [];
@@ -122,16 +126,18 @@ const MarketAnalyticsDetail = () => {
         const lineMarketOdds = [];
 
         docsSnap.forEach((doc) => {
-          if (doc.data()?.state?.status !== "CLOSED") {
+          // console.log(doc.data());
+          if (doc.data()?.state?.status !== "SUPERCLOSED") {
             if (doc?.data()?.type === "fancy") {
               fancyMarket.push(doc.data());
+
               fancyMarketOdds.push({
                 exMarketId: doc.data().exMarketId,
                 odds:
                   doc.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
-                    ?.price ||
+                    ?.Price ||
                   doc.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
-                    ?.Price,
+                    ?.price,
               });
             } else if (doc?.data()?.type === "line_market") {
               lineMarket.push(doc.data());
@@ -139,9 +145,9 @@ const MarketAnalyticsDetail = () => {
                 exMarketId: doc?.data().exMarketId,
                 odds:
                   doc?.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
-                    ?.price ||
+                    ?.Price ||
                   doc?.data()?.runners?.[0]?.exchange?.availableToLay?.[0]
-                    ?.Price,
+                    ?.price,
               });
             } else {
               data?.push(doc.data());
@@ -150,17 +156,144 @@ const MarketAnalyticsDetail = () => {
         });
 
         const sortedData = fancyMarket.sort(
-          (a, b) => a?.sequence - b?.sequence
+          (a, b) =>
+            Number(a?.sequence || 100000) - Number(b?.sequence || 100000)
         );
 
         setFancyPageData(sortedData);
         setLinePageData(lineMarket);
+        // setPageRunnersData(runnerData);
+        // setPageCustomizeData(customizeData);
 
         sortedData?.map((item, mainIndex) => {
           const runnersList = [];
           const newData = [];
+          // const sortedData = data.sort((a, b) => a?.sequence - b?.sequence);
 
-          Object.keys(item?.runnerData).map((key, index) => {
+          const sortedData = item?.runners?.sort(
+            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
+          );
+
+          const sortRunnerObject = [];
+          sortedData?.map((item) => {
+            sortRunnerObject.push(item?.selectionId);
+          });
+          // console.log(item?.selectionId);
+
+          sortRunnerObject?.map((key, index) => {
+            // console.log({ key });
+
+            const runners = item?.runners?.find(
+              (item) => item?.selectionId == key
+            )?.exchange;
+            runnersList.push([
+              {
+                size: runners?.availableToLay?.[0]?.size || "-",
+                price: runners?.availableToLay?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[0]?.size || "-",
+                price: runners?.availableToBack?.[0]?.price || "-",
+              },
+            ]);
+
+            const oldData = liveFancyValue?.current?.[mainIndex]?.[index];
+
+            if (oldData) {
+              newData?.push([
+                oldData?.[0]?.size !==
+                  (runners?.availableToLay?.[0]?.size || "-") ||
+                oldData?.[0]?.price !==
+                  (runners?.availableToLay?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[1]?.size !==
+                  (runners?.availableToBack?.[0]?.size || "-") ||
+                oldData?.[1]?.price !==
+                  (runners?.availableToBack?.[0]?.price || "-")
+                  ? true
+                  : false,
+              ]);
+            }
+          });
+
+          customizeFancyData.push(newData);
+          runnerFancyData.push(runnersList);
+        });
+
+        lineMarket?.map((item, mainIndex) => {
+          const runnersList = [];
+          const newData = [];
+          const sortedData = item?.runners?.sort(
+            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
+          );
+
+          const sortRunnerObject = [];
+          sortedData?.map((item) => {
+            sortRunnerObject.push(item?.selectionId);
+          });
+
+          sortRunnerObject?.map((key, index) => {
+            const runners = item?.runners?.find(
+              (item) => item?.selectionId == key
+            )?.exchange;
+
+            runnersList.push([
+              {
+                size: runners?.availableToLay?.[0]?.size || "-",
+                price: runners?.availableToLay?.[0]?.price || "-",
+              },
+              {
+                size: runners?.availableToBack?.[0]?.size || "-",
+                price: runners?.availableToBack?.[0]?.price || "-",
+              },
+            ]);
+
+            const oldData = liveLineValue?.current?.[mainIndex]?.[index];
+
+            if (oldData) {
+              newData?.push([
+                oldData?.[0]?.size !==
+                  (runners?.availableToLay?.[0]?.size || "-") ||
+                oldData?.[0]?.price !==
+                  (runners?.availableToLay?.[0]?.price || "-")
+                  ? true
+                  : false,
+                oldData?.[1]?.size !==
+                  (runners?.availableToBack?.[0]?.size || "-") ||
+                oldData?.[1]?.price !==
+                  (runners?.availableToBack?.[0]?.price || "-")
+                  ? true
+                  : false,
+              ]);
+            }
+          });
+
+          customizeLineData.push(newData);
+          runnerLineData.push(runnersList);
+        });
+
+        const desiredStatuses = ["match_odds", "bookmaker", "sportbook"];
+
+        const sortMarket = data.sort((a, b) => {
+          const statusA = desiredStatuses.indexOf(a.type);
+          const statusB = desiredStatuses.indexOf(b.type);
+          return statusA - statusB;
+        });
+
+        sortMarket?.map((item, mainIndex) => {
+          const runnersList = [];
+          const newData = [];
+          const sortedData = item?.runners?.sort(
+            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
+          );
+
+          const sortRunnerObject = [];
+          sortedData?.map((item) => {
+            sortRunnerObject.push(item?.selectionId);
+          });
+
+          sortRunnerObject?.map((key, index) => {
             const runners = item?.runners?.find(
               (item) => item?.selectionId == key
             )?.exchange;
@@ -240,193 +373,6 @@ const MarketAnalyticsDetail = () => {
           runnerData.push(runnersList);
         });
 
-        // setFancyPageData(fancyMarket);
-        // setLinePageData(lineMarket);
-
-        fancyMarket?.map((item, mainIndex) => {
-          const runnersList = [];
-          const newData = [];
-          const sortedData = item?.runners?.sort(
-            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
-          );
-
-          const sortRunnerObject = [];
-          sortedData?.map((item) => {
-            sortRunnerObject.push(item?.selectionId);
-          });
-
-          sortRunnerObject?.map((key, index) => {
-            const runners = item?.runners?.find(
-              (item) => item?.selectionId == key
-            )?.exchange;
-
-            runnersList.push([
-              {
-                size: runners?.availableToBack?.[2]?.size || "-",
-                price: runners?.availableToBack?.[2]?.price || "-",
-              },
-              {
-                size: runners?.availableToBack?.[1]?.size || "-",
-                price: runners?.availableToBack?.[1]?.price || "-",
-              },
-              {
-                size: runners?.availableToBack?.[0]?.size || "-",
-                price: runners?.availableToBack?.[0]?.price || "-",
-              },
-              {
-                size: runners?.availableToLay?.[0]?.size || "-",
-                price: runners?.availableToLay?.[0]?.price || "-",
-              },
-              {
-                size: runners?.availableToLay?.[1]?.size || "-",
-                price: runners?.availableToLay?.[1]?.price || "-",
-              },
-              {
-                size: runners?.availableToLay?.[2]?.size || "-",
-                price: runners?.availableToLay?.[2]?.price || "-",
-              },
-            ]);
-
-            const oldData = liveFancyValue?.current?.[mainIndex]?.[index];
-
-            if (oldData) {
-              newData?.push([
-                oldData?.[0]?.size !==
-                  (runners?.availableToBack?.[2]?.size || "-") ||
-                oldData?.[0]?.price !==
-                  (runners?.availableToBack?.[2]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[1]?.size !==
-                  (runners?.availableToBack?.[1]?.size || "-") ||
-                oldData?.[1]?.price !==
-                  (runners?.availableToBack?.[1]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[2]?.size !==
-                  (runners?.availableToBack?.[0]?.size || "-") ||
-                oldData?.[2]?.price !==
-                  (runners?.availableToBack?.[0]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[3]?.size !==
-                  (runners?.availableToLay?.[0]?.size || "-") ||
-                oldData?.[3]?.price !==
-                  (runners?.availableToLay?.[0]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[4]?.size !==
-                  (runners?.availableToLay?.[1]?.size || "-") ||
-                oldData?.[4]?.price !==
-                  (runners?.availableToLay?.[1]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[5]?.size !==
-                  (runners?.availableToLay?.[2]?.size || "-") ||
-                oldData?.[5]?.price !==
-                  (runners?.availableToLay?.[2]?.price || "-")
-                  ? true
-                  : false,
-              ]);
-            }
-          });
-
-          customizeFancyData.push(newData);
-          runnerFancyData.push(runnersList);
-        });
-
-        lineMarket?.map((item, mainIndex) => {
-          const runnersList = [];
-          const newData = [];
-          const sortedData = item?.runners?.sort(
-            (a, b) => a?.state?.sortPriority - b?.state?.sortPriority
-          );
-
-          const sortRunnerObject = [];
-          sortedData?.map((item) => {
-            sortRunnerObject.push(item?.selectionId);
-          });
-
-          sortRunnerObject?.map((key, index) => {
-            const runners = item?.runners?.find(
-              (item) => item?.selectionId == key
-            )?.exchange;
-
-            runnersList.push([
-              {
-                size: runners?.availableToBack?.[2]?.size || "-",
-                price: runners?.availableToBack?.[2]?.price || "-",
-              },
-              {
-                size: runners?.availableToBack?.[1]?.size || "-",
-                price: runners?.availableToBack?.[1]?.price || "-",
-              },
-              {
-                size: runners?.availableToBack?.[0]?.size || "-",
-                price: runners?.availableToBack?.[0]?.price || "-",
-              },
-              {
-                size: runners?.availableToLay?.[0]?.size || "-",
-                price: runners?.availableToLay?.[0]?.price || "-",
-              },
-              {
-                size: runners?.availableToLay?.[1]?.size || "-",
-                price: runners?.availableToLay?.[1]?.price || "-",
-              },
-              {
-                size: runners?.availableToLay?.[2]?.size || "-",
-                price: runners?.availableToLay?.[2]?.price || "-",
-              },
-            ]);
-
-            const oldData = liveLineValue?.current?.[mainIndex]?.[index];
-
-            if (oldData) {
-              newData?.push([
-                oldData?.[0]?.size !==
-                  (runners?.availableToBack?.[2]?.size || "-") ||
-                oldData?.[0]?.price !==
-                  (runners?.availableToBack?.[2]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[1]?.size !==
-                  (runners?.availableToBack?.[1]?.size || "-") ||
-                oldData?.[1]?.price !==
-                  (runners?.availableToBack?.[1]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[2]?.size !==
-                  (runners?.availableToBack?.[0]?.size || "-") ||
-                oldData?.[2]?.price !==
-                  (runners?.availableToBack?.[0]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[3]?.size !==
-                  (runners?.availableToLay?.[0]?.size || "-") ||
-                oldData?.[3]?.price !==
-                  (runners?.availableToLay?.[0]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[4]?.size !==
-                  (runners?.availableToLay?.[1]?.size || "-") ||
-                oldData?.[4]?.price !==
-                  (runners?.availableToLay?.[1]?.price || "-")
-                  ? true
-                  : false,
-                oldData?.[5]?.size !==
-                  (runners?.availableToLay?.[2]?.size || "-") ||
-                oldData?.[5]?.price !==
-                  (runners?.availableToLay?.[2]?.price || "-")
-                  ? true
-                  : false,
-              ]);
-            }
-          });
-
-          customizeLineData.push(newData);
-          runnerLineData.push(runnersList);
-        });
-
         liveFancyOdds.current = fancyMarketOdds;
 
         liveLineOdds.current = lineMarketOdds;
@@ -436,7 +382,7 @@ const MarketAnalyticsDetail = () => {
           getBetPl(eventId);
         }
 
-        setPageData(data);
+        setPageData(sortMarket);
         setPageRunnersData(runnerData);
         setPageCustomizeData(customizeData);
 
@@ -448,6 +394,7 @@ const MarketAnalyticsDetail = () => {
         setIsLoading(false);
       });
     } catch (err) {
+      console.warn(err);
       setIsLoading(false);
     }
   };
@@ -545,19 +492,24 @@ const MarketAnalyticsDetail = () => {
     }
   };
 
-  const getEventMarkets = async () => {
+  const getEventMarkets = async (eventId, isLoggedIn) => {
     setIsLoading(true);
-    const data = await getMarketDetailData(eventId);
+    let data = await getMarketDetailData(eventId);
+    data = data?.data;
 
-    if (data?.data) {
+    if (data) {
+      if (data?.length === 0) {
+        navigate("/sport/home");
+        return false;
+      }
       const fancyMarket = [];
       const lineMarket = [];
       const fancyMarketOdds = [];
       const lineMarketOdds = [];
       const market = [];
 
-      const sortedAllData = data?.data?.sort(
-        (a, b) => a?.sequence - b?.sequence
+      const sortedAllData = data?.sort(
+        (a, b) => Number(a?.sequence || 100000) - Number(b?.sequence || 100000)
       );
 
       sortedAllData?.map((item) => {
@@ -585,20 +537,34 @@ const MarketAnalyticsDetail = () => {
       liveFancyOdds.current = fancyMarketOdds;
       liveLineOdds.current = lineMarketOdds;
 
-      if (firstTimeRender?.current) {
+      if (isLoggedIn && firstTimeRender?.current) {
         firstTimeRender.current = false;
         getBetPl(eventId);
       }
 
+      const desiredStatuses = ["match_odds", "bookmaker", "sportbook"];
+
+      const sortMarket = market.sort((a, b) => {
+        const statusA = desiredStatuses.indexOf(a.type);
+        const statusB = desiredStatuses.indexOf(b.type);
+        return statusA - statusB;
+      });
+
       unsubscribeFromMessagesRef.current &&
         unsubscribeFromMessagesRef.current();
-      getFirebaseData(market?.[0]?.sportsId);
+      getFirebaseData(eventId, sortMarket?.[0]?.sportsId);
+      // getMarketSpreadexId();
 
-      setPageData(market);
-      setFancyPageData(fancyMarket);
+      setPageData(sortMarket);
+
+      const sortedData = fancyMarket.sort(
+        (a, b) =>
+          a?.runners?.[0]?.state?.sortPriority -
+          b?.runners?.[0]?.state?.sortPriority
+      );
+
+      setFancyPageData(sortedData);
       setLinePageData(lineMarket);
-
-      // getFirebaseData(data?.data?.[0]?.sportsId);
     }
     setIsLoading(false);
   };

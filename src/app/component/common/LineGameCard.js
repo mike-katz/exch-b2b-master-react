@@ -17,11 +17,17 @@ const LineGameCard = (props) => {
 
   useEffect(() => {
     if (props?.oldData) {
+      console.log(props?.oldData);
       setBlinkData(props?.oldData);
 
       setTimeout(() => {
-        setBlinkData([]);
-      }, 100);
+        const customizeBlinkData = [];
+        props?.oldData?.map((item) => {
+          customizeBlinkData.push([false, false]);
+        });
+        // console.log(customizeBlinkData);
+        setBlinkData(customizeBlinkData);
+      }, 200);
     }
   }, [props?.oldData]);
 
@@ -225,7 +231,7 @@ const LineGameCard = (props) => {
                       borderColor: "#FFFFFF",
                     }}
                     className={`cursor-pointer w-[50%] flex flex-col justify-center items-center min-h-[50px] ${
-                      blinkValue?.[0] ? "blink_me" : ""
+                      blinkValue?.[1] ? "blink_me" : ""
                     } ${DATA?.length === index + 1 ? "" : "border-b"} border-r`}
                   >
                     <div className="text-[#1e1e1e] text-[12px] font-bold text-center">
