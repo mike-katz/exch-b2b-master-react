@@ -17,6 +17,7 @@ import MarketAnalyticsDetail from "./dashboard/MarketAnalytics/detail";
 import BetLock from "./dashboard/BetLock";
 import AllBetHistory from "./dashboard/MarketAnalytics/AllBetHistory";
 import News from "./dashboard/Extra/News";
+import AllProfileLogs from "./dashboard/Dashboard/AllProfileLogs";
 
 const CustomRoutes = () => {
   return (
@@ -90,6 +91,14 @@ const CustomRoutes = () => {
         element={
           <PrivateRoute>
             <AllBankingLogs />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/profile-logs-all/:userId"
+        element={
+          <PrivateRoute>
+            <AllProfileLogs />
           </PrivateRoute>
         }
       />

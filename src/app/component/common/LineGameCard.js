@@ -17,7 +17,6 @@ const LineGameCard = (props) => {
 
   useEffect(() => {
     if (props?.oldData) {
-      console.log(props?.oldData);
       setBlinkData(props?.oldData);
 
       setTimeout(() => {

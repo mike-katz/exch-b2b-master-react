@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaPencilAlt, FaUser } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loader from "../../../component/common/Loader";
 import { getUserDetailData } from "../../../redux/services/DownLineUser";
 import { amountFormate } from "../../../utils/helper";
@@ -127,8 +127,16 @@ const AccountSummary = () => {
         onCloseMenu={onCloseCasinoEnable}
       />
 
-      <div className="text-[#243a48] text-[16px] font-black">
-        Account Summary
+      <div className="flex items-center justify-between">
+        <div className="text-[#243a48] text-[16px] font-black">
+          Account Summary
+        </div>
+        {/* <div className="text-[#243a48] text-[16px] font-black">Logs</div> */}
+        <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black w-[58px]">
+          <Link target="_blank" to={`/profile-logs-all/${userId}`} className="">
+            All Log
+          </Link>
+        </button>
       </div>
 
       {isLoading ? (

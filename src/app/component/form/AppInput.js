@@ -24,7 +24,7 @@ const AppInput = (
             autoComplete="off"
             required={isRequired}
             className={`bg-[${themeColor?.loginSignupText}] text-[${themeColor?.loginSignupBg}] h-[36px] w-full text-[16px] px-3 ${className}`}
-            type={type}
+            type={type || "text"}
             placeholder={placeholder}
           />
           {meta.touched && meta.error && (

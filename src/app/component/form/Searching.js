@@ -6,6 +6,8 @@ const Searching = ({ onChange, onSubmitSearch }) => {
     <div className="flex items-center border border-[#cdcdcd] bg-[#FFFFFF] p-[2px] rounded">
       <FaSearch color="#000000" size={15} className="ml-1" />
       <input
+        autoComplete="off"
+        type="text"
         onChange={onChange}
         className="h-[25px] pl-2 text-[12px] w-[100%]"
         placeholder="Find member..."

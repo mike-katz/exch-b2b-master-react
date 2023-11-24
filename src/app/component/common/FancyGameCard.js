@@ -12,7 +12,7 @@ const TAB_DATA = [
   { name: "all", value: "all" },
   { name: "sessions", value: "sessions" },
   { name: "w/p market", value: "wp_market" },
-  { name: "others", value: "xtra_market" },
+  { name: "others", value: "extra_market" },
 ];
 
 const FancyGameCard = (props) => {

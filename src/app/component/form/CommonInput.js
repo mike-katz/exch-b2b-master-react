@@ -23,7 +23,7 @@ const CommonInput = (
                 autoComplete="off"
                 style={{ boxShadow: "inset 0px 1px 0px rgba(0,0,0,.5)" }}
                 className={`w-full rounded p-[5px] text-[12px] text-[#1e1e1e] font-black ${className}`}
-                type={type}
+                type={type || "text"}
                 placeholder={placeholder}
               />
               {isRequired ? (

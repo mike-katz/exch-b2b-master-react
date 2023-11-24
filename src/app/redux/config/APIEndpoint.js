@@ -20,6 +20,7 @@ export default class APIEndpoint {
   static exportCSVFile = "api/user/export";
   static bankingTransaction = "api/banking/transaction";
   static bankingTransactionHistory = "api/banking/transaction-history";
+  static allProfileLog = "api/user/profile-log";
   static getSportList = "api/beating/get-sports";
   static getBetHistory = "api/beating/history";
   static getBetList = "api/beating/list";
