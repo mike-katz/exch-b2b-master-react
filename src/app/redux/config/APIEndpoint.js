@@ -46,7 +46,7 @@ export default class APIEndpoint {
   static getEventPl = "api/pl/userMarketsProfitloss";
   static getBetListPl = "api/pl/getUserBetList";
   static getAviatorSport = "api/pl/aviator/total";
-  static getAviatorPl = "api/pl/aviator/pl";
+  static getAviatorPl = "api/pl/aviator";
   static getSt8CategoryTotalPL = "api/pl/st8/getCategoryTotalPL";
   static getSt8Categories = "api/pl/st8/getCategories";
   static getSt8GameList = "api/pl/st8/getGameList";
