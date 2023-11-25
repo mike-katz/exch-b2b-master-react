@@ -295,8 +295,9 @@ const BankingMaster = () => {
   };
 
   const onSubmitSearch = () => {
+    setCurrentPage(1);
     const payload = {
-      page: currentPage,
+      page: 1,
       limit: perPage,
       search: searchParams,
       status: statusParams,

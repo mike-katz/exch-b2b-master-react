@@ -406,8 +406,8 @@ export const getAuraMarketPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}to=${payload?.to}`;
   }
 
-  if (payload?.eventName) {
-    queryString += `${queryString ? "&" : "?"}eventName=${payload?.eventName}`;
+  if (payload?.matchName) {
+    queryString += `${queryString ? "&" : "?"}matchName=${payload?.matchName}`;
   }
 
   if (payload?.timeZone) {

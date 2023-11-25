@@ -192,7 +192,7 @@ const BettingProfitLost = (props) => {
         setCurrentType("St8Category");
       }
       setIsLoading(false);
-    } else if (customType === "St8") {
+    } else if (customType === "Int Casino") {
       const payload = {
         limit: perPage,
         page: currentPage,
@@ -208,7 +208,13 @@ const BettingProfitLost = (props) => {
 
       if (data) {
         if (navigation?.length === 0) {
-          customizeNavigation.push({ type: "St8", payload, name, id, sportId });
+          customizeNavigation.push({
+            type: "Int Casino",
+            payload,
+            name,
+            id,
+            sportId,
+          });
         }
         setNavigationData(customizeNavigation);
 
@@ -216,7 +222,7 @@ const BettingProfitLost = (props) => {
         setPerPage(data?.data?.limit);
         setCurrentPage(Number(data?.data?.page));
         setPageData(data?.data?.results);
-        setCurrentType("St8");
+        setCurrentType("Int Casino");
       }
       setIsLoading(false);
     } else if (customType === "Aviator") {
@@ -355,7 +361,7 @@ const BettingProfitLost = (props) => {
         setCurrentType("BetList");
       }
       setIsLoading(false);
-    } else if (customType === "Aura") {
+    } else if (customType === "Casino") {
       const payload = {
         limit: perPage,
         page: currentPage,
@@ -372,7 +378,7 @@ const BettingProfitLost = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
-            type: "Aura",
+            type: "Casino",
             payload,
             name,
             id,
@@ -390,7 +396,7 @@ const BettingProfitLost = (props) => {
       setIsLoading(false);
     } else if (customType === "AuraEvent") {
       const payload = {
-        eventName: id,
+        matchName: id,
         limit: perPage,
         page: currentPage,
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
@@ -626,6 +632,7 @@ const BettingProfitLost = (props) => {
                 <th>Result</th>
                 <th>Profit/Lost</th>
                 <th>Commission</th>
+                <th>Total P&L</th>
                 <th>Settle Time</th>
               </tr>
             ) : currentType === "BetList" ? (
@@ -648,7 +655,7 @@ const BettingProfitLost = (props) => {
                 <th>Profit/Lost</th>
                 <th>Date/Time</th>
               </tr>
-            ) : currentType === "St8" ? (
+            ) : currentType === "Int Casino" ? (
               <tr>
                 <th>Sport Name</th>
                 <th>Game Category</th>
@@ -725,6 +732,9 @@ const BettingProfitLost = (props) => {
             {!isLoading &&
               pageData?.map((item, index) => {
                 if (currentType === "Sports") {
+                  const totalPl = Number(
+                    Number(item?.pl) + (Number(item?.commission) || 0)
+                  );
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
@@ -744,23 +754,28 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
-                      <td>{item?.commission || "-"}</td>
+                      <td>
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
                       <td
                         className={`font-black ${
-                          item?.pl === 0
+                          totalPl === 0
                             ? ""
-                            : item?.totalPl > 0
+                            : totalPl > 0
                             ? "text-[green]"
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(totalPl || 0)?.toFixed(2)}
                       </td>
                     </tr>
                   );
                 } else if (currentType === "Events") {
+                  const totalPl = Number(
+                    Number(item?.pl) + (Number(item?.commission) || 0)
+                  );
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td className="">{item?.sportName}</td>
@@ -781,19 +796,21 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
-                      <td className="">{item?.commission || "-"}</td>
+                      <td className="">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
                       <td
                         className={`p-4 font-black ${
-                          item?.pl === 0
+                          totalPl === 0
                             ? ""
-                            : item?.totalPl > 0
+                            : totalPl > 0
                             ? "text-[green]"
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(totalPl || 0)?.toFixed(2)}
                       </td>
                       <td className="">
                         {moment
@@ -809,6 +826,9 @@ const BettingProfitLost = (props) => {
                     </tr>
                   );
                 } else if (currentType === "Markets") {
+                  const totalPl = Number(
+                    Number(item?.pl) + (Number(item?.commission) || 0)
+                  );
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td className="">{item?.sportName}</td>
@@ -835,9 +855,22 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
-                      <td className="">{item?.commission || "-"}</td>
+                      <td className="">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
+                      <td
+                        className={`p-4 font-black ${
+                          totalPl === 0
+                            ? ""
+                            : totalPl > 0
+                            ? "text-[green]"
+                            : "text-[red]"
+                        }`}
+                      >
+                        {Number(totalPl || 0)?.toFixed(2)}
+                      </td>
                       <td className="">
                         {moment
                           .utc(item?.createdAt)
@@ -886,7 +919,7 @@ const BettingProfitLost = (props) => {
                               : "text-[red]"
                           }`}
                         >
-                          {item?.pl1}
+                          {Number(item?.pl1 || 0)?.toFixed(2)}
                         </span>
                         <span
                           className={`font-black ${
@@ -897,7 +930,7 @@ const BettingProfitLost = (props) => {
                               : "text-[red]"
                           }`}
                         >
-                          ({item?.pl2})
+                          ({Number(item?.pl2 || 0)?.toFixed(2)})
                         </span>
                       </td>
                       <td className="">
@@ -925,16 +958,18 @@ const BettingProfitLost = (props) => {
                     </tr>
                   );
                 } else if (currentType === "Aviator") {
+                  const pl =
+                    (Number(item?.pl) || 0) - (Number(item?.stack) || 0);
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td className=" capitalize">{item?.sportName}</td>
                       <td className="">{item?.stack}</td>
                       <td
                         className={`p-4 font-black ${
-                          item?.pl === 0 ? "text-[red]" : "text-[green]"
+                          pl <= 0 ? "text-[red]" : "text-[green]"
                         }`}
                       >
-                        {item?.pl === 0 ? item?.stack : item?.pl}
+                        {Number(pl || 0)?.toFixed(2)}
                       </td>
                       <td className="">
                         {moment
@@ -949,7 +984,7 @@ const BettingProfitLost = (props) => {
                       </td>
                     </tr>
                   );
-                } else if (currentType === "St8") {
+                } else if (currentType === "Int Casino") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td className=" capitalize">{item?.sportName}</td>
@@ -975,9 +1010,11 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.totalPL}
+                        {Number(item?.totalPL || 0)?.toFixed(2)}
                       </td>
-                      <td className="p-4">{item?.commission || "-"}</td>
+                      <td className="p-4">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
                       <td
                         className={`p-4 font-black ${
                           item?.totalPL === 0
@@ -987,7 +1024,7 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.totalPL}
+                        {Number(item?.totalPL || 0)?.toFixed(2)}
                       </td>
                       <td className="">
                         {moment
@@ -1017,9 +1054,11 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.totalPL}
+                        {Number(item?.totalPL || 0)?.toFixed(2)}
                       </td>
-                      <td className="p-4">{item?.commission || "-"}</td>
+                      <td className="p-4">
+                        {Number(item?.commission || 0)?.toFixed || "-"}
+                      </td>
                       <td
                         className={`p-4 font-black ${
                           item?.totalPL === 0
@@ -1029,7 +1068,7 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.totalPL}
+                        {Number(item?.totalPL || 0)?.toFixed(2)}
                       </td>
                       <td className=" ">
                         {moment
@@ -1066,9 +1105,11 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
-                      <td className="p-4">{item?.commission || "-"}</td>
+                      <td className="p-4">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
                       <td
                         className={`p-4 font-black ${
                           item?.pl === 0
@@ -1078,7 +1119,7 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
                       {/* <td className=" ">
                         {moment
@@ -1117,9 +1158,11 @@ const BettingProfitLost = (props) => {
                             : "text-[red]"
                         }`}
                       >
-                        {item?.pl}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
-                      <td className="">{item?.commission || "-"}</td>
+                      <td className="">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
                       <td className="">
                         {moment
                           .utc(item?.createdAt)
@@ -1168,7 +1211,7 @@ const BettingProfitLost = (props) => {
                               : "text-[red]"
                           }`}
                         >
-                          {item?.pl1}
+                          {Number(item?.pl1 || 0)?.toFixed(2)}
                         </span>
                         <span
                           className={`font-black ${
@@ -1179,7 +1222,7 @@ const BettingProfitLost = (props) => {
                               : "text-[red]"
                           }`}
                         >
-                          ({item?.pl2})
+                          ({Number(item?.pl2 || 0)?.toFixed(2)})
                         </span>
                       </td>
                       <td className="">
@@ -1213,7 +1256,7 @@ const BettingProfitLost = (props) => {
 
             {!isLoading &&
               currentType === "Sports" &&
-              Number(aviatorData?.total) > 0 && (
+              Number(aviatorData?.total) != 0 && (
                 <tr className="even:bg-blue-gray-50/50">
                   <td
                     onClick={() => {
@@ -1234,7 +1277,9 @@ const BettingProfitLost = (props) => {
                   >
                     {Number(aviatorData?.total)?.toFixed(2)}
                   </td>
-                  <td className="">{aviatorData?.commission || "-"}</td>
+                  <td className="">
+                    {Number(aviatorData?.commission || 0)?.toFixed(2) || "-"}
+                  </td>
                   <td
                     className={` font-black ${
                       Number(aviatorData?.total) === 0
@@ -1253,11 +1298,11 @@ const BettingProfitLost = (props) => {
               <tr className="even:bg-blue-gray-50/50">
                 <td
                   onClick={() => {
-                    onClickPl(false, false, "St8", "St8");
+                    onClickPl(false, false, "Int Casino", "Int Casino");
                   }}
                   className=" underline text-[#568bc8] cursor-pointer"
                 >
-                  St8
+                  Int Casino
                 </td>
                 <td
                   className={` font-black ${
@@ -1270,7 +1315,9 @@ const BettingProfitLost = (props) => {
                 >
                   {Number(st8Data?.totalPL)?.toFixed(2)}
                 </td>
-                <td className="">{st8Data?.commission || "-"}</td>
+                <td className="">
+                  {Number(st8Data?.commission || 0)?.toFixed(2) || "-"}
+                </td>
                 <td
                   className={` font-black ${
                     Number(st8Data?.totalPL) === 0
@@ -1289,11 +1336,11 @@ const BettingProfitLost = (props) => {
               <tr className="even:bg-blue-gray-50/50">
                 <td
                   onClick={() => {
-                    onClickPl(false, false, "Aura", "Aura");
+                    onClickPl(false, false, "Casino", "Casino");
                   }}
                   className=" underline text-[#568bc8] cursor-pointer"
                 >
-                  Aura
+                  Casino
                 </td>
                 <td
                   className={` font-black ${
@@ -1306,7 +1353,9 @@ const BettingProfitLost = (props) => {
                 >
                   {Number(auraData?.pl)?.toFixed(2)}
                 </td>
-                <td className="">{auraData?.commission || "-"}</td>
+                <td className="">
+                  {Number(auraData?.commission || 0)?.toFixed(2) || "-"}
+                </td>
                 <td
                   className={` font-black ${
                     Number(auraData?.pl) === 0

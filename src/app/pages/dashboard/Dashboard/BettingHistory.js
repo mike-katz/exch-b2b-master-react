@@ -196,6 +196,7 @@ const BettingHistory = ({ username }) => {
         <div className="col-span-6 lg:col-span-2">
           <div className="text-[#000] text-[12px]">From Date :</div>
           <input
+            min={moment().subtract(14, "days").format("YYYY-MM-DD")}
             value={fromDate}
             onChange={onChangeFromDate}
             type="date"
@@ -206,6 +207,7 @@ const BettingHistory = ({ username }) => {
         <div className="col-span-6 lg:col-span-2">
           <div className="text-[#000] text-[12px]">To Date :</div>
           <input
+            min={moment().subtract(14, "days").format("YYYY-MM-DD")}
             value={toDate}
             onChange={onChangeToDate}
             type="date"
@@ -233,6 +235,7 @@ const BettingHistory = ({ username }) => {
               <th className="">Type</th>
               <th className="">Odd Req.</th>
               <th className="">Stake</th>
+              <th className="">Profit/Lost</th>
               <th className="">Place Time</th>
               <th className="">Matched Time</th>
             </tr>
@@ -240,7 +243,7 @@ const BettingHistory = ({ username }) => {
           <tbody>
             {isLoadingTable && (
               <tr>
-                <td className="h-[200px] text-center" colSpan={9}>
+                <td className="h-[200px] text-center" colSpan={10}>
                   <Loader color={"#FEBA11"} size={25} />
                 </td>
               </tr>
@@ -249,7 +252,7 @@ const BettingHistory = ({ username }) => {
               <tr>
                 <td
                   className="h-[200px] text-center text-[16px] font-black"
-                  colSpan={9}
+                  colSpan={10}
                 >
                   No Record Found
                 </td>
@@ -275,7 +278,7 @@ const BettingHistory = ({ username }) => {
                           />
                         )} */}
 
-                        <div className="font-semibold">1288446886</div>
+                        <div className="font-semibold">{item?.sportName}</div>
                       </div>
                     </td>
                     <td>{item?.eventName}</td>
@@ -303,6 +306,7 @@ const BettingHistory = ({ username }) => {
                       {item?.odds?.$numberDecimal || item?.odds}
                     </td>
                     <td className="font-black">{item?.stake}</td>
+                    <td className="font-black">{item?.pl}</td>
                     <td className="">
                       {moment(item?.upddatedAt).format("DD/MM/YYYY")}
                       <br />
