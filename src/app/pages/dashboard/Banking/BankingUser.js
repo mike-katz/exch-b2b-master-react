@@ -358,6 +358,7 @@ const BankingMaster = () => {
         };
 
         getDownLineUser(payload);
+        setIsEnableBalanceView(false);
       }
       setIsLoadingRecall(false);
     }
@@ -661,7 +662,7 @@ const BankingMaster = () => {
 
                           <tr>
                             <th width="12%" className="px-[10px] py-[8px]">
-                              Casino
+                              Int Casino
                             </th>
                             <th
                               width="13%"

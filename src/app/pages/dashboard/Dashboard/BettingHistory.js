@@ -12,10 +12,11 @@ import { BET_STATUS, MARKET_TYPE } from "../../../utils/dropdown";
 
 const BettingHistory = ({ username }) => {
   const { userId } = useParams();
+  const { timeZone } = Intl.DateTimeFormat().resolvedOptions(); // eslint-disable-line
   // const [isVisibleHistory, setIsVisibleHistory] = useState(false);
   const [sportListDropdown, setSportListDropdown] = useState([]);
 
-  const [sportType, setSportType] = useState("");
+  const [sportType, setSportType] = useState("Cricket");
   const [betStatus, setBetStatus] = useState("");
   const [marketType, setMarketType] = useState("");
   const [fromDate, setFromDate] = useState(
@@ -29,6 +30,8 @@ const BettingHistory = ({ username }) => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
+
+  console.log({ marketType });
 
   useEffect(() => {
     getSportList();
@@ -52,13 +55,16 @@ const BettingHistory = ({ username }) => {
         page: currentPage,
         limit: perPage,
         userId: userId,
-        sportId: sportType,
+        sportName: sportType,
         status: betStatus,
-        type: marketType,
-        // from: fromDate,
-        // to: toDate,
+        marketType: marketType,
+        from: fromDate,
+        to: toDate,
+        timeZone: timeZone,
       };
     }
+
+    console.log({ payload });
 
     setIsLoadingTable(true);
     const data = await getBetHistoryData(payload);
@@ -85,10 +91,12 @@ const BettingHistory = ({ username }) => {
   };
 
   const onChangeBetStatus = (e) => {
+    console.log(e?.target?.value);
     setBetStatus(e?.target?.value);
   };
 
   const onChangeMarketStatus = (e) => {
+    console.log(e?.target?.value);
     setMarketType(e?.target?.value);
   };
 
@@ -106,11 +114,12 @@ const BettingHistory = ({ username }) => {
       page: count,
       limit: perPage,
       userId: userId,
-      sportId: sportType,
+      sportName: sportType,
       status: betStatus,
-      type: marketType,
+      marketType: marketType,
       from: fromDate,
       to: toDate,
+      timeZone: timeZone,
     };
 
     getBetHistory(payload);
@@ -122,11 +131,12 @@ const BettingHistory = ({ username }) => {
       page: 1,
       limit: perPage,
       userId: userId,
-      sportId: sportType,
+      sportName: sportType,
       status: betStatus,
-      type: marketType,
+      marketType: marketType,
       from: fromDate,
       to: toDate,
+      timeZone: timeZone,
     };
 
     getBetHistory(payload);
@@ -149,10 +159,10 @@ const BettingHistory = ({ username }) => {
             onChange={onChangeSportType}
             className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2"
           >
-            <option value="">All</option>
+            {/* <option value="">All</option> */}
             {sportListDropdown?.map((item, index) => {
               return (
-                <option key={index} value={item?._id}>
+                <option key={index} value={item?.sportName}>
                   {item?.sportName}
                 </option>
               );
@@ -176,14 +186,12 @@ const BettingHistory = ({ username }) => {
           </select>
         </div>
         <div className="col-span-6 lg:col-span-2">
-          <div
+          <div className="text-[#000] text-[12px]">Market Type: </div>
+          <select
             value={marketType}
             onChange={onChangeMarketStatus}
-            className="text-[#000] text-[12px]"
+            className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2"
           >
-            Market Type:{" "}
-          </div>
-          <select className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2">
             {MARKET_TYPE?.map((item, index) => {
               return (
                 <option key={index} value={item?.value}>
@@ -228,7 +236,7 @@ const BettingHistory = ({ username }) => {
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>
-              <th className="">Sport Name</th>
+              {/* <th className="">Sport Name</th> */}
               <th className="">Event Name</th>
               <th className="">Market Name</th>
               <th className="">Selection</th>
@@ -262,25 +270,6 @@ const BettingHistory = ({ username }) => {
               pageData?.map((item, index) => {
                 return (
                   <tr key={index}>
-                    <td>
-                      <div className="flex items-center">
-                        {/* {isVisibleHistory ? (
-                          <FaMinusSquare
-                            onClick={onClickHideHistory}
-                            fill="#4c5e6d"
-                            className="mr-1"
-                          />
-                        ) : (
-                          <FaPlusSquare
-                            onClick={onClickShowHistory}
-                            fill="#4c5e6d"
-                            className="mr-1"
-                          />
-                        )} */}
-
-                        <div className="font-semibold">{item?.sportName}</div>
-                      </div>
-                    </td>
                     <td>{item?.eventName}</td>
                     <td className="">{item?.marketType}</td>
                     {/* <td className="max-w-[200px]">

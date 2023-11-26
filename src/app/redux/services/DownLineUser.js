@@ -206,16 +206,18 @@ export const getBetHistoryData = async (payload) => {
     queryParams += `${queryParams ? "&" : "?"}userId=${payload?.userId}`;
   }
 
-  if (payload?.sportId) {
-    queryParams += `${queryParams ? "&" : "?"}sportId=${payload?.sportId}`;
+  if (payload?.sportName) {
+    queryParams += `${queryParams ? "&" : "?"}sportName=${payload?.sportName}`;
   }
 
   if (payload?.status) {
     queryParams += `${queryParams ? "&" : "?"}status=${payload?.status}`;
   }
 
-  if (payload?.type) {
-    queryParams += `${queryParams ? "&" : "?"}type=${payload?.type}`;
+  if (payload?.marketType) {
+    queryParams += `${queryParams ? "&" : "?"}marketType=${
+      payload?.marketType
+    }`;
   }
 
   if (payload?.from) {
@@ -225,6 +227,10 @@ export const getBetHistoryData = async (payload) => {
   if (payload?.to) {
     queryParams += `${queryParams ? "&" : "?"}to=${payload?.to}`;
   }
+
+  // if (payload?.timeZone) {
+  //   queryParams += `${queryParams ? "&" : "?"}timeZone=${payload?.timeZone}`;
+  // }
 
   const { data } = await Rest.get(`${APIEndpoint.getBetHistory}${queryParams}`);
 

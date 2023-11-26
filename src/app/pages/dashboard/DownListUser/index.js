@@ -256,8 +256,8 @@ const DownListMaster = () => {
           search: searchParams,
           status: statusParams,
         };
-
         getDownLineUser(payload);
+        setIsEnableBalanceView(false);
       }
       setIsLoadingRecall(false);
     }
@@ -629,7 +629,7 @@ const DownListMaster = () => {
 
                             <tr>
                               <th width="12%" className="px-[10px] py-[8px]">
-                                Casino
+                                Int Casino
                               </th>
                               <th
                                 width="13%"

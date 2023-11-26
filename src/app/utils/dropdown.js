@@ -42,8 +42,8 @@ export const BET_STATUS = [
 
 export const MARKET_TYPE = [
   { value: "", label: "ALL" },
-  { value: "Match Odds", label: "Match Odds" },
-  { value: "Fancy", label: "Fancy" },
-  { value: "Sports Book", label: "Sports Book" },
-  { value: "Book Maker", label: "Book Maker" },
+  { value: "match_odds", label: "Match Odds" },
+  { value: "fancy", label: "Fancy" },
+  { value: "sportbook", label: "Sports Book" },
+  { value: "bookmaker", label: "Book Maker" },
 ];

@@ -159,7 +159,16 @@ const BankingMaster = () => {
 
     const submitData = [];
 
+    let balanceError = false;
     pageSubmitData?.map((item) => {
+      const currentBalance = pageData?.find(
+        (ud) => ud?._id === item?.userId
+      )?.balance;
+
+      if (item?.type === "W" && item?.dw > currentBalance) {
+        balanceError = true;
+      }
+
       if (item?.dw || item?.creditRef || item?.remark) {
         submitData.push({
           userId: item?.userId,
@@ -175,6 +184,10 @@ const BankingMaster = () => {
         });
       }
     });
+
+    if (balanceError) {
+      return false;
+    }
 
     if (submitData?.length > 0) {
       const payload = {
@@ -466,6 +479,10 @@ const BankingMaster = () => {
                         placeholder="0"
                         style={{
                           boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
+                          borderColor:
+                            pageSubmitData?.[index]?.dw > item?.balance
+                              ? "red"
+                              : "",
                         }}
                         className="text-right w-full rounded p-[5px] text-[#1e1e1e] border border-[#aaa] font-black text-[14px]"
                       />
