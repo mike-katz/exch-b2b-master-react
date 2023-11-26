@@ -188,6 +188,16 @@ const AccountSummary = () => {
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
                     Time Zone
                   </div>
+                  {pageData?.selfReferral && (
+                    <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
+                      Self Referral Code
+                    </div>
+                  )}
+                  {pageData?.registeredReferral && (
+                    <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] whitespace-nowrap">
+                      Register Referral Code
+                    </div>
+                  )}
                 </div>
                 <div className="w-full">
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6] flex items-center justify-between">
@@ -214,6 +224,12 @@ const AccountSummary = () => {
                   </div>
                   <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
                     IST
+                  </div>
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
+                    {pageData?.selfReferral}
+                  </div>
+                  <div className="text-[#243a48] px-[10px] leading-[24px] border-b border-[#e0e6e6]">
+                    {pageData?.registeredReferral}
                   </div>
                 </div>
               </div>
