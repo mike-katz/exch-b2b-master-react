@@ -156,7 +156,7 @@ const TopMenu = () => {
           >
             Bet Lock
           </div>
-          {/* <Menu placement="bottom-start">
+          <Menu placement="bottom-start">
             <MenuHandler>
               <Button
                 className={`rounded-none bg-transparent text-[12px] text-[#000000] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[rgba(255,255,255,.2)] cursor-pointer py-0 capitalize ${
@@ -180,11 +180,11 @@ const TopMenu = () => {
                     : ""
                 } border-t border-[rgba(0,0,0,.2)]`}
               >
-                Down List Master
+                Report by Downline
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  onClickMenu("/down-list-user");
+                  onClickMenu("/reports-by-market");
                 }}
                 className={`m-0 rounded-none hover:bg-[rgba(255,255,255,.2)] focus:bg-transparent ${
                   activeMenu === "/down-list-user"
@@ -192,10 +192,10 @@ const TopMenu = () => {
                     : ""
                 } border-t border-[rgba(0,0,0,.2)]`}
               >
-                Down List User
+                Report by Market
               </MenuItem>
             </MenuList>
-          </Menu> */}
+          </Menu>
           <div
             onClick={() => {
               onClickMenu("/market-analytics");

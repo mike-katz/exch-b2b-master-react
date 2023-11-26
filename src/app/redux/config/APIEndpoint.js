@@ -54,4 +54,12 @@ export default class APIEndpoint {
   static getAuraEventPl = "api/pl/userEventsProfitlossAura";
   static getAuraMarketPl = "api/pl/userMarketsProfitlossAura";
   static getAuraBetListPl = "api/pl/getUserBetListAura";
+
+  // REPORT
+  static getReportSportTotalPL = "api/report/sport/total-pl";
+  static getReportCasinoTotalPL = "api/report/casino/total-pl";
+  static apiReportIntCasinoTotalPL = "api/report/intCasino/total-pl";
+  static getReportAviatorTotalPL = "api/report/aviator/total-pl";
+  static getReportSportList = "api/report/sport/list";
+  static getReportAviatorList = "api/report/aviator/list";
 }

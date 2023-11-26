@@ -18,6 +18,7 @@ import BetLock from "./dashboard/BetLock";
 import AllBetHistory from "./dashboard/MarketAnalytics/AllBetHistory";
 import News from "./dashboard/Extra/News";
 import AllProfileLogs from "./dashboard/Dashboard/AllProfileLogs";
+import ReportByMarket from "./dashboard/Report/ReportByMarket";
 
 const CustomRoutes = () => {
   return (
@@ -170,6 +171,14 @@ const CustomRoutes = () => {
         element={
           <PrivateRoute>
             <News />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/reports-by-market"
+        element={
+          <PrivateRoute>
+            <ReportByMarket />
           </PrivateRoute>
         }
       />

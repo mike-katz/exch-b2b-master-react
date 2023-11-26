@@ -149,6 +149,9 @@ const LineGameCard = (props) => {
             (plArray) => plArray?.exMarketId === item?.exMarketId
           )?.runnerData || [];
 
+        // console.log(props?.linePlArray);
+        // console.log(props?.data);
+
         return (
           <>
             <div key={index} className="grid grid-cols-12">

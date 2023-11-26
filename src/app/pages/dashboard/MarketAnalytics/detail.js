@@ -424,6 +424,7 @@ const MarketAnalyticsDetail = () => {
         const selectionIdArray = [];
 
         item?.selectionId?.map((si, index) => {
+          // console.log({ si });
           if (item?.type === "fancy") {
             const fancyOdds = liveFancyOdds.current?.find(
               (odds) => odds?.exMarketId === item?.exMarketId
@@ -454,6 +455,8 @@ const MarketAnalyticsDetail = () => {
             Object.assign(selectionId, si);
           }
         });
+
+        // console.log({ selectionId });
 
         cusData?.push({
           exMarketId: item?.exMarketId,
@@ -637,6 +640,8 @@ const MarketAnalyticsDetail = () => {
                     )}
                   </div>
                   <div>
+                    {/* {console.log({ pagePlData })} */}
+                    {/* {console.log({ pageData })} */}
                     {!isLoading &&
                       pageData?.map((item, index) => {
                         const runnerData = pagePlData?.find(
