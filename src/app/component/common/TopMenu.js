@@ -86,24 +86,27 @@ const TopMenu = () => {
             </div>
           ) : (
             <Menu placement="bottom-start">
-              <MenuHandler>
-                <Button
-                  style={{ color: themeColor?.menuTextColor }}
-                  className={`rounded-none bg-transparent text-[12px] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[${
-                    themeColor?.subHoverBgColor
-                  }] cursor-pointer py-0 capitalize ${
-                    activeMenu === "/down-list-user" || activeMenu === "/"
-                      ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
-                      : ""
-                  }`}
-                >
-                  Down List
-                  <FaCaretDown
-                    color={themeColor?.menuTextColor}
-                    className="ml-1"
-                  />
-                </Button>
-              </MenuHandler>
+              {role !== "Agent" && (
+                <MenuHandler>
+                  <Button
+                    style={{ color: themeColor?.menuTextColor }}
+                    className={`rounded-none bg-transparent text-[12px] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[${
+                      themeColor?.subHoverBgColor
+                    }] cursor-pointer py-0 capitalize ${
+                      activeMenu === "/down-list-user" || activeMenu === "/"
+                        ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
+                        : ""
+                    }`}
+                  >
+                    Down List
+                    <FaCaretDown
+                      color={themeColor?.menuTextColor}
+                      className="ml-1"
+                    />
+                  </Button>
+                </MenuHandler>
+              )}
+
               <MenuList
                 className={`bg-[${themeColor?.subMenuBgColor}] rounded-none border-none mt-[-5px] p-0 text-[12px] font-extrabold text-[${themeColor?.subMenuTextColor}]`}
               >
@@ -205,17 +208,31 @@ const TopMenu = () => {
             >
               <MenuItem
                 onClick={() => {
-                  onClickMenu("/down-list-master");
+                  onClickMenu("/down-list-client");
                 }}
                 className={`m-0 rounded-none hover:bg-[${
                   themeColor?.subHoverBgColor
                 }] focus:bg-transparent ${
-                  activeMenu === "/down-list-master"
+                  activeMenu === "/down-list-client"
                     ? `bg-[${themeColor?.activeMenuBgColor}] text-[${themeColor?.activeMenuTextColor}] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]`
                     : ""
                 } border-t border-[rgba(0,0,0,.2)]`}
               >
-                Report by Downline
+                Report by Client
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  onClickMenu("/down-list-user");
+                }}
+                className={`m-0 rounded-none hover:bg-[${
+                  themeColor?.subHoverBgColor
+                }] focus:bg-transparent ${
+                  activeMenu === "/down-list-user"
+                    ? `bg-[${themeColor?.activeMenuBgColor}] text-[${themeColor?.activeMenuTextColor}] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]`
+                    : ""
+                } border-t border-[rgba(0,0,0,.2)]`}
+              >
+                Report by User
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -224,7 +241,7 @@ const TopMenu = () => {
                 className={`m-0 rounded-none hover:bg-[${
                   themeColor?.subHoverBgColor
                 }] focus:bg-transparent ${
-                  activeMenu === "/down-list-user"
+                  activeMenu === "/reports-by-market"
                     ? "bg-[#ffdc7a]  shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
                     : ""
                 } border-t border-[rgba(0,0,0,.2)]`}

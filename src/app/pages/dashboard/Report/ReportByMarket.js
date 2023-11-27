@@ -5,8 +5,6 @@ import {
   getAuraEventPlData,
   getAuraMarketPlData,
   getBetListData,
-  getSt8CategoriesData,
-  getSt8GameListData,
 } from "../../../redux/services/pl";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
@@ -16,6 +14,7 @@ import {
   getReportAviatorListData,
   getReportAviatorTotalPLData,
   getReportCasinoTotalPLData,
+  getReportIntCasinoListData,
   getReportSportListData,
   getReportSportTotalPLData,
 } from "../../../redux/services/report";
@@ -30,6 +29,7 @@ const ReportByMarket = (props) => {
   const [aviatorData, setAviatorData] = useState([]);
   const [st8Data, setSt8Data] = useState([]);
   const [auraData, setAuraData] = useState([]);
+  const [currentTotalItem, setCurrentTotalItem] = useState();
 
   const [currentType, setCurrentType] = useState("Sports");
   const [navigationData, setNavigationData] = useState([]);
@@ -51,6 +51,7 @@ const ReportByMarket = (props) => {
     const lastRecord = navigationData?.[navigationData?.length - 1];
 
     onClickPl(
+      lastRecord?.item,
       lastRecord?.id,
       lastRecord?.sportId,
       lastRecord?.name,
@@ -107,6 +108,7 @@ const ReportByMarket = (props) => {
     if (data) {
       setCurrentType("Sports");
       setNavigationData([]);
+      setCurrentTotalItem();
       // setTotalPage(data?.data?.totalPages);
       // setPerPage(data?.data?.limit);
       // setCurrentPage(Number(data?.data?.page));
@@ -139,6 +141,7 @@ const ReportByMarket = (props) => {
   };
 
   const onClickPl = async (
+    item,
     id,
     sportId,
     name,
@@ -146,6 +149,7 @@ const ReportByMarket = (props) => {
     navigation = [],
     currentPage = 1
   ) => {
+    setCurrentTotalItem(item);
     let customizeNavigation = [];
     let customType = "";
     if (type) {
@@ -168,16 +172,17 @@ const ReportByMarket = (props) => {
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         category: id,
         timeZone: timeZone,
-        userId,
+        developerCode: id,
       };
 
       setIsLoading(true);
 
-      const data = await getSt8GameListData(payload);
+      const data = await getReportIntCasinoListData(payload);
 
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "St8Category",
             payload,
             name,
@@ -205,11 +210,12 @@ const ReportByMarket = (props) => {
 
       setIsLoading(true);
 
-      const data = await getSt8CategoriesData(payload);
+      const data = await getReportIntCasinoListData(payload);
 
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "Int Casino",
             payload,
             name,
@@ -242,6 +248,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "Aviator",
             payload,
             name,
@@ -275,6 +282,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "Sports",
             payload,
             name,
@@ -312,6 +320,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "Events",
             payload,
             name,
@@ -348,6 +357,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "Markets",
             payload,
             name,
@@ -381,6 +391,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "Casino",
             payload,
             name,
@@ -415,6 +426,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "AuraEvent",
             payload,
             name,
@@ -449,6 +461,7 @@ const ReportByMarket = (props) => {
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
+            item,
             type: "AuraMarket",
             payload,
             name,
@@ -493,6 +506,7 @@ const ReportByMarket = (props) => {
     const lastRecord = customizeNavigation?.[customizeNavigation?.length - 1];
 
     onClickPl(
+      lastRecord?.item,
       lastRecord?.id,
       lastRecord?.sportId,
       lastRecord?.name,
@@ -500,6 +514,44 @@ const ReportByMarket = (props) => {
       customizeNavigation
     );
   };
+
+  let totalStack = 0;
+  let totalPL = 0;
+  let totalCommission = 0;
+
+  if (currentTotalItem) {
+    totalStack += Number(currentTotalItem?.stack || 0) || 0;
+    totalPL += Number(currentTotalItem?.pl || 0) || 0;
+    totalCommission += Number(currentTotalItem?.commission || 0) || 0;
+  }
+
+  if (currentType === "Sports") {
+    pageData?.map((item) => {
+      totalStack += Number(item?.stack || 0) || 0;
+      totalPL += Number(item?.pl || 0) || 0;
+      totalCommission += Number(item?.commission || 0) || 0;
+    });
+
+    aviatorData?.map((item) => {
+      totalStack += Number(item?.stack || 0) || 0;
+      totalPL += Number(item?.pl || 0) || 0;
+      totalCommission += Number(item?.commission || 0) || 0;
+    });
+
+    st8Data?.map((item) => {
+      totalStack += Number(item?.stack || 0) || 0;
+      totalPL += Number(item?.pl || 0) || 0;
+      totalCommission += Number(item?.commission || 0) || 0;
+    });
+
+    auraData?.map((item) => {
+      totalStack += Number(item?.stack || 0) || 0;
+      totalPL += Number(item?.pl || 0) || 0;
+      totalCommission += Number(item?.commission || 0) || 0;
+    });
+  }
+
+  console.log({ totalPL });
 
   return (
     <div>
@@ -620,7 +672,7 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(item?.id, null, item?.name);
+                          onClickPl(item, item?.id, null, item?.name);
                         }}
                         className="text-left underline text-[#568bc8] cursor-pointer"
                       >
@@ -659,7 +711,12 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(item?.exEventId, null, item?.eventName);
+                          onClickPl(
+                            item,
+                            item?.exEventId,
+                            null,
+                            item?.eventName
+                          );
                         }}
                         className="text-left underline text-[#568bc8] cursor-pointer"
                       >
@@ -730,7 +787,7 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(false, false, "Aviator", "Aviator");
+                          onClickPl(item, false, false, "Aviator", "Aviator");
                         }}
                         className=" underline text-[#568bc8] cursor-pointer"
                       >
@@ -769,7 +826,7 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(false, false, "Aviator", "Aviator");
+                          onClickPl(item, false, false, "Aviator", "Aviator");
                         }}
                         className="text-left"
                       >
@@ -809,15 +866,16 @@ const ReportByMarket = (props) => {
                       <td
                         onClick={() => {
                           onClickPl(
-                            item?.developerCode,
+                            item,
+                            item?.developer_code,
                             null,
                             item?.categoryName,
                             "St8Category"
                           );
                         }}
-                        className=" underline text-[#568bc8] cursor-pointer"
+                        className="text-left underline text-[#568bc8] cursor-pointer"
                       >
-                        {item?.name}
+                        {item?.categoryName}
                       </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
@@ -850,14 +908,7 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "St8Category") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td
-                        onClick={() => {
-                          onClickPl(false, false, "Aviator", "Aviator");
-                        }}
-                        className=" underline text-[#568bc8] cursor-pointer"
-                      >
-                        {item?.name}
-                      </td>
+                      <td className="text-left">{item?.gameName}</td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${
@@ -891,7 +942,7 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(item?.eventId, null, item?.eventName);
+                          onClickPl(item, item?.eventId, null, item?.eventName);
                         }}
                         className=" underline text-[#568bc8] cursor-pointer"
                       >
@@ -931,6 +982,7 @@ const ReportByMarket = (props) => {
                       <td
                         onClick={() => {
                           onClickPl(
+                            item,
                             item?.marketName,
                             item?.sportId,
                             item?.marketName
@@ -973,7 +1025,7 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(false, false, "Aviator", "Aviator");
+                          onClickPl(item, false, false, "Aviator", "Aviator");
                         }}
                         className=" underline text-[#568bc8] cursor-pointer"
                       >
@@ -1018,7 +1070,7 @@ const ReportByMarket = (props) => {
                   <tr key={index} className="even:bg-blue-gray-50/50">
                     <td
                       onClick={() => {
-                        onClickPl(false, false, "Aviator", "Aviator");
+                        onClickPl(item, false, false, "Aviator", "Aviator");
                       }}
                       className="text-left underline text-[#568bc8] cursor-pointer"
                     >
@@ -1060,7 +1112,13 @@ const ReportByMarket = (props) => {
                   <tr key={index} className="even:bg-blue-gray-50/50">
                     <td
                       onClick={() => {
-                        onClickPl(false, false, "Aviator", "Aviator");
+                        onClickPl(
+                          item,
+                          false,
+                          false,
+                          "Int Casino",
+                          "Int Casino"
+                        );
                       }}
                       className="text-left underline text-[#568bc8] cursor-pointer"
                     >
@@ -1102,7 +1160,7 @@ const ReportByMarket = (props) => {
                   <tr key={index} className="even:bg-blue-gray-50/50">
                     <td
                       onClick={() => {
-                        onClickPl(false, false, "Aviator", "Aviator");
+                        onClickPl(item, false, false, "Aviator", "Aviator");
                       }}
                       className="text-left underline text-[#568bc8] cursor-pointer"
                     >
@@ -1137,6 +1195,40 @@ const ReportByMarket = (props) => {
                   </tr>
                 );
               })}
+
+            {!isLoading && (
+              <tr className="even:bg-blue-gray-50/50">
+                <td className="bg-[#e0e6e6] text-left font-black">Total</td>
+                <td className="bg-[#e0e6e6]">
+                  {Number(totalStack || 0)?.toFixed(2)}
+                </td>
+                <td
+                  className={`bg-[#e0e6e6] font-black ${
+                    Number(totalPL) === 0
+                      ? ""
+                      : Number(totalPL) > 0
+                      ? "text-[green]"
+                      : "text-[red]"
+                  }`}
+                >
+                  {Number(totalPL)?.toFixed(2)}
+                </td>
+                <td className="bg-[#e0e6e6] ">
+                  {Number(totalCommission || 0)?.toFixed(2) || "-"}
+                </td>
+                <td
+                  className={`bg-[#e0e6e6] font-black ${
+                    Number(numberOppositeConvert(totalPL)) === 0
+                      ? ""
+                      : Number(numberOppositeConvert(totalPL)) > 0
+                      ? "text-[green]"
+                      : "text-[red]"
+                  }`}
+                >
+                  {Number(numberOppositeConvert(totalPL))?.toFixed(2)}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         {navigationData?.length > 0 && (

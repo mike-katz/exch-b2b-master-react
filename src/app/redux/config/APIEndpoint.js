@@ -65,4 +65,5 @@ export default class APIEndpoint {
   static getReportAviatorTotalPL = "api/report/aviator/total-pl";
   static getReportSportList = "api/report/sport/list";
   static getReportAviatorList = "api/report/aviator/list";
+  static getReportIntCasinoList = "api/report/intCasino/list";
 }
