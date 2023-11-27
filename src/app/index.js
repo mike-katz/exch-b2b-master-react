@@ -14,10 +14,11 @@ import News from "./component/common/News";
 import { useDispatch, useSelector } from "react-redux";
 import { getThemeColorData } from "./redux/services/themeColor";
 import { GET_THEME_COLOR_RESPONSE } from "./redux/actions/themeColor";
+import { Helmet } from "react-helmet";
 
 const MainApp = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state?.persist);
+  const { isLoggedIn, themeColor } = useSelector((state) => state?.persist);
 
   // const DISABLE_MENU_ROUTE_LIST = [""];
   // useEffect(() => {
@@ -176,6 +177,11 @@ const MainApp = () => {
           pauseOnHover
           theme="light"
         />
+        <Helmet>
+          {console.log({ themeColor })}
+          <link rel="icon" href={themeColor?.faviconUrl} />
+          <link rel="apple-touch-icon" href={themeColor?.faviconUrl} />
+        </Helmet>
         <div>
           {!isLoggedIn ||
           window.location?.pathname?.includes("/credit-ref-logs/") ||
