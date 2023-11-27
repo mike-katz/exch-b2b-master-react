@@ -40,7 +40,7 @@ const Login = () => {
       <div className="bg-color-absolute"></div>
       <div
         style={{
-          background: themeColor?.loginSignupBg,
+          background: themeColor?.headerBgColor,
           boxShadow: "rgba(0, 80, 152, 0.2) 0px 2px 20px 10px",
         }}
         className="md:w-[540px] h-fit w-full rounded-lg z-[2]"
@@ -51,13 +51,13 @@ const Login = () => {
               <div className="p-[30px] w-full">
                 <div className="flex flex-col items-center">
                   <div
-                    style={{ color: themeColor?.loginSignupText }}
+                    style={{ color: themeColor?.headerTextColor }}
                     className="text-[30px] font-bold text-center"
                   >
                     Agent login
                   </div>
                   <div
-                    style={{ color: themeColor?.loginSignupText }}
+                    style={{ color: themeColor?.headerTextColor }}
                     className="border-t-2 w-[100px] mt-2 mb-4"
                   ></div>
                 </div>
@@ -72,6 +72,7 @@ const Login = () => {
                   {({ values, errors, touched, handleSubmit }) => (
                     <Form>
                       <AppInput
+                        labelColor={themeColor?.headerTextColor}
                         placeholder=""
                         label="username"
                         type="text"
@@ -80,6 +81,7 @@ const Login = () => {
                         id="user"
                       />
                       <AppInput
+                        labelColor={themeColor?.headerTextColor}
                         placeholder=""
                         label="password"
                         type="password"
@@ -113,7 +115,7 @@ const Login = () => {
                 className="h-fit w-full rounded-r-lg"
               />
               <img
-                src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png"
+                src={themeColor?.logoUrl}
                 className="absolute z-[4] w-[200px]"
               />
             </div>

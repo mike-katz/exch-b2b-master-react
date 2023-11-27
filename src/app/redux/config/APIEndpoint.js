@@ -1,6 +1,9 @@
 export default class APIEndpoint {
   static url = process.env.API_URL;
 
+  // THEME
+  static getThemeColor = "api/extra/theme";
+
   // AUTH
   static login = "api/auth/login";
   static register = "api/user/register";

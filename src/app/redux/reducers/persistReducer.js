@@ -7,13 +7,14 @@ import {
   SIGNUP_MODAL_VISIBLE_START,
   UPDATE_BALANCE_START,
 } from "../actions/persistAction";
+import { GET_THEME_COLOR_RESPONSE } from "../actions/themeColor";
 
 const initialState = {
   isLoggedIn: false,
   userData: null,
   themeColor: {
     faviconUrl:
-      "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
+      "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1700899864608.png",
     logoUrl:
       "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
     headerBgColor: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
@@ -31,6 +32,13 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action?.type) {
+    case GET_THEME_COLOR_RESPONSE:
+      console.log({ action });
+      return {
+        ...state,
+        themeColor: action?.data || {},
+      };
+
     case LOGIN_END:
       return {
         ...state,

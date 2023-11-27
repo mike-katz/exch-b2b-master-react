@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import CustomRoutes from "./pages/Routes";
 // import Header from './component/common/Header';
@@ -11,15 +11,150 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./component/common/Header";
 import TopMenu from "./component/common/TopMenu";
 import News from "./component/common/News";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getThemeColorData } from "./redux/services/themeColor";
+import { GET_THEME_COLOR_RESPONSE } from "./redux/actions/themeColor";
 
 const MainApp = () => {
+  const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state?.persist);
 
   // const DISABLE_MENU_ROUTE_LIST = [""];
   // useEffect(() => {
   //   setRouteList()
   // }, [location]);
+
+  useEffect(() => {
+    setThemeData();
+  }, []);
+
+  const setThemeData = async () => {
+    const hours = 12;
+
+    const now = new Date().getTime();
+    const themeColor = localStorage.getItem("themeColor");
+    // const themeColor = null;
+
+    if (themeColor == null) {
+      const data = await getThemeColorData();
+      console.log({ data });
+      // const data = [];
+      if (data?.data) {
+        if (data?.data?.length === 0) {
+          dispatch({
+            type: GET_THEME_COLOR_RESPONSE,
+            data: {
+              headerBgColor:
+                "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+              headerTextColor: "#ecad17",
+              menuBgColor:
+                "linear-gradient(rgb(255, 204, 46) 0%, rgb(255, 189, 20) 100%)",
+              subMenuBgColor: "#ffbd14",
+              subMenuTextColor: "#000000",
+              subHoverBgColor: "rgba(255,255,255,.2)",
+              menuTextColor: "#000000",
+              activeMenuBgColor: "#ffdc7a",
+              activeMenuTextColor: "#000000",
+              origin: "http://localhost:3001",
+              logoUrl:
+                "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
+              faviconUrl:
+                "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
+            },
+          });
+          localStorage.setItem("themeColor", now);
+        } else {
+          dispatch({
+            type: GET_THEME_COLOR_RESPONSE,
+            data: data?.data?.[0],
+          });
+          localStorage.setItem("themeColor", now);
+        }
+      } else {
+        dispatch({
+          type: GET_THEME_COLOR_RESPONSE,
+          data: {
+            headerBgColor: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+            headerTextColor: "#ecad17",
+            menuBgColor:
+              "linear-gradient(rgb(255, 204, 46) 0%, rgb(255, 189, 20) 100%)",
+            subMenuBgColor: "#ffbd14",
+            subMenuTextColor: "#000000",
+            subHoverBgColor: "rgba(255,255,255,.2)",
+            menuTextColor: "#000000",
+            activeMenuBgColor: "#ffdc7a",
+            activeMenuTextColor: "#000000",
+            origin: "http://localhost:3001",
+            logoUrl:
+              "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
+            faviconUrl:
+              "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
+          },
+        });
+        localStorage.setItem("themeColor", now);
+      }
+    } else {
+      if (now - themeColor > hours * 60 * 60 * 1000) {
+        localStorage.clear();
+        const data = await getThemeColorData();
+        if (data?.data) {
+          if (data?.data?.length === 0) {
+            dispatch({
+              type: GET_THEME_COLOR_RESPONSE,
+              data: {
+                headerBgColor:
+                  "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+                headerTextColor: "#ecad17",
+                menuBgColor:
+                  "linear-gradient(rgb(255, 204, 46) 0%, rgb(255, 189, 20) 100%)",
+                subMenuBgColor: "#ffbd14",
+                subMenuTextColor: "#000000",
+                subHoverBgColor: "rgba(255,255,255,.2)",
+                menuTextColor: "#000000",
+                activeMenuBgColor: "#ffdc7a",
+                activeMenuTextColor: "#000000",
+                origin: "http://localhost:3001",
+                logoUrl:
+                  "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
+                faviconUrl:
+                  "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
+              },
+            });
+            localStorage.setItem("themeColor", now);
+          } else {
+            dispatch({
+              type: GET_THEME_COLOR_RESPONSE,
+              data: data?.data?.[0],
+            });
+            localStorage.setItem("themeColor", now);
+          }
+        } else {
+          dispatch({
+            type: GET_THEME_COLOR_RESPONSE,
+            data: {
+              headerBgColor:
+                "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+              headerTextColor: "#ecad17",
+              menuBgColor:
+                "linear-gradient(rgb(255, 204, 46) 0%, rgb(255, 189, 20) 100%)",
+              subMenuBgColor: "#ffbd14",
+              subMenuTextColor: "#000000",
+              subHoverBgColor: "rgba(255,255,255,.2)",
+              menuTextColor: "#000000",
+              activeMenuBgColor: "#ffdc7a",
+              activeMenuTextColor: "#000000",
+              origin: "http://localhost:3001",
+              logoUrl:
+                "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
+              faviconUrl:
+                "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
+            },
+          });
+          localStorage.setItem("themeColor", now);
+        }
+      }
+    }
+  };
 
   return (
     <div

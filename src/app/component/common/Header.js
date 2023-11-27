@@ -36,10 +36,7 @@ const Header = () => {
       className="h-[60px] flex items-center"
     >
       <div className="container flex justify-between items-center px-2">
-        <img
-          src="https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png"
-          className="h-[40px]"
-        />
+        <img src={themeColor?.logoUrl} className="h-[40px]" />
         <div className="flex sm:flex-row flex-col items-center justify-center">
           <div className="flex items-center">
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] uppercase font-bold">
