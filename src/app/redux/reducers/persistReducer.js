@@ -13,10 +13,6 @@ const initialState = {
   isLoggedIn: false,
   userData: null,
   themeColor: {
-    faviconUrl:
-      "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1700899864608.png",
-    logoUrl:
-      "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
     headerBgColor: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
     headerTextColor: "#ecad17",
     menuBgColor:

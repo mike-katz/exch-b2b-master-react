@@ -57,10 +57,6 @@ const MainApp = () => {
               activeMenuBgColor: "#ffdc7a",
               activeMenuTextColor: "#000000",
               origin: "http://localhost:3001",
-              logoUrl:
-                "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
-              faviconUrl:
-                "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
             },
           });
           localStorage.setItem("themeColor", now);
@@ -86,10 +82,6 @@ const MainApp = () => {
             activeMenuBgColor: "#ffdc7a",
             activeMenuTextColor: "#000000",
             origin: "http://localhost:3001",
-            logoUrl:
-              "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
-            faviconUrl:
-              "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
           },
         });
         localStorage.setItem("themeColor", now);
@@ -115,10 +107,6 @@ const MainApp = () => {
                 activeMenuBgColor: "#ffdc7a",
                 activeMenuTextColor: "#000000",
                 origin: "http://localhost:3001",
-                logoUrl:
-                  "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
-                faviconUrl:
-                  "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
               },
             });
             localStorage.setItem("themeColor", now);
@@ -145,10 +133,6 @@ const MainApp = () => {
               activeMenuBgColor: "#ffdc7a",
               activeMenuTextColor: "#000000",
               origin: "http://localhost:3001",
-              logoUrl:
-                "https://bx-s3-dev-001.s3.amazonaws.com/theme-logo/1701089497627.png",
-              faviconUrl:
-                "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/theme-logo/1701089497884.png",
             },
           });
           localStorage.setItem("themeColor", now);
