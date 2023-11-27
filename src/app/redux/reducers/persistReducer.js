@@ -11,22 +11,21 @@ import {
 const initialState = {
   isLoggedIn: false,
   userData: null,
-  loginModalVisibleState: false,
-  signupModalVisibleState: false,
   themeColor: {
-    bottomImageContainerBg: "#6D081D",
     faviconUrl:
       "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
     logoUrl:
       "https://bx-s3-dev-001.s3.ap-southeast-1.amazonaws.com/Logo/CBTF-logo.png",
-    commonActiveColor: "#C10930",
-    commonBgColor: "#343435",
-    commonHeighLightColor: "#EBDA8D",
-    commonTextColor: "#FFFFFF",
-    loginSignupBg: "#005098",
-    loginSignupText: "#FFFFFF",
-    topHeaderBgColor: "#292525",
-    topHeaderTextColor: "#FFFFFF",
+    headerBgColor: "linear-gradient(rgb(53, 53, 53), rgb(17, 17, 17))",
+    headerTextColor: "#ecad17",
+    menuBgColor:
+      "linear-gradient(rgb(255, 204, 46) 0%, rgb(255, 189, 20) 100%)",
+    subMenuBgColor: "#ffbd14",
+    subMenuTextColor: "#000000",
+    subHoverBgColor: "rgba(255,255,255,.2)",
+    menuTextColor: "#000000",
+    activeMenuBgColor: "#ffdc7a",
+    activeMenuTextColor: "#000000",
   },
 };
 

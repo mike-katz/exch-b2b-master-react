@@ -9,7 +9,7 @@ import jwtDecode from "jwt-decode";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { userData } = useSelector((state) => state?.persist);
+  const { userData, themeColor } = useSelector((state) => state?.persist);
   const [isLoading, setIsLoading] = useState(false);
 
   const { token } = useSelector((state) => state?.persist);
@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <div
-      style={{ backgroundImage: "linear-gradient(#353535, #111111)" }}
+      style={{ background: themeColor?.headerBgColor }}
       className="h-[60px] flex items-center"
     >
       <div className="container flex justify-between items-center px-2">
@@ -45,7 +45,10 @@ const Header = () => {
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] uppercase font-bold">
               {roleStatusWithoutColor(role)}
             </div>
-            <div className="text-[#ecad17] text-[12px] font-black ml-2">
+            <div
+              style={{ color: themeColor?.headerTextColor }}
+              className="text-[12px] font-black ml-2"
+            >
               {userData?.username}
             </div>
           </div>
@@ -53,7 +56,10 @@ const Header = () => {
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] capitalize font-bold">
               main
             </div>
-            <div className="text-[#ecad17] text-[12px] font-black ml-2">
+            <div
+              style={{ color: themeColor?.headerTextColor }}
+              className="text-[12px] font-black ml-2"
+            >
               IR {amountFormate(userData?.balance)}
             </div>
           </div>
