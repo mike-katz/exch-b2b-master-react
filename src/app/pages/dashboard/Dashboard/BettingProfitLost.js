@@ -19,6 +19,7 @@ import {
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const BettingProfitLost = (props) => {
   const { userId } = useParams();
@@ -41,6 +42,7 @@ const BettingProfitLost = (props) => {
   const [perPage, setPerPage] = useState(20);
 
   const [isLoading, setIsLoading] = useState(false);
+  const { themeColor } = useSelector((state) => state?.persist);
 
   const onRefreshPagination = (count) => {
     setCurrentPage(count);
@@ -560,7 +562,11 @@ const BettingProfitLost = (props) => {
         <div className="col-span-6 lg:col-span-2">
           <button
             onClick={onClickSubmit}
-            className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+            style={{
+              background: themeColor?.headerBgColor,
+              color: themeColor?.headerTextColor,
+            }}
+            className="rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
           >
             SUBMIT
           </button>

@@ -9,8 +9,10 @@ import Loader from "../../../component/common/Loader";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { BET_STATUS, MARKET_TYPE } from "../../../utils/dropdown";
+import { useSelector } from "react-redux";
 
 const BettingHistory = ({ username }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const { userId } = useParams();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions(); // eslint-disable-line
   // const [isVisibleHistory, setIsVisibleHistory] = useState(false);
@@ -30,8 +32,6 @@ const BettingHistory = ({ username }) => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
-
-  console.log({ marketType });
 
   useEffect(() => {
     getSportList();
@@ -226,7 +226,11 @@ const BettingHistory = ({ username }) => {
         <div className="col-span-6 lg:col-span-2">
           <button
             onClick={onClickSubmit}
-            className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+            style={{
+              background: themeColor?.headerBgColor,
+              color: themeColor?.headerTextColor,
+            }}
+            className="rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
           >
             SUBMIT
           </button>

@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { getBetHistoryData } from "../../redux/services/MarketAnalytics";
 import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const BetHistory = (props) => {
   const { eventId } = useParams();
+  const { themeColor } = useSelector((state) => state?.persist);
 
   const [activeMenu, setActiveMenu] = useState("matched");
   const [pageBackAllData, setPageBackAllData] = useState([]);
@@ -93,8 +95,12 @@ const BetHistory = (props) => {
       <div className="p-2">
         {/* <div className="flex justify-end"> */}
         <Link
+          style={{
+            background: themeColor?.headerBgColor,
+            color: themeColor?.headerTextColor,
+          }}
           to={`/bet-history/${eventId}`}
-          className="w-full text-[14px] cursor-pointer bg-[#000000] text-[#feba11] rounded px-2 h-[25px] font-black flex items-center justify-center"
+          className="w-full text-[14px] cursor-pointer rounded px-2 h-[25px] font-black flex items-center justify-center"
         >
           View All
         </Link>

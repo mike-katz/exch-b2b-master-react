@@ -19,7 +19,9 @@ import jwtDecode from "jwt-decode";
 import { Switch } from "@material-tailwind/react";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
-  const { userData, token } = useSelector((state) => state?.persist);
+  const { userData, token, themeColor } = useSelector(
+    (state) => state?.persist
+  );
 
   const userDataJWT = jwtDecode(token);
 
@@ -264,7 +266,11 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
                 <button
                   type="submit"
                   onClick={handleSubmit}
-                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
+                  className="rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
                 >
                   {isLoadingSubmit && <Loader color="#feba11" size={10} />}
                   Create

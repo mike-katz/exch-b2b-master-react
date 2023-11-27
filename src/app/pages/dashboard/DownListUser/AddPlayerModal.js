@@ -8,7 +8,7 @@ import CommonInput from "../../../component/form/CommonInput";
 import { useSelector } from "react-redux";
 
 const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
-  const { userData } = useSelector((state) => state?.persist);
+  const { userData, themeColor } = useSelector((state) => state?.persist);
   const onClickAddPlayer = async (values) => {
     const payload = {
       ...values,
@@ -131,8 +131,12 @@ const AddPlayerModal = ({ isVisible, onCloseMenu, onRefreshTable }) => {
               </div>
               <div className="flex items-center justify-center p-[15px]">
                 <button
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
                   onClick={handleSubmit}
-                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+                  className="rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
                 >
                   Create
                 </button>

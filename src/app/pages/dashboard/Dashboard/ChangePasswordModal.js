@@ -6,8 +6,10 @@ import { changePasswordSchema } from "../../../utils/validationSchema";
 import CommonInput from "../../../component/form/CommonInput";
 import { updateProfileData } from "../../../redux/services/DownLineUser";
 import Loader from "../../../component/common/Loader";
+import { useSelector } from "react-redux";
 
 const ChangePasswordModal = ({ isVisible, onCloseMenu, userId }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmitNewPassword = async (values) => {
@@ -88,9 +90,13 @@ const ChangePasswordModal = ({ isVisible, onCloseMenu, userId }) => {
               </div>
               <div className="flex items-center justify-center p-[15px]">
                 <button
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
                   disabled={isLoading}
                   onClick={handleSubmit}
-                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+                  className="rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
                 >
                   {isLoading && <Loader color="#feba11" size={10} />}
                   Submit

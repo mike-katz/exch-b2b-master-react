@@ -59,7 +59,13 @@ const CreditRefModal = ({ isVisible, onCloseMenu }) => {
           </div>
         </div>
         <div className="flex items-center justify-center p-[15px]">
-          <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]">
+          <button
+            style={{
+              background: themeColor?.headerBgColor,
+              color: themeColor?.headerTextColor,
+            }}
+            className="rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+          >
             Submit
           </button>
         </div>

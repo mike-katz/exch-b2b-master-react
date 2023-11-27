@@ -4,6 +4,7 @@ import Loader from "../../../component/common/Loader";
 import Model from "../../../component/common/Modal";
 import { changeStatusData } from "../../../redux/services/DownLineUser";
 import { roleStatus } from "../../../utils/helper";
+import { useSelector } from "react-redux";
 
 const ChangeStatusModal = ({
   isVisible,
@@ -14,6 +15,7 @@ const ChangeStatusModal = ({
   activeUser,
   activeRole,
 }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const [activeStatus, setActiveStatus] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -198,9 +200,13 @@ const ChangeStatusModal = ({
             </div>
           </div>
           <button
+            style={{
+              background: themeColor?.headerBgColor,
+              color: themeColor?.headerTextColor,
+            }}
             disabled={isLoading}
             onClick={onSubmitStatus}
-            className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+            className="rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
           >
             {isLoading && <Loader color="#feba11" size={10} />} Change
           </button>

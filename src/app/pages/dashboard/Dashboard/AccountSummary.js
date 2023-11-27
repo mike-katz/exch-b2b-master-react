@@ -9,8 +9,10 @@ import EditCasinoEnable from "./EditCasinoEnable";
 import EditCommissionModal from "./EditCommissionModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
 import EditMobileNumberModal from "./EditMobileNumberModal";
+import { useSelector } from "react-redux";
 
 const AccountSummary = () => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   const [isVisibleExposureLimit, setIsVisibleExposureLimit] = useState(false);
   const [isVisibleCommission, setIsVisibleCommission] = useState(false);
@@ -132,7 +134,13 @@ const AccountSummary = () => {
           Account Summary
         </div>
         {/* <div className="text-[#243a48] text-[16px] font-black">Logs</div> */}
-        <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black w-[58px]">
+        <button
+          style={{
+            background: themeColor?.headerBgColor,
+            color: themeColor?.headerTextColor,
+          }}
+          className="rounded px-2 text-[11px] h-[28px] font-black w-[58px]"
+        >
           <Link target="_blank" to={`/profile-logs-all/${userId}`} className="">
             All Log
           </Link>

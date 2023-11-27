@@ -5,7 +5,7 @@ import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
 
 const News = () => {
-  const { token } = useSelector((state) => state?.persist);
+  const { token, themeColor } = useSelector((state) => state?.persist);
 
   const [newsValue, setNewsValue] = useState("");
   const [originValue, setOriginValue] = useState("");
@@ -59,7 +59,11 @@ const News = () => {
 
       <button
         onClick={onClickSubmitNews}
-        className="w-full bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black mt-2"
+        style={{
+          background: themeColor?.headerBgColor,
+          color: themeColor?.headerTextColor,
+        }}
+        className="w-full rounded px-2 text-[11px] h-[28px] font-black mt-2"
       >
         {isLoading && <Loader color="#feba11" size={10} />}
         Submit

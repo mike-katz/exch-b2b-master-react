@@ -7,6 +7,7 @@ import Loader from "../../../component/common/Loader";
 import { updateProfileData } from "../../../redux/services/DownLineUser";
 import { Switch } from "@material-tailwind/react";
 import CommonInput from "../../../component/form/CommonInput";
+import { useSelector } from "react-redux";
 
 const EditCasinoEnable = ({
   isVisible,
@@ -19,6 +20,7 @@ const EditCasinoEnable = ({
   isIntCasino,
   isSportBook,
 }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const onSubmitEditMobileNumber = async (values) => {
@@ -167,8 +169,12 @@ const EditCasinoEnable = ({
               </div>
               <div className="flex items-center justify-center p-[15px]">
                 <button
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
                   onClick={handleSubmit}
-                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+                  className="rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
                 >
                   {isLoadingSubmit && <Loader color="#feba11" size={10} />}{" "}
                   Change

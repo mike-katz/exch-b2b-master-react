@@ -6,6 +6,7 @@ import { editMobileSchema } from "../../../utils/validationSchema";
 import CommonInput from "../../../component/form/CommonInput";
 import Loader from "../../../component/common/Loader";
 import { updateProfileData } from "../../../redux/services/DownLineUser";
+import { useSelector } from "react-redux";
 
 const EditMobileNumberModal = ({
   isVisible,
@@ -14,6 +15,7 @@ const EditMobileNumberModal = ({
   onRefreshTable,
   activeMobileNumber,
 }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const onSubmitEditMobileNumber = async (values) => {
@@ -84,8 +86,12 @@ const EditMobileNumberModal = ({
               </div>
               <div className="flex items-center justify-center p-[15px]">
                 <button
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
                   onClick={handleSubmit}
-                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+                  className="rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
                 >
                   {isLoadingSubmit && <Loader color="#feba11" size={10} />}{" "}
                   Change

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBalance } from "../../../redux/actions/persistAction";
 
 const BankingMaster = () => {
-  const { userData } = useSelector((state) => state?.persist);
+  const { userData, themeColor } = useSelector((state) => state?.persist);
   const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -386,7 +386,13 @@ const BankingMaster = () => {
               </th>
               <th className="text-right border-r border-[#7e97a7]">Remark</th>
               <th className="text-center">
-                <button className="bg-[#000000] text-[#feba11] rounded px-2 text-[11px] h-[28px] font-black w-[58px]">
+                <button
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
+                  className="rounded px-2 text-[11px] h-[28px] font-black w-[58px]"
+                >
                   <Link target="_blank" to={`/banking-logs-all`} className="">
                     All Log
                   </Link>
@@ -610,8 +616,12 @@ const BankingMaster = () => {
               )}
             </div>
             <button
+              style={{
+                background: themeColor?.headerBgColor,
+                color: themeColor?.headerTextColor,
+              }}
               onClick={onSubmitPayment}
-              className="bg-[#000000] text-[#feba11] rounded px-2 w-[228px] h-[35px] font-black text-[14px] whitespace-nowrap ml-[10px] flex items-center justify-center"
+              className="rounded px-2 w-[228px] h-[35px] font-black text-[14px] whitespace-nowrap ml-[10px] flex items-center justify-center"
             >
               Submit{" "}
               <div className="bg-[rgba(255,255,255,.2)] w-[24px] h-[24px] rounded-full text-[12px] font-normal text-center text-[#FFFFFF] leading-[24px] mx-2">

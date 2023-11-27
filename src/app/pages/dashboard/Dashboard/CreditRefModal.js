@@ -8,6 +8,7 @@ import CommonInput from "../../../component/form/CommonInput";
 import { Link } from "react-router-dom";
 import Loader from "../../../component/common/Loader";
 import { amountFormate } from "../../../utils/helper";
+import { useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
 
 const CreditRefModal = ({
@@ -17,6 +18,7 @@ const CreditRefModal = ({
   onRefreshTable,
   activeCreditRef,
 }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   // const navigate = useNavigate();
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
@@ -108,9 +110,13 @@ const CreditRefModal = ({
               </div>
               <div className="flex items-center justify-center p-[15px]">
                 <button
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
                   disabled={isLoadingSubmit}
                   onClick={handleSubmit}
-                  className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
+                  className="rounded px-2 text-[13px] h-[25px] font-black w-[140px] flex items-center justify-center"
                 >
                   {isLoadingSubmit && <Loader color="#feba11" size={10} />}
                   Submit

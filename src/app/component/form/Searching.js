@@ -1,7 +1,9 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Searching = ({ onChange, onSubmitSearch }) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   return (
     <div className="flex items-center border border-[#cdcdcd] bg-[#FFFFFF] p-[2px] rounded">
       <FaSearch color="#000000" size={15} className="ml-1" />
@@ -14,7 +16,11 @@ const Searching = ({ onChange, onSubmitSearch }) => {
       />
       <button
         onClick={onSubmitSearch}
-        className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black"
+        style={{
+          background: themeColor?.headerBgColor,
+          color: themeColor?.headerTextColor,
+        }}
+        className="rounded px-2 text-[13px] h-[25px] font-black"
       >
         Search
       </button>

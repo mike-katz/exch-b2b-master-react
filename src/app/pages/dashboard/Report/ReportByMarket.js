@@ -20,8 +20,10 @@ import {
   getReportSportTotalPLData,
 } from "../../../redux/services/report";
 import { numberOppositeConvert } from "../../../utils/helper";
+import { useSelector } from "react-redux";
 
 const ReportByMarket = (props) => {
+  const { themeColor } = useSelector((state) => state?.persist);
   const { userId } = useParams();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions(); // eslint-disable-line
   const [pageData, setPageData] = useState([]);
@@ -532,7 +534,11 @@ const ReportByMarket = (props) => {
         <div className="col-span-6 lg:col-span-2">
           <button
             onClick={onClickSubmit}
-            className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+            style={{
+              background: themeColor?.headerBgColor,
+              color: themeColor?.headerTextColor,
+            }}
+            className="rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
           >
             SUBMIT
           </button>

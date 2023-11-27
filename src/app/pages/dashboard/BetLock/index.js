@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import Loader from "../../../component/common/Loader";
 import { betLockData, getBetLockData } from "../../../redux/services/BetLock";
+import { useSelector } from "react-redux";
 
 const BetLock = () => {
   //   const navigate = useNavigate();
@@ -10,6 +11,8 @@ const BetLock = () => {
   const [pageData, setPageData] = useState([]);
   const [openChildren, setOpenChildren] = useState([]);
   const [openChildrenMarket, setOpenChildrenMarket] = useState([]);
+
+  const { themeColor } = useSelector((state) => state?.persist);
 
   useEffect(() => {
     getMarkets();
@@ -224,7 +227,11 @@ const BetLock = () => {
                                             : "lock"
                                         );
                                       }}
-                                      className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black"
+                                      style={{
+                                        background: themeColor?.headerBgColor,
+                                        color: themeColor?.headerTextColor,
+                                      }}
+                                      className="rounded px-2 text-[13px] h-[25px] font-black"
                                     >
                                       {lastItem?.status === 1
                                         ? "Unlock"
@@ -270,7 +277,13 @@ const BetLock = () => {
                                                     : "lock"
                                                 );
                                               }}
-                                              className="bg-[#000000] text-[#feba11] rounded px-2 text-[13px] h-[25px] font-black"
+                                              style={{
+                                                background:
+                                                  themeColor?.headerBgColor,
+                                                color:
+                                                  themeColor?.headerTextColor,
+                                              }}
+                                              className="rounded px-2 text-[13px] h-[25px] font-black"
                                             >
                                               {marketItem?.status === 1
                                                 ? "Unlock"
