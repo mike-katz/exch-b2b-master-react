@@ -208,7 +208,7 @@ const TopMenu = () => {
             >
               <MenuItem
                 onClick={() => {
-                  onClickMenu("/down-list-client");
+                  onClickMenu("/reports-by-client");
                 }}
                 className={`m-0 rounded-none hover:bg-[${
                   themeColor?.subHoverBgColor
@@ -222,12 +222,12 @@ const TopMenu = () => {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  onClickMenu("/down-list-user");
+                  onClickMenu("/reports-by-user");
                 }}
                 className={`m-0 rounded-none hover:bg-[${
                   themeColor?.subHoverBgColor
                 }] focus:bg-transparent ${
-                  activeMenu === "/down-list-user"
+                  activeMenu === "/reports-by-user"
                     ? `bg-[${themeColor?.activeMenuBgColor}] text-[${themeColor?.activeMenuTextColor}] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]`
                     : ""
                 } border-t border-[rgba(0,0,0,.2)]`}

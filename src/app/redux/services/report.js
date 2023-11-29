@@ -192,3 +192,37 @@ export const getReportIntCasinoListData = async (payload) => {
 
   return data;
 };
+
+export const getReportUserListData = async (payload) => {
+  let queryString = "";
+
+  if (payload?.limit) {
+    queryString += `${queryString ? "&" : "?"}limit=${payload?.limit}`;
+  }
+
+  if (payload?.page) {
+    queryString += `${queryString ? "&" : "?"}page=${payload?.page}`;
+  }
+
+  if (payload?.from) {
+    queryString += `${queryString ? "&" : "?"}from=${payload?.from}`;
+  }
+
+  if (payload?.to) {
+    queryString += `${queryString ? "&" : "?"}to=${payload?.to}`;
+  }
+
+  if (payload?.timeZone) {
+    queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
+  }
+
+  if (payload?.userName) {
+    queryString += `${queryString ? "&" : "?"}userName=${payload?.userName}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getReportUserList}${queryString}`
+  );
+
+  return data;
+};
