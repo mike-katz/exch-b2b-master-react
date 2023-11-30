@@ -106,7 +106,6 @@ const TopMenu = () => {
                   </Button>
                 </MenuHandler>
               )}
-
               <MenuList
                 className={`bg-[${themeColor?.subMenuBgColor}] rounded-none border-none mt-[-5px] p-0 text-[12px] font-extrabold text-[${themeColor?.subMenuTextColor}]`}
               >
