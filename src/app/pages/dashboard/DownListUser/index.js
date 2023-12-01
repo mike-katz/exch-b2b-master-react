@@ -57,6 +57,7 @@ const DownListMaster = () => {
   const [statusParams, setStatusParams] = useState("");
 
   const [totalPage, setTotalPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
@@ -85,7 +86,7 @@ const DownListMaster = () => {
       setPerPage(data?.data?.limit);
       setCurrentPage(data?.data?.page);
       setPageData(data?.data?.results);
-      setPageData(data?.data?.results);
+      setTotalResults(data?.data?.totalResults);
     }
     setIsLoadingTable(false);
   };
@@ -261,6 +262,18 @@ const DownListMaster = () => {
       }
       setIsLoadingRecall(false);
     }
+  };
+
+  const onChangePerPage = (value) => {
+    setPerPage(value);
+    setCurrentPage(1);
+    const payload = {
+      page: 1,
+      limit: value,
+      search: searchParams,
+      status: statusParams,
+    };
+    getDownLineUser(payload);
   };
 
   const currentStatusActive = userData?.status === "Active";
@@ -672,8 +685,11 @@ const DownListMaster = () => {
       </div>
       <div className="flex justify-center my-7 mb:pb-0 pb-20">
         <Pagination
+          onChangePerPage={onChangePerPage}
+          totalResults={totalResults}
           currentPage={currentPage || 1}
           itemsPerPage={totalPage || 1}
+          perPage={perPage}
           onChange={onRefreshPagination}
         />
       </div>

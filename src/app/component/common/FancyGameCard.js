@@ -290,7 +290,7 @@ const FancyGameCard = (props) => {
                             Number(price) > 0 ? "text-[green]" : "text-[red]"
                           }`}
                         >
-                          {price}
+                          {price ? Number(price)?.toFixed(2) : ""}
                         </span>
                       </div>
                     </div>

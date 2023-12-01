@@ -345,7 +345,14 @@ const DownLineUser = () => {
         </tbody>
       </table>
       <div className="flex justify-center  my-7">
-        <Pagination itemsPerPage={4} />
+        <Pagination
+          onChangePerPage={onChangePerPage}
+          totalResults={totalResults}
+          currentPage={currentPage || 1}
+          itemsPerPage={totalPage || 1}
+          perPage={perPage}
+          onChange={onRefreshPagination}
+        />
       </div>
       <div className="">
         <div className="fixed right-0 bottom-0 mt-2 w-full border-t border-[#d4d4d4] bg-[#eeeeee] py-2">

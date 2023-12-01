@@ -40,6 +40,7 @@ const ReportByMarket = (props) => {
   const [toDate, setToDate] = useState(moment().format("YYYY-MM-DD"));
 
   const [totalPage, setTotalPage] = useState(1);
+  // const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
@@ -1160,7 +1161,7 @@ const ReportByMarket = (props) => {
                   <tr key={index} className="even:bg-blue-gray-50/50">
                     <td
                       onClick={() => {
-                        onClickPl(item, false, false, "Aviator", "Aviator");
+                        onClickPl(item, false, false, "Casino", "Casino");
                       }}
                       className="text-left underline text-[#568bc8] cursor-pointer"
                     >

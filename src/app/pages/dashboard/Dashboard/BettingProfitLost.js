@@ -1380,8 +1380,11 @@ const BettingProfitLost = (props) => {
         {navigationData?.length > 0 && (
           <div className="flex justify-center my-7 mb:pb-0 pb-20">
             <Pagination
+              // onChangePerPage={onChangePerPage}
+              // totalResults={totalResults}
               currentPage={currentPage || 1}
               itemsPerPage={totalPage || 1}
+              // perPage={perPage}
               onChange={onRefreshPagination}
             />
           </div>

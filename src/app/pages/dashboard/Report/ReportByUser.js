@@ -20,6 +20,7 @@ const ReportByUser = (props) => {
   const [usernameValue, setUsernameValue] = useState("");
 
   const [totalPage, setTotalPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
@@ -69,6 +70,7 @@ const ReportByUser = (props) => {
       setPerPage(data?.data?.limit);
       setCurrentPage(Number(data?.data?.page));
       setPageData(data?.data?.results);
+      setTotalResults(data?.data?.totalResults);
     }
 
     setIsLoading(false);
@@ -91,6 +93,22 @@ const ReportByUser = (props) => {
     const payload = {
       page: 1,
       limit: perPage,
+      from: fromDate,
+      to: toDate,
+      userName: usernameValue,
+      timeZone: timeZone,
+      userId,
+    };
+
+    getAllPl(payload);
+  };
+
+  const onChangePerPage = (value) => {
+    setPerPage(value);
+    setCurrentPage(1);
+    const payload = {
+      page: 1,
+      limit: value,
       from: fromDate,
       to: toDate,
       userName: usernameValue,
@@ -218,8 +236,11 @@ const ReportByUser = (props) => {
         {pageData?.length > 0 && (
           <div className="flex justify-center my-7 mb:pb-0 pb-20">
             <Pagination
+              onChangePerPage={onChangePerPage}
+              totalResults={totalResults}
               currentPage={currentPage || 1}
               itemsPerPage={totalPage || 1}
+              perPage={perPage}
               onChange={onRefreshPagination}
             />
           </div>

@@ -167,7 +167,9 @@ const DetailGameCard = (props) => {
                                 : "text-[red]"
                             }`}
                           >
-                            {props?.oldPrice?.[key]}
+                            {props?.oldPrice?.[key]
+                              ? Number(props?.oldPrice?.[key])?.toFixed(2)
+                              : ""}
                           </span>
                         </div>
                       </div>

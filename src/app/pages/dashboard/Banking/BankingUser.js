@@ -32,6 +32,7 @@ const BankingMaster = () => {
   const [isEnableBalanceView, setIsEnableBalanceView] = useState(false);
 
   const [totalPage, setTotalPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
@@ -81,7 +82,7 @@ const BankingMaster = () => {
       setPerPage(data?.data?.limit);
       setCurrentPage(data?.data?.page);
       setPageData(data?.data?.results);
-      setPageData(data?.data?.results);
+      setTotalResults(data?.data?.totalResults);
     }
     setIsLoadingTable(false);
   };
@@ -362,6 +363,20 @@ const BankingMaster = () => {
       }
       setIsLoadingRecall(false);
     }
+  };
+
+  const onChangePerPage = (value) => {
+    setPerPage(value);
+    setCurrentPage(1);
+    const payload = {
+      page: 1,
+      limit: value,
+      search: searchParams,
+      status: statusParams,
+      // userId: activePageId,
+    };
+
+    getDownLineUser(payload);
   };
 
   return (
@@ -711,8 +726,11 @@ const BankingMaster = () => {
       </div>
       <div className="flex justify-center my-7 mb:pb-0 pb-20">
         <Pagination
+          onChangePerPage={onChangePerPage}
+          totalResults={totalResults}
           currentPage={currentPage || 1}
           itemsPerPage={totalPage || 1}
+          perPage={perPage}
           onChange={onRefreshPagination}
         />
       </div>

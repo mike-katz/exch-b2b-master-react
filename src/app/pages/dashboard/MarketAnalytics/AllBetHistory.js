@@ -16,6 +16,7 @@ const AllBetHistory = () => {
   // const [username, setUsername] = useState("");
 
   const [totalPage, setTotalPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
@@ -55,6 +56,7 @@ const AllBetHistory = () => {
       setPerPage(data?.data?.limit);
       setCurrentPage(data?.data?.page);
       setPageData(data?.data?.results);
+      setTotalResults(data?.data?.totalResults);
     }
 
     setIsLoading(false);
@@ -73,6 +75,18 @@ const AllBetHistory = () => {
 
   const onClickBack = () => {
     navigate(`/market-analytics/${eventId}`);
+  };
+
+  const onChangePerPage = (value) => {
+    setPerPage(value);
+    setCurrentPage(1);
+    const payload = {
+      page: 1,
+      limit: value,
+      eventId: eventId,
+    };
+
+    transactionsHistory(payload);
   };
 
   return (
@@ -214,8 +228,11 @@ const AllBetHistory = () => {
       {!isLoading && pageData?.length !== 0 && totalPage ? (
         <div className="flex justify-center my-7 mb:pb-0 pb-20">
           <Pagination
+            onChangePerPage={onChangePerPage}
+            totalResults={totalResults}
             currentPage={currentPage || 1}
             itemsPerPage={totalPage || 1}
+            perPage={perPage}
             onChange={onRefreshPagination}
           />
         </div>
