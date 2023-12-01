@@ -298,9 +298,9 @@ const BetList = () => {
                     </td>
                     <td className="font-black">{item?.stake}</td>
                     <td className="">
-                      {moment(item?.upddatedAt).format("DD/MM/YYYY")}
+                      {moment(item?.createdAt).format("DD/MM/YYYY")}
                       <br />
-                      {moment(item?.upddatedAt).format("hh:mm:ss A")}
+                      {moment(item?.createdAt).format("hh:mm:ss A")}
                     </td>
                     <td className="">
                       {moment(item?.upddatedAt).format("DD/MM/YYYY")}

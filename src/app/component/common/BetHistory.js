@@ -239,7 +239,7 @@ const BetHistory = (props) => {
                         >
                           {moment(item?.createdAt)?.format("DD/MM/YYYY")}
                           <br />
-                          {moment(item?.updatedAt)?.format("h:mm:ss A")}
+                          {moment(item?.createdAt)?.format("h:mm:ss A")}
                         </td>
                         <td
                           className={`${
