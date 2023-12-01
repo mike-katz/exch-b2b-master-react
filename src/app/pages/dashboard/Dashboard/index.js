@@ -25,6 +25,7 @@ import ChangeStatusModal from "./ChangeStatusModal";
 import CreditRefModal from "./CreditRefModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
 import jwtDecode from "jwt-decode";
+import { FaArrowDownShortWide } from "react-icons/fa6";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
@@ -60,6 +61,11 @@ const DownListMaster = () => {
   const userDataJWT = jwtDecode(token);
 
   const role = userDataJWT?.roles?.toString();
+
+  const [sortConfig, setSortConfig] = useState({
+    balance: null,
+    direction: "asc",
+  });
 
   useEffect(() => {
     getDownLineMaster();
@@ -301,6 +307,25 @@ const DownListMaster = () => {
   const currentStatusActive = userData?.status === "Active";
   const findUser = pageData?.find((item) => item?.roles?.toString() === "User");
 
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  useEffect(() => {
+    const sortedData = [...pageData].sort((a, b) => {
+      if (sortConfig.direction === "asc") {
+        return a[sortConfig.key] - b[sortConfig.key];
+      } else {
+        return b[sortConfig.key] - a[sortConfig.key];
+      }
+    });
+    setPageData(sortedData);
+  }, [sortConfig]);
+
   return (
     <div className="relative px-2">
       <CreditRefModal
@@ -464,8 +489,28 @@ const DownListMaster = () => {
             <tr>
               <th className="">Account</th>
               <th className="text-right">Credit Ref.</th>
-              <th className="text-right">Balance</th>
-              <th className="text-right">Exposure</th>
+              <th className="text-right">
+                <div
+                  className="flex justify-end items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("balance");
+                  }}
+                >
+                  Balance
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
+              <th className="text-right">
+                <div
+                  className="flex justify-end items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("exposure");
+                  }}
+                >
+                  Exposure
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
               <th className="text-right">Avail. bal.</th>
               {findUser ? <th className="text-right">Exposure Limit</th> : null}
               <th className="text-right">Ref. P/L</th>
