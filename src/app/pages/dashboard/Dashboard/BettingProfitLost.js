@@ -725,7 +725,7 @@ const BettingProfitLost = (props) => {
             )}
             {!isLoading &&
               pageData?.length === 0 &&
-              Number(aviatorData?.total) <= 0 &&
+              Number(aviatorData?.total) === 0 &&
               !st8Data?.totalPL &&
               !auraData?.pl && (
                 <tr>
