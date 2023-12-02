@@ -183,26 +183,19 @@ const BetList = () => {
 
   useEffect(() => {
     const sortedData = [...pageData].sort((a, b) => {
-      console.log("Direction:", sortConfig.direction);
-      console.log("Key:", sortConfig.key);
-
       if (sortConfig.direction === "asc") {
-        console.log("Sorting in ascending order");
-        // return a[sortConfig.key] - b[sortConfig.key];
         const eventA = a?.[sortConfig.key]?.toLowerCase();
         const eventB = b?.[sortConfig.key]?.toLowerCase();
 
         return eventA.localeCompare(eventB);
       } else {
-        console.log("Sorting in descending order");
-        // return b[sortConfig.key] - a[sortConfig.key];
         const eventA = a?.[sortConfig.key]?.toLowerCase();
         const eventB = b?.[sortConfig.key]?.toLowerCase();
 
         return eventB.localeCompare(eventA);
       }
     });
-    console.log({ sortedData });
+
     setPageData(sortedData);
   }, [sortConfig]);
 

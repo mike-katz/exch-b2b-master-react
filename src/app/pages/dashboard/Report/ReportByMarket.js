@@ -279,7 +279,7 @@ const ReportByMarket = (props) => {
       setIsLoading(true);
 
       const data = await getReportSportListData(payload);
-      console.log({ data });
+
       if (data) {
         if (navigation?.length === 0) {
           customizeNavigation.push({
@@ -292,7 +292,6 @@ const ReportByMarket = (props) => {
           });
         }
 
-        console.log({ customizeNavigation });
         setNavigationData(customizeNavigation);
 
         setTotalPage(data?.data?.totalPages);
@@ -311,8 +310,6 @@ const ReportByMarket = (props) => {
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
       };
-
-      console.log({ payload });
 
       setIsLoading(true);
 
@@ -551,8 +548,6 @@ const ReportByMarket = (props) => {
       totalCommission += Number(item?.commission || 0) || 0;
     });
   }
-
-  console.log({ totalPL });
 
   return (
     <div>

@@ -11,3 +11,15 @@ export const getLogin = async (payload) => {
 
   return data;
 };
+
+export const getExposerData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.userId) {
+    queryParams += `${queryParams ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  const { data } = await Rest.get(APIEndpoint.getExposer + queryParams);
+
+  return data;
+};

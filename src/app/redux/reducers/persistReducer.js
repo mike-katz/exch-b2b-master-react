@@ -29,7 +29,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action?.type) {
     case GET_THEME_COLOR_RESPONSE:
-      console.log({ action });
       return {
         ...state,
         themeColor: action?.data || {},

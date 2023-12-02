@@ -63,8 +63,6 @@ const ReportByUser = (props) => {
 
     const data = await getReportUserListData(payload);
 
-    console.log({ data });
-
     if (data) {
       setTotalPage(data?.data?.totalPages);
       setPerPage(data?.data?.limit);

@@ -24,7 +24,7 @@ const LineGameCard = (props) => {
         props?.oldData?.map((item) => {
           customizeBlinkData.push([false, false]);
         });
-        // console.log(customizeBlinkData);
+
         setBlinkData(customizeBlinkData);
       }, 200);
     }
@@ -148,9 +148,6 @@ const LineGameCard = (props) => {
           props?.linePlArray?.find(
             (plArray) => plArray?.exMarketId === item?.exMarketId
           )?.runnerData || [];
-
-        // console.log(props?.linePlArray);
-        // console.log(props?.data);
 
         return (
           <>

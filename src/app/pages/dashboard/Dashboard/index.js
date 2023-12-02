@@ -26,6 +26,7 @@ import CreditRefModal from "./CreditRefModal";
 import EditExposureLimitModal from "./EditExposureLimitModal";
 import jwtDecode from "jwt-decode";
 import { FaArrowDownShortWide } from "react-icons/fa6";
+import BalanceModel from "../../../component/common/BalanceModel";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
@@ -58,6 +59,8 @@ const DownListMaster = () => {
 
   const [activePageId, setActivePageId] = useState("");
   const [activePageRole, setActivePageRole] = useState([]);
+  const [isVisibleBalanceModal, setIsVisibleBalanceModal] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState(false);
 
   const userDataJWT = jwtDecode(token);
 
@@ -317,6 +320,21 @@ const DownListMaster = () => {
     setSortConfig({ key, direction });
   };
 
+  const onClickExposer = (userId, exposure) => {
+    const payload = {
+      userId,
+      exposure,
+    };
+
+    setCurrentUserData(payload);
+    setIsVisibleBalanceModal(true);
+  };
+
+  const onCloseBalanceModal = () => {
+    setIsVisibleBalanceModal(false);
+    setCurrentUserData(false);
+  };
+
   useEffect(() => {
     const sortedData = [...pageData].sort((a, b) => {
       if (sortConfig.direction === "asc") {
@@ -372,6 +390,12 @@ const DownListMaster = () => {
         onRefreshTable={onRefreshTable}
         isVisible={isVisibleAddPlayer}
         onCloseMenu={onCloseAddPlayer}
+      />
+
+      <BalanceModel
+        isVisible={isVisibleBalanceModal}
+        onCloseMenu={onCloseBalanceModal}
+        currentUserData={currentUserData}
       />
 
       <div className="grid grid-cols-12 gap-4 mt-2">
@@ -609,7 +633,18 @@ const DownListMaster = () => {
                       </div>
                     </td>
                     <td className="text-right">
-                      <span className="text-[#d0021b]">
+                      <span
+                        onClick={() => {
+                          if (item?.roles?.toString() === "User") {
+                            onClickExposer(item?._id, item?.exposure);
+                          }
+                        }}
+                        className={`text-[#d0021b] ${
+                          item?.roles?.toString() === "User"
+                            ? "cursor-pointer"
+                            : ""
+                        }`}
+                      >
                         ({amountFormate(item?.exposure) || 0})
                       </span>
                     </td>

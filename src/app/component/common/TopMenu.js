@@ -24,10 +24,6 @@ const TopMenu = () => {
 
   const { token, themeColor } = useSelector((state) => state?.persist);
 
-  {
-    console.log({ themeColor });
-  }
-
   const userData = jwtDecode(token);
 
   const role = userData?.roles?.toString();

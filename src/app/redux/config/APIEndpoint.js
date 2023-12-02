@@ -18,6 +18,7 @@ export default class APIEndpoint {
   static creditRefList = "api/user/creditlogs";
   static updateStatus = "api/user/update-status";
   static editExposureLimit = "api/user/change-exposure";
+  static getExposer = "api/user/exposure-list";
 
   // BENKING
   static exportCSVFile = "api/user/export";
@@ -67,4 +68,8 @@ export default class APIEndpoint {
   static getReportAviatorList = "api/report/aviator/list";
   static getReportIntCasinoList = "api/report/intCasino/list";
   static getReportUserList = "api/report/user/list";
+
+  // ST8
+  static gamesBalance = "st8/balance";
+  static gamesTransfer = "st8/transfer";
 }

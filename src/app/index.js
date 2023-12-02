@@ -38,7 +38,6 @@ const MainApp = () => {
 
     if (themeColor == null) {
       const data = await getThemeColorData();
-      console.log({ data });
       // const data = [];
       if (data?.data) {
         if (data?.data?.length === 0) {
@@ -162,7 +161,6 @@ const MainApp = () => {
           theme="light"
         />
         <Helmet>
-          {console.log({ themeColor })}
           <link rel="icon" href={themeColor?.faviconUrl} />
           <link rel="apple-touch-icon" href={themeColor?.faviconUrl} />
         </Helmet>

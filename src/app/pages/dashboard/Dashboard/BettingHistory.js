@@ -65,8 +65,6 @@ const BettingHistory = ({ username }) => {
       };
     }
 
-    console.log({ payload });
-
     setIsLoadingTable(true);
     const data = await getBetHistoryData(payload);
 
@@ -93,12 +91,10 @@ const BettingHistory = ({ username }) => {
   };
 
   const onChangeBetStatus = (e) => {
-    console.log(e?.target?.value);
     setBetStatus(e?.target?.value);
   };
 
   const onChangeMarketStatus = (e) => {
-    console.log(e?.target?.value);
     setMarketType(e?.target?.value);
   };
 

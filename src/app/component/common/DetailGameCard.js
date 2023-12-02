@@ -132,8 +132,6 @@ const DetailGameCard = (props) => {
 
               const blinkValue = blinkData?.[index];
 
-              // console.log({ blinkValue });
-
               return (
                 <>
                   <div key={index} className="grid grid-cols-12">
@@ -145,16 +143,6 @@ const DetailGameCard = (props) => {
                           : "border-b"
                       }`}
                     >
-                      {/* {console.log(
-                        props?.data?.type === "bookmaker"
-                          ? props?.data?.exMarketId
-                          : ""
-                      )} */}
-                      {/* {console.log(
-                        props?.data?.type === "bookmaker"
-                          ? props?.oldPrice
-                          : props?.data
-                      )} */}
                       <div className="flex items-center w-full">
                         <div className="cursor-pointer flex justify-between flex-col md:flex-row w-full">
                           <div className="text-[#3B5160] text-[13px] font-bold text-ellipsis">

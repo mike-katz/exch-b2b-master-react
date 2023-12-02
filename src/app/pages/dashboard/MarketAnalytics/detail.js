@@ -126,7 +126,6 @@ const MarketAnalyticsDetail = () => {
         const lineMarketOdds = [];
 
         docsSnap.forEach((doc) => {
-          // console.log(doc.data());
           if (doc.data()?.state?.status !== "SUPERCLOSED") {
             if (doc?.data()?.type === "fancy") {
               fancyMarket.push(doc.data());
@@ -178,11 +177,8 @@ const MarketAnalyticsDetail = () => {
           sortedData?.map((item) => {
             sortRunnerObject.push(item?.selectionId);
           });
-          // console.log(item?.selectionId);
 
           sortRunnerObject?.map((key, index) => {
-            // console.log({ key });
-
             const runners = item?.runners?.find(
               (item) => item?.selectionId == key
             )?.exchange;
@@ -424,7 +420,6 @@ const MarketAnalyticsDetail = () => {
         const selectionIdArray = [];
 
         item?.selectionId?.map((si, index) => {
-          // console.log({ si });
           if (item?.type === "fancy") {
             const fancyOdds = liveFancyOdds.current?.find(
               (odds) => odds?.exMarketId === item?.exMarketId
@@ -455,8 +450,6 @@ const MarketAnalyticsDetail = () => {
             Object.assign(selectionId, si);
           }
         });
-
-        // console.log({ selectionId });
 
         cusData?.push({
           exMarketId: item?.exMarketId,
@@ -640,8 +633,6 @@ const MarketAnalyticsDetail = () => {
                     )}
                   </div>
                   <div>
-                    {/* {console.log({ pagePlData })} */}
-                    {/* {console.log({ pageData })} */}
                     {!isLoading &&
                       pageData?.map((item, index) => {
                         const runnerData = pagePlData?.find(

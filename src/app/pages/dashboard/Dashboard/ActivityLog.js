@@ -67,7 +67,7 @@ const ActivityLog = () => {
                 // let ipData = [];
 
                 // if (Object.keys(ip).length > 0) {
-                //   console.log(ip);
+
                 //   ipData = JSON.parse(ip);
                 // }
 

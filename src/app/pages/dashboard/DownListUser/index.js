@@ -28,6 +28,8 @@ import { amountFormate, roleStatus } from "../../../utils/helper";
 import { USER_STATUS } from "../../../utils/dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBalance } from "../../../redux/actions/persistAction";
+import BalanceModel from "../../../component/common/BalanceModel";
+import { FaArrowDownShortWide } from "react-icons/fa6";
 
 const DownListMaster = () => {
   const navigate = useNavigate();
@@ -45,6 +47,8 @@ const DownListMaster = () => {
   const [casinoBalance, setCasinoBalance] = useState(0);
   const [isLoadingBalance, setIsLoadingBalance] = useState(false);
   const [isLoadingRecall, setIsLoadingRecall] = useState(false);
+  const [isVisibleBalanceModal, setIsVisibleBalanceModal] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState(false);
 
   const [activeId, setActiveId] = useState("");
   const [activeStatus, setActiveStatus] = useState("");
@@ -60,6 +64,11 @@ const DownListMaster = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
+
+  const [sortConfig, setSortConfig] = useState({
+    balance: null,
+    direction: "asc",
+  });
 
   useEffect(() => {
     getDownLineUser();
@@ -276,6 +285,40 @@ const DownListMaster = () => {
     getDownLineUser(payload);
   };
 
+  const onClickExposer = (userId, exposure) => {
+    const payload = {
+      userId,
+      exposure,
+    };
+
+    setCurrentUserData(payload);
+    setIsVisibleBalanceModal(true);
+  };
+
+  const onCloseBalanceModal = () => {
+    setIsVisibleBalanceModal(false);
+    setCurrentUserData(false);
+  };
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  useEffect(() => {
+    const sortedData = [...pageData].sort((a, b) => {
+      if (sortConfig.direction === "asc") {
+        return a[sortConfig.key] - b[sortConfig.key];
+      } else {
+        return b[sortConfig.key] - a[sortConfig.key];
+      }
+    });
+    setPageData(sortedData);
+  }, [sortConfig]);
+
   const currentStatusActive = userData?.status === "Active";
 
   return (
@@ -308,6 +351,12 @@ const DownListMaster = () => {
         onRefreshTable={onRefreshTable}
         isVisible={isVisibleAddPlayer}
         onCloseMenu={onCloseAddPlayer}
+      />
+
+      <BalanceModel
+        isVisible={isVisibleBalanceModal}
+        onCloseMenu={onCloseBalanceModal}
+        currentUserData={currentUserData}
       />
 
       <div className="grid grid-cols-12 gap-4 mt-2">
@@ -420,8 +469,28 @@ const DownListMaster = () => {
             <tr>
               <th className="">Account</th>
               <th className="">Credit Ref.</th>
-              <th className="">Balance</th>
-              <th className="">Exposure</th>
+              <th className="">
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("balance");
+                  }}
+                >
+                  Balance
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
+              <th className="">
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("exposure");
+                  }}
+                >
+                  Exposure
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
               <th className="">Avail. bal.</th>
               <th className="">Exposure Limit</th>
               <th className="">Ref. P/L</th>
@@ -506,7 +575,12 @@ const DownListMaster = () => {
                         </div>
                       </td>
                       <td>
-                        <span className="text-[#d0021b]">
+                        <span
+                          onClick={() => {
+                            onClickExposer(item?._id, item?.exposure);
+                          }}
+                          className="text-[#d0021b] cursor-pointer"
+                        >
                           ({amountFormate(item?.exposure) || 0})
                         </span>
                       </td>
