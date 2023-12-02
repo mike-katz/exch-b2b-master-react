@@ -34,6 +34,10 @@ export const getBetListData = async (payload) => {
     queryParams += `${queryParams ? "&" : "?"}to=${payload?.to}`;
   }
 
+  if (payload?.search) {
+    queryParams += `${queryParams ? "&" : "?"}search=${payload?.search}`;
+  }
+
   const { data } = await Rest.get(`${APIEndpoint.getBetList}${queryParams}`);
 
   return data;

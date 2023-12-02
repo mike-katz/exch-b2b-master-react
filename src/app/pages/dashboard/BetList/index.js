@@ -7,15 +7,17 @@ import { useParams } from "react-router-dom";
 import { BET_STATUS, MARKET_TYPE } from "../../../utils/dropdown";
 import { getBetListData } from "../../../redux/services/BetList";
 import { useSelector } from "react-redux";
+import { FaArrowDownShortWide } from "react-icons/fa6";
 
 const BetList = () => {
   const { userId } = useParams();
   // const [isVisibleHistory, setIsVisibleHistory] = useState(false);
   const [sportListDropdown, setSportListDropdown] = useState([]);
 
-  const [sportType, setSportType] = useState("");
+  const [sportType, setSportType] = useState("Cricket");
   const [betStatus, setBetStatus] = useState("");
   const [marketType, setMarketType] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [fromDate, setFromDate] = useState(
     moment().subtract(5, "days").format("YYYY-MM-DD")
   );
@@ -29,6 +31,10 @@ const BetList = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
+  const [sortConfig, setSortConfig] = useState({
+    balance: null,
+    direction: "asc",
+  });
 
   useEffect(() => {
     getSportList();
@@ -56,6 +62,7 @@ const BetList = () => {
         marketType: marketType,
         from: fromDate,
         to: toDate,
+        search: searchValue,
       };
     }
 
@@ -100,6 +107,23 @@ const BetList = () => {
     setToDate(e?.target?.value);
   };
 
+  const onChangeSearch = (e) => {
+    setSearchValue(e?.target?.value);
+    setCurrentPage(1);
+    const payload = {
+      page: 1,
+      limit: perPage,
+      sportName: sportType,
+      status: betStatus,
+      marketType: marketType,
+      from: fromDate,
+      to: toDate,
+      search: e?.target?.value,
+    };
+
+    getBetHistory(payload);
+  };
+
   const onRefreshPagination = (count) => {
     setCurrentPage(count);
     const payload = {
@@ -110,6 +134,7 @@ const BetList = () => {
       marketType: marketType,
       from: fromDate,
       to: toDate,
+      search: searchValue,
     };
 
     getBetHistory(payload);
@@ -125,6 +150,7 @@ const BetList = () => {
       marketType: marketType,
       from: fromDate,
       to: toDate,
+      search: searchValue,
     };
 
     getBetHistory(payload);
@@ -141,10 +167,44 @@ const BetList = () => {
       marketType: marketType,
       from: fromDate,
       to: toDate,
+      search: searchValue,
     };
 
     getBetHistory(payload);
   };
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  useEffect(() => {
+    const sortedData = [...pageData].sort((a, b) => {
+      console.log("Direction:", sortConfig.direction);
+      console.log("Key:", sortConfig.key);
+
+      if (sortConfig.direction === "asc") {
+        console.log("Sorting in ascending order");
+        // return a[sortConfig.key] - b[sortConfig.key];
+        const eventA = a?.[sortConfig.key]?.toLowerCase();
+        const eventB = b?.[sortConfig.key]?.toLowerCase();
+
+        return eventA.localeCompare(eventB);
+      } else {
+        console.log("Sorting in descending order");
+        // return b[sortConfig.key] - a[sortConfig.key];
+        const eventA = a?.[sortConfig.key]?.toLowerCase();
+        const eventB = b?.[sortConfig.key]?.toLowerCase();
+
+        return eventB.localeCompare(eventA);
+      }
+    });
+    console.log({ sortedData });
+    setPageData(sortedData);
+  }, [sortConfig]);
 
   return (
     <div className="px-2">
@@ -157,7 +217,6 @@ const BetList = () => {
             onChange={onChangeSportType}
             className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2"
           >
-            <option value="">All</option>
             {sportListDropdown?.map((item, index) => {
               return (
                 <option key={index} value={item?.sportName}>
@@ -232,18 +291,56 @@ const BetList = () => {
           </button>
         </div>
       </div>
+      <div className="flex items-center justify-end mb-4">
+        <input
+          className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2 w-48"
+          placeholder="Search..."
+          value={searchValue}
+          onChange={onChangeSearch}
+        />
+      </div>
       <div className="table-responsive">
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>
               <th className="">Username</th>
               <th className="">Sport Name</th>
-              <th className="">Event Name</th>
-              <th className="">Market Name</th>
+              <th className="">
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("eventName");
+                  }}
+                >
+                  Event Name
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
+              <th className="">
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("marketType");
+                  }}
+                >
+                  Market Name
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
               <th className="">Selection</th>
               <th className="">Type</th>
               <th className="">Odd Req.</th>
-              <th className="">Stake</th>
+              <th className="">
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => {
+                    handleSort("stake");
+                  }}
+                >
+                  Stake
+                  <FaArrowDownShortWide className="ml-2" />
+                </div>
+              </th>
               <th className="">Place Time</th>
               <th className="">Matched Time</th>
             </tr>
