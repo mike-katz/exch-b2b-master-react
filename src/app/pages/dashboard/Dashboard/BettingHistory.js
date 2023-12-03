@@ -322,9 +322,13 @@ const BettingHistory = ({ username }) => {
                       {moment(item?.createdAt).format("hh:mm:ss A")}
                     </td>
                     <td className="">
-                      {moment(item?.matchedTime).format("DD/MM/YYYY")}
+                      {moment(item?.matchedTime || item?.createdAt).format(
+                        "DD/MM/YYYY"
+                      )}
                       <br />
-                      {moment(item?.matchedTime).format("hh:mm:ss A")}
+                      {moment(item?.matchedTime || item?.createdAt).format(
+                        "hh:mm:ss A"
+                      )}
                     </td>
                   </tr>
                 );
