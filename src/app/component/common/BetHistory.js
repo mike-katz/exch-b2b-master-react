@@ -67,17 +67,17 @@ const BetHistory = (props) => {
     const data = await getBetHistoryData(payload);
 
     if (data?.data) {
-      const backData = [];
-      const layData = [];
-      data?.data?.results?.map((item) => {
-        if (item?.type === "lay") {
-          layData.push(item);
-        } else {
-          backData.push(item);
-        }
-      });
-      setPageBackAllData(backData);
-      setPageData(layData);
+      // const backData = [];
+      // const layData = [];
+      // data?.data?.results?.map((item) => {
+      //   if (item?.type === "lay") {
+      //     layData.push(item);
+      //   } else {
+      //     backData.push(item);
+      //   }
+      // });
+      setPageBackAllData(data?.data?.results);
+      setPageData(data?.data?.results);
       setIsLoading(false);
     }
   };
