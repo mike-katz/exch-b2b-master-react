@@ -511,31 +511,6 @@ const BettingProfitLost = (props) => {
       </div>
       <div className="grid grid-cols-12 gap-4 items-end mb-4 mt-4 bg-[#e0e6e6] p-3 pt-2 rounded">
         <div className="col-span-6 lg:col-span-2">
-          <div className="text-[#000] text-[12px]">Betting Type :</div>
-          <select className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2">
-            <option value="all">All</option>
-            <option value="settled">Exchange</option>
-            <option value="unsettled">Fancy Bet</option>
-            <option value="unsettled">Casino</option>
-            <option value="voided_bets">Sports Book</option>
-            <option value="voided_bets">Book Maker</option>
-            <option value="voided_bets">BPoker</option>
-            <option value="voided_bets">Binary</option>
-            <option value="voided_bets">SABA</option>
-            <option value="voided_bets">Sky Trader</option>
-            <option value="voided_bets">Mini Game</option>
-            <option value="voided_bets">Royal</option>
-          </select>
-        </div>
-        {/* <div className="col-span-6 lg:col-span-2">
-          <div className="text-[#000] text-[12px]">Bet Status :</div>
-          <select className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2">
-            <option value="all">All</option>
-            <option value="cricket">Cricket</option>
-            <option value="football">Football</option>
-          </select>
-        </div> */}
-        <div className="col-span-6 lg:col-span-2">
           <div className="text-[#000] text-[12px]">From Date :</div>
           <input
             min={moment().subtract(1, "months").format("YYYY-MM-DD")}

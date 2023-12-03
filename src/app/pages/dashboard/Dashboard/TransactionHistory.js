@@ -18,6 +18,8 @@ const TransactionHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
+  const [currentUser, setCurrentUser] = useState(20);
+
   useEffect(() => {
     transactionsHistory();
   }, []);
@@ -47,6 +49,7 @@ const TransactionHistory = () => {
       setCurrentPage(data?.data?.page);
       setPageData(data?.data?.results);
       setTotalResults(data?.data?.totalResults);
+      setCurrentUser(data?.username);
     }
 
     setIsLoading(false);
@@ -110,6 +113,7 @@ const TransactionHistory = () => {
                 </td>
               </tr>
             )}
+
             {!isLoading &&
               pageData?.map((item, index) => {
                 return (
@@ -119,12 +123,38 @@ const TransactionHistory = () => {
                       <br /> {moment(item?.createdAt)?.format("hh:mm:ss A")}
                     </td>
                     <td className="text-right">
-                      {item?.method === "Deposit"
-                        ? amountFormate(item?.amount)
-                        : "-"}
+                      {item?.method === "Redeem" ? (
+                        <span className="text-[green]">
+                          {amountFormate(item?.amount)}
+                        </span>
+                      ) : item?.method === "Transfer" ? (
+                        item?.receiver_id?.username === currentUser ? (
+                          <span className="text-[green]">
+                            {amountFormate(item?.amount)}
+                          </span>
+                        ) : (
+                          ""
+                        )
+                      ) : item?.method === "Deposit" ? (
+                        <span className="text-[green]">
+                          {amountFormate(item?.amount)}
+                        </span>
+                      ) : (
+                        "-"
+                      )}
                     </td>
                     <td className="text-right">
-                      {item?.method === "Deposit" ? (
+                      {item?.method === "Redeem" ? (
+                        ""
+                      ) : item?.method === "Transfer" ? (
+                        item?.sender_id?.username === currentUser ? (
+                          <span className="text-[red]">
+                            ({amountFormate(item?.amount)})
+                          </span>
+                        ) : (
+                          "-"
+                        )
+                      ) : item?.method === "Deposit" ? (
                         "-"
                       ) : (
                         <span className="text-[red]">
@@ -133,7 +163,14 @@ const TransactionHistory = () => {
                       )}
                     </td>
                     <td className="text-right">
-                      {amountFormate(item?.balance) || "-"}
+                      {item?.method === "Transfer"
+                        ? amountFormate(
+                            item?.sender_id?.username === currentUser
+                              ? item?.senderBalance
+                              : item?.receiverBalance
+                          ) || "-"
+                        : amountFormate(item?.balance) || "-"}
+                      {}
                     </td>
                     <td className="text-right">{item?.remark || "-"}</td>
                     <td className="text-right">
