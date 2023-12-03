@@ -212,9 +212,9 @@ const AllBetHistory = () => {
                                 : "bg-[#efe1e5]"
                             } `}
                           >
-                            {moment(item?.updatedAt)?.format("DD/MM/YYYY")}
+                            {moment(item?.matchedTime)?.format("DD/MM/YYYY")}
                             <br />
-                            {moment(item?.updatedAt)?.format("h:mm:ss A")}
+                            {moment(item?.matchedTime)?.format("h:mm:ss A")}
                           </td>
                         </tr>
                       </>

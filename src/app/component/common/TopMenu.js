@@ -89,7 +89,8 @@ const TopMenu = () => {
                     className={`rounded-none bg-transparent text-[12px] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[${
                       themeColor?.subHoverBgColor
                     }] cursor-pointer py-0 capitalize ${
-                      activeMenu === "/down-list-user" || activeMenu === "/"
+                      activeMenu === "/down-list-user" ||
+                      activeMenu === "/down-list-master"
                         ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
                         : ""
                     }`}
@@ -189,7 +190,9 @@ const TopMenu = () => {
                 className={`rounded-none bg-transparent text-[12px] font-extrabold border-0 border-r border-[rgba(0,0,0,.2)] px-2 flex items-center hover:bg-[${
                   themeColor?.subHoverBgColor
                 }] cursor-pointer py-0 capitalize ${
-                  activeMenu === "/down-list-user" || activeMenu === "/"
+                  activeMenu === "/reports-by-market" ||
+                  activeMenu === "/reports-by-user" ||
+                  activeMenu === "reports-by-client"
                     ? "bg-[rgba(255,255,255,.2)] shadow-[inset_0_0px_5px_0_rgba(83,33,33,0.5)]"
                     : ""
                 }`}

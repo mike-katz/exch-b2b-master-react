@@ -338,9 +338,25 @@ const DownListMaster = () => {
   useEffect(() => {
     const sortedData = [...pageData].sort((a, b) => {
       if (sortConfig.direction === "asc") {
-        return a[sortConfig.key] - b[sortConfig.key];
+        if (sortConfig.key === "balance") {
+          const sum =
+            a[sortConfig.key] +
+            a["exposure"] -
+            (b[sortConfig.key] + b["exposure"]);
+          return sum;
+        } else {
+          return a[sortConfig.key] - b[sortConfig.key];
+        }
       } else {
-        return b[sortConfig.key] - a[sortConfig.key];
+        if (sortConfig.key === "balance") {
+          const sum =
+            b[sortConfig.key] +
+            b["exposure"] -
+            (a[sortConfig.key] + a["exposure"]);
+          return sum;
+        } else {
+          return b[sortConfig.key] - a[sortConfig.key];
+        }
       }
     });
     setPageData(sortedData);

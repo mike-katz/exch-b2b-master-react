@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
-import { getBetHistoryData } from "../../redux/services/MarketAnalytics";
+import { getBetHistoryDetailData } from "../../redux/services/MarketAnalytics";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -10,7 +10,8 @@ const BetHistory = (props) => {
   const { themeColor } = useSelector((state) => state?.persist);
 
   const [activeMenu, setActiveMenu] = useState("matched");
-  const [pageBackAllData, setPageBackAllData] = useState([]);
+  const [pageFancyAllData, setPageFancyAllData] = useState([]);
+  const [pageLayAllData, setPageLayAllData] = useState([]);
   // const [pageBackData, setPageBackData] = useState([]);
   // const [pageLayData, setPageLayData] = useState([]);
   const [pageData, setPageData] = useState([]);
@@ -19,20 +20,20 @@ const BetHistory = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (activeMenu && pageBackAllData?.length > 0) {
+    if (activeMenu) {
       let filterData = [];
       if (activeMenu === "matched") {
-        filterData = pageBackAllData?.filter(
+        filterData = pageLayAllData?.filter(
           (bet) => bet?.type === "lay" || bet?.type === "back"
         );
       } else {
-        filterData = pageBackAllData?.filter(
+        filterData = pageFancyAllData?.filter(
           (bet) => bet?.type === "yes" || bet?.type === "no"
         );
       }
       setPageData(filterData);
     }
-  }, [activeMenu, pageBackAllData]);
+  }, [activeMenu, pageLayAllData, pageFancyAllData]);
 
   useEffect(() => {
     if (eventId) {
@@ -64,8 +65,9 @@ const BetHistory = (props) => {
   }, [eventId]);
 
   const getBetHistory = async (payload) => {
-    const data = await getBetHistoryData(payload);
+    const data = await getBetHistoryDetailData(payload);
 
+    console.log({ data });
     if (data?.data) {
       // const backData = [];
       // const layData = [];
@@ -76,10 +78,12 @@ const BetHistory = (props) => {
       //     backData.push(item);
       //   }
       // });
-      setPageBackAllData(data?.data?.results);
-      setPageData(data?.data?.results);
-      setIsLoading(false);
+
+      setPageFancyAllData(data?.data?.fancyResult);
+      setPageLayAllData(data?.data?.otherResult);
+      // setPageData(data?.data?.results);
     }
+    setIsLoading(false);
   };
 
   const onClickTab = (menu) => {
@@ -248,9 +252,9 @@ const BetHistory = (props) => {
                               : "bg-[#efe1e5]"
                           } `}
                         >
-                          {moment(item?.updatedAt)?.format("DD/MM/YYYY")}
+                          {moment(item?.matchedTime)?.format("DD/MM/YYYY")}
                           <br />
-                          {moment(item?.updatedAt)?.format("h:mm:ss A")}
+                          {moment(item?.matchedTime)?.format("h:mm:ss A")}
                         </td>
                       </tr>
                     </>

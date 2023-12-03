@@ -35,6 +35,7 @@ export default class APIEndpoint {
   static marketDetails = "api/market/detail";
   static getChannelData = "api/market/stream";
   static getBetHistoryData = "api/beating/matchBet";
+  static getBetHistoryDetailData = "api/beating/latestBet";
   static getBetHistoryLPData = "api/beating/pl";
   static getBetLockData = "api/market/events";
   static betLockData = "api/beating/lock";

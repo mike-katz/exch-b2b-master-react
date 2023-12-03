@@ -281,7 +281,7 @@ const FancyGameCard = (props) => {
                             runners?.availableToBack?.[0]?.price
                         );
                       }}
-                      className="flex justify-between w-[50px] cursor-pointer"
+                      className="flex justify-between cursor-pointer"
                     >
                       <TbLadder />
                       <div className="flex items-center font-bold">

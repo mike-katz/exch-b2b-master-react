@@ -47,6 +47,20 @@ export const getBetHistoryData = async (payload) => {
   return data;
 };
 
+export const getBetHistoryDetailData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.eventId) {
+    queryParams += `${queryParams ? "&" : "?"}eventId=${payload?.eventId}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getBetHistoryDetailData}${queryParams}`
+  );
+
+  return data;
+};
+
 export const getBetHistoryLPData = async (payload) => {
   let queryParams = "";
 
