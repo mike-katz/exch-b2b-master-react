@@ -22,7 +22,7 @@ const BookHistory = () => {
   const [marketName, setMarketName] = useState("");
 
   const onClickBack = () => {
-    navigate(`/market-analytics/${exEventId}/${exMarketId}`);
+    navigate(`/market-analytics/${exEventId}`);
   };
 
   useEffect(() => {
