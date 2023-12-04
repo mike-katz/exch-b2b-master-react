@@ -20,6 +20,7 @@ import News from "./dashboard/Extra/News";
 import AllProfileLogs from "./dashboard/Dashboard/AllProfileLogs";
 import ReportByMarket from "./dashboard/Report/ReportByMarket";
 import ReportByUser from "./dashboard/Report/ReportByUser";
+import BookHistory from "./dashboard/MarketAnalytics/BookHistory";
 
 const CustomRoutes = () => {
   return (
@@ -188,6 +189,14 @@ const CustomRoutes = () => {
         element={
           <PrivateRoute>
             <ReportByUser />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/market-book-history/:exEventId/:exMarketId"
+        element={
+          <PrivateRoute>
+            <BookHistory />
           </PrivateRoute>
         }
       />

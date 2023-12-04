@@ -24,21 +24,26 @@ function Pagination({
 
   return (
     <div className="flex items-center justify-between w-full">
-      <div className="flex items-center">
-        <select
-          onChange={(e) => {
-            onChangePerPage(e?.target?.value);
-          }}
-          value={perPage?.toString()}
-          className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] h-[25px] rounded px-2"
-        >
-          <option value="20">20</option>
-          <option value="40">40</option>
-          <option value="60">60</option>
-          <option value="100">100</option>
-        </select>
-        <div className="ml-2 text-[14px]">{`Showing ${firstRecord} to ${lastRecord} of ${totalResults} entities`}</div>
-      </div>
+      {totalResults ? (
+        <div className="flex items-center">
+          <select
+            onChange={(e) => {
+              onChangePerPage(e?.target?.value);
+            }}
+            value={perPage?.toString()}
+            className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] h-[25px] rounded px-2"
+          >
+            <option value="20">20</option>
+            <option value="40">40</option>
+            <option value="60">60</option>
+            <option value="100">100</option>
+          </select>
+          <div className="ml-2 text-[14px]">{`Showing ${firstRecord} to ${lastRecord} of ${totalResults} entities`}</div>
+        </div>
+      ) : (
+        ""
+      )}
+
       <ReactPaginate
         forcePage={currentPage - 1}
         breakLabel="..."

@@ -99,6 +99,7 @@ const BetHistory = (props) => {
       <div className="p-2">
         {/* <div className="flex justify-end"> */}
         <Link
+          // target="_blank"
           style={{
             background: themeColor?.headerBgColor,
             color: themeColor?.headerTextColor,
@@ -252,9 +253,13 @@ const BetHistory = (props) => {
                               : "bg-[#efe1e5]"
                           } `}
                         >
-                          {moment(item?.matchedTime)?.format("DD/MM/YYYY")}
+                          {moment(item?.matchedTime || item?.createdAt)?.format(
+                            "DD/MM/YYYY"
+                          )}
                           <br />
-                          {moment(item?.matchedTime)?.format("h:mm:ss A")}
+                          {moment(item?.matchedTime || item?.createdAt)?.format(
+                            "h:mm:ss A"
+                          )}
                         </td>
                       </tr>
                     </>

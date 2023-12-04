@@ -5,10 +5,13 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const DetailGameCard = (props) => {
   const [blinkData, setBlinkData] = useState([]);
   const [sortRunners, setSortRunners] = useState([]);
+  const { themeColor } = useSelector((state) => state?.persist);
 
   useEffect(() => {
     if (props?.oldData) {
@@ -47,6 +50,18 @@ const DetailGameCard = (props) => {
         icon={
           <>
             <div className="flex items-center">
+              <div className="mr-4">
+                <Link
+                  to={`/market-book-history/${props?.data?.exEventId}/${props?.data?.exMarketId}`}
+                  style={{
+                    background: themeColor?.headerBgColor,
+                    color: themeColor?.headerTextColor,
+                  }}
+                  className="text-[14px] cursor-pointer rounded px-2 h-[25px] font-black flex items-center justify-center"
+                >
+                  BOOK
+                </Link>
+              </div>
               <div className="text-[#43444a] text-[10px] font-semibold mr-2 md:hidden">
                 Min: {props?.data?.betLimit?.split(" - ")?.[0]} <br /> Max:{" "}
                 {props?.data?.betLimit?.split(" - ")?.[1]}

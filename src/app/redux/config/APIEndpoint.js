@@ -41,6 +41,7 @@ export default class APIEndpoint {
   static betLockData = "api/beating/lock";
   static getSt8Balance = "master/st8/balance";
   static withdrawSt8Balance = "master/st8/withdraw";
+  static getUserPlByMarket = "api/beating/market-pl";
 
   // NEWS
   static news = "api/extra/news";

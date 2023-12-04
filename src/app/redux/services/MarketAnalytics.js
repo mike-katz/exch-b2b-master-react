@@ -74,3 +74,25 @@ export const getBetHistoryLPData = async (payload) => {
 
   return data;
 };
+
+export const getUserPlByMarketData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.page) {
+    queryParams += `${queryParams ? "&" : "?"}page=${payload?.page}`;
+  }
+
+  if (payload?.limit) {
+    queryParams += `${queryParams ? "&" : "?"}limit=${payload?.limit}`;
+  }
+
+  if (payload?.marketId) {
+    queryParams += `${queryParams ? "&" : "?"}marketId=${payload?.marketId}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getUserPlByMarket}${queryParams}`
+  );
+
+  return data;
+};

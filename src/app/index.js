@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CustomRoutes from "./pages/Routes";
 // import Header from './component/common/Header';
 // import TopMenu from './component/common/TopMenu';
@@ -18,7 +18,11 @@ import { Helmet } from "react-helmet";
 
 const MainApp = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const { isLoggedIn, themeColor } = useSelector((state) => state?.persist);
+
+  const [isVisibleHeader, setIsVisibleHeader] = useState(false);
 
   // const DISABLE_MENU_ROUTE_LIST = [""];
   // useEffect(() => {
@@ -140,6 +144,17 @@ const MainApp = () => {
     }
   };
 
+  useEffect(() => {
+    const noHeader =
+      window.location?.pathname?.includes("/credit-ref-logs/") ||
+      window.location?.pathname?.includes("/banking-logs/") ||
+      window.location?.pathname?.includes("/banking-logs-all") ||
+      window.location?.pathname?.includes("/profile-logs-all") ||
+      window.location?.pathname?.includes("/bet-history");
+
+    setIsVisibleHeader(noHeader);
+  }, [location.pathname]);
+
   return (
     <div
       style={{
@@ -147,56 +162,50 @@ const MainApp = () => {
         minHeight: isLoggedIn ? "100vh" : "unset",
       }}
     >
-      <Router>
-        <ToastContainer
-          position="top-right"
-          autoClose={1000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <Helmet>
-          <link rel="icon" href={themeColor?.faviconUrl} />
-          <link rel="apple-touch-icon" href={themeColor?.faviconUrl} />
-        </Helmet>
-        <div>
-          {!isLoggedIn ||
-          window.location?.pathname?.includes("/credit-ref-logs/") ||
-          window.location?.pathname?.includes("/banking-logs/") ||
-          window.location?.pathname?.includes("/banking-logs-all") ||
-          window.location?.pathname?.includes("/profile-logs-all") ? null : (
-            <>
-              <Header />
-              <TopMenu />
-              <div className="container px-2">
-                <News />
-              </div>
-            </>
-          )}
-        </div>
-        <div>
-          <div className="xl:block hidden">
-            <div className="fixed top-[147px] xl:top-[105px] left-0 w-[240px]">
-              {/* <SideMenu /> */}
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <Helmet>
+        <link rel="icon" href={themeColor?.faviconUrl} />
+        <link rel="apple-touch-icon" href={themeColor?.faviconUrl} />
+      </Helmet>
+      <div>
+        {!isLoggedIn || isVisibleHeader ? null : (
+          <>
+            <Header />
+            <TopMenu />
+            <div className="container px-2">
+              <News />
             </div>
+          </>
+        )}
+      </div>
+      <div>
+        <div className="xl:block hidden">
+          <div className="fixed top-[147px] xl:top-[105px] left-0 w-[240px]">
+            {/* <SideMenu /> */}
           </div>
-          {/* <div className="block lg:hidden">
+        </div>
+        {/* <div className="block lg:hidden">
           <MobileMenu />
         </div> */}
-          {/* <div className="fixed top-[147px] xl:top-[105px] xl:left-[240px] z-[9] overflow-hidden overflow-y-auto">
+        {/* <div className="fixed top-[147px] xl:top-[105px] xl:left-[240px] z-[9] overflow-hidden overflow-y-auto">
           <div className="h-[calc(100vh-105px)] w-[100vw] xl:w-[calc(100vw-240px)]"> */}
-          <div className="container">
-            <CustomRoutes />
-          </div>
-          {/* </div>
-        </div> */}
+        <div className="container">
+          <CustomRoutes />
         </div>
-      </Router>
+        {/* </div>
+        </div> */}
+      </div>
     </div>
   );
 };
