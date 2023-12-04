@@ -66,8 +66,8 @@ const DownListMaster = () => {
   const [perPage, setPerPage] = useState(20);
 
   const [sortConfig, setSortConfig] = useState({
-    balance: null,
-    direction: "asc",
+    balance: "",
+    direction: "1",
   });
 
   useEffect(() => {
@@ -159,6 +159,8 @@ const DownListMaster = () => {
       limit: perPage,
       search: searchParams,
       status: statusParams,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineUser(payload);
@@ -171,6 +173,8 @@ const DownListMaster = () => {
       limit: perPage,
       search: searchParams,
       status: statusParams,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineUser(payload);
@@ -181,6 +185,10 @@ const DownListMaster = () => {
   };
 
   const onSubmitSearch = () => {
+    setSortConfig({
+      balance: "",
+      direction: "1",
+    });
     setCurrentPage(1);
     const payload = {
       page: 1,
@@ -200,12 +208,18 @@ const DownListMaster = () => {
       limit: perPage,
       search: searchParams,
       status: e?.target?.value,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineUser(payload);
   };
 
   const onSubmitRefresh = () => {
+    setSortConfig({
+      balance: "",
+      direction: "1",
+    });
     setCurrentPage(1);
     const payload = {
       page: 1,
@@ -222,6 +236,8 @@ const DownListMaster = () => {
       type: "user",
       status: statusParams || undefined,
       search: searchParams || undefined,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     const data = await exportCSVFileData(payload);
@@ -265,6 +281,8 @@ const DownListMaster = () => {
           limit: perPage,
           search: searchParams,
           status: statusParams,
+          sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+          order: sortConfig?.key ? sortConfig?.direction : undefined,
         };
         getDownLineUser(payload);
         setIsEnableBalanceView(false);
@@ -281,6 +299,8 @@ const DownListMaster = () => {
       limit: value,
       search: searchParams,
       status: statusParams,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
     getDownLineUser(payload);
   };
@@ -301,38 +321,23 @@ const DownListMaster = () => {
   };
 
   const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
+    let direction = "1";
+    if (sortConfig.key === key && sortConfig.direction === "1") {
+      direction = "-1";
     }
     setSortConfig({ key, direction });
   };
 
   useEffect(() => {
-    const sortedData = [...pageData].sort((a, b) => {
-      if (sortConfig.direction === "asc") {
-        if (sortConfig.key === "balance") {
-          const sum =
-            a[sortConfig.key] +
-            a["exposure"] -
-            (b[sortConfig.key] + b["exposure"]);
-          return sum;
-        } else {
-          return a[sortConfig.key] - b[sortConfig.key];
-        }
-      } else {
-        if (sortConfig.key === "balance") {
-          const sum =
-            b[sortConfig.key] +
-            b["exposure"] -
-            (a[sortConfig.key] + a["exposure"]);
-          return sum;
-        } else {
-          return b[sortConfig.key] - a[sortConfig.key];
-        }
-      }
-    });
-    setPageData(sortedData);
+    const payload = {
+      page: currentPage,
+      limit: perPage,
+      search: searchParams,
+      status: statusParams,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
+    };
+    getDownLineUser(payload);
   }, [sortConfig]);
 
   const currentStatusActive = userData?.status === "Active";

@@ -62,14 +62,14 @@ const DownListMaster = () => {
   const [isVisibleBalanceModal, setIsVisibleBalanceModal] = useState(false);
   const [currentUserData, setCurrentUserData] = useState(false);
 
+  const [sortConfig, setSortConfig] = useState({
+    balance: "",
+    direction: "1",
+  });
+
   const userDataJWT = jwtDecode(token);
 
   const role = userDataJWT?.roles?.toString();
-
-  const [sortConfig, setSortConfig] = useState({
-    balance: null,
-    direction: "asc",
-  });
 
   useEffect(() => {
     getDownLineMaster();
@@ -170,6 +170,8 @@ const DownListMaster = () => {
       search: searchParams,
       status: statusParams,
       userId: activePageId,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineMaster(payload);
@@ -183,6 +185,8 @@ const DownListMaster = () => {
       search: searchParams,
       status: statusParams,
       userId: activePageId,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineMaster(payload);
@@ -193,6 +197,11 @@ const DownListMaster = () => {
   };
 
   const onSubmitSearch = () => {
+    setSortConfig({
+      balance: "",
+      direction: "1",
+    });
+
     setCurrentPage(1);
     const payload = {
       page: 1,
@@ -214,12 +223,19 @@ const DownListMaster = () => {
       search: searchParams,
       status: e?.target?.value,
       userId: activePageId,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineMaster(payload);
   };
 
   const onSubmitRefresh = () => {
+    setSortConfig({
+      balance: "",
+      direction: "1",
+    });
+
     setCurrentPage(1);
     const payload = {
       page: 1,
@@ -238,6 +254,8 @@ const DownListMaster = () => {
       search: searchParams || undefined,
       userId: activePageId,
       type: "master",
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     const data = await exportCSVFileData(payload);
@@ -247,6 +265,11 @@ const DownListMaster = () => {
   };
 
   const onClickChildren = (item) => {
+    setSortConfig({
+      balance: "",
+      direction: "1",
+    });
+
     if (item?.roles?.toString() !== "User") {
       setActivePageId(item?._id);
 
@@ -271,6 +294,11 @@ const DownListMaster = () => {
   };
 
   const onClickUserManage = ({ role, _id }) => {
+    setSortConfig({
+      balance: "",
+      direction: "1",
+    });
+
     if (userData?.roles?.toString() === role) {
       setActivePageId("");
     }
@@ -313,9 +341,9 @@ const DownListMaster = () => {
   const findUser = pageData?.find((item) => item?.roles?.toString() === "User");
 
   const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
+    let direction = "1";
+    if (sortConfig.key === key && sortConfig.direction === "1") {
+      direction = "-1";
     }
     setSortConfig({ key, direction });
   };
@@ -336,30 +364,18 @@ const DownListMaster = () => {
   };
 
   useEffect(() => {
-    const sortedData = [...pageData].sort((a, b) => {
-      if (sortConfig.direction === "asc") {
-        if (sortConfig.key === "balance") {
-          const sum =
-            a[sortConfig.key] +
-            a["exposure"] -
-            (b[sortConfig.key] + b["exposure"]);
-          return sum;
-        } else {
-          return a[sortConfig.key] - b[sortConfig.key];
-        }
-      } else {
-        if (sortConfig.key === "balance") {
-          const sum =
-            b[sortConfig.key] +
-            b["exposure"] -
-            (a[sortConfig.key] + a["exposure"]);
-          return sum;
-        } else {
-          return b[sortConfig.key] - a[sortConfig.key];
-        }
-      }
-    });
-    setPageData(sortedData);
+    if (sortConfig?.key) {
+      const payload = {
+        page: currentPage,
+        limit: perPage,
+        search: searchParams,
+        status: statusParams,
+        userId: activePageId,
+        sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+        order: sortConfig?.key ? sortConfig?.direction : undefined,
+      };
+      getDownLineMaster(payload);
+    }
   }, [sortConfig]);
 
   const onChangePerPage = (value) => {
@@ -371,6 +387,8 @@ const DownListMaster = () => {
       search: searchParams,
       status: statusParams,
       userId: activePageId,
+      sortBy: sortConfig?.key ? sortConfig?.key : undefined,
+      order: sortConfig?.key ? sortConfig?.direction : undefined,
     };
 
     getDownLineMaster(payload);

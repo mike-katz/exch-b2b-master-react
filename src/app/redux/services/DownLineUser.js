@@ -35,6 +35,15 @@ export const getDownLineUserData = async (payload) => {
   if (payload?.userId) {
     queryParams += `${queryParams ? "&" : "?"}userId=${payload?.userId}`;
   }
+
+  if (payload?.sortBy) {
+    queryParams += `${queryParams ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryParams += `${queryParams ? "&" : "?"}order=${payload?.order}`;
+  }
+
   const { data } = await Rest.get(
     `${APIEndpoint.getDownLineUser}${queryParams}`
   );
@@ -63,6 +72,14 @@ export const getDownLineMasterData = async (payload) => {
 
   if (payload?.userId) {
     queryParams += `${queryParams ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  if (payload?.sortBy) {
+    queryParams += `${queryParams ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryParams += `${queryParams ? "&" : "?"}order=${payload?.order}`;
   }
 
   const { data } = await Rest.get(

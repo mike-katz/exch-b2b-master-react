@@ -187,12 +187,12 @@ const BetList = () => {
         const eventA = a?.[sortConfig.key]?.toLowerCase();
         const eventB = b?.[sortConfig.key]?.toLowerCase();
 
-        return eventA.localeCompare(eventB);
+        return eventA?.localeCompare(eventB);
       } else {
         const eventA = a?.[sortConfig.key]?.toLowerCase();
         const eventB = b?.[sortConfig.key]?.toLowerCase();
 
-        return eventB.localeCompare(eventA);
+        return eventB?.localeCompare(eventA);
       }
     });
 
@@ -286,7 +286,7 @@ const BetList = () => {
       </div>
       <div className="flex items-center justify-end mb-4">
         <input
-          className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2 w-48"
+          className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] h-[25px] rounded px-2 w-48"
           placeholder="Search..."
           value={searchValue}
           onChange={onChangeSearch}
