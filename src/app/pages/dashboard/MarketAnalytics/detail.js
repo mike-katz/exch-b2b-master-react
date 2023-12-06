@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fireStoreCricket } from "../../../../firebaseSetup/firebaseCricket";
 import { fireStoreSoccer } from "../../../../firebaseSetup/firebaseSoccer";
 import { fireStoreTennis } from "../../../../firebaseSetup/firebaseTennis";
+import { fireStoreOthers } from "../../../../firebaseSetup/firebaseOthers";
 import BetHistory from "../../../component/common/BetHistory";
 import DetailGameCard from "../../../component/common/DetailGameCard";
 import FancyGameCard from "../../../component/common/FancyGameCard";
@@ -39,6 +40,8 @@ const MarketAnalyticsDetail = () => {
   const [linePlData, setLinePlData] = useState([]);
   const [linePlArray, setLinePlArray] = useState([]);
 
+  const [isVisibleScore, setIsVisibleScore] = useState(false);
+
   const [visibleBestHistoryModal, setVisibleBestHistoryModal] = useState(false);
 
   const liveValue = useRef([]);
@@ -49,6 +52,7 @@ const MarketAnalyticsDetail = () => {
   const liveLineOdds = useRef();
 
   const unsubscribeFromMessagesRef = useRef();
+  const unsubscribeScoreBoardRef = useRef();
 
   const firstTimeRender = useRef(true);
 
@@ -497,6 +501,7 @@ const MarketAnalyticsDetail = () => {
     data = data?.data;
 
     if (data) {
+      getFirebaseScoreData(data?.[0]?.eventId);
       if (data?.length === 0) {
         navigate("/sport/home");
         return false;
@@ -576,6 +581,26 @@ const MarketAnalyticsDetail = () => {
     setVisibleBestHistoryModal(true);
   };
 
+  const getFirebaseScoreData = async (spredexId) => {
+    try {
+      setIsLoading(true);
+      const citiesRef = collection(fireStoreOthers, "scoreBoard");
+      const q = query(citiesRef, where("eventId", "==", spredexId));
+      unsubscribeScoreBoardRef.current = onSnapshot(q, (docsSnap) => {
+        const data = [];
+        docsSnap.forEach((doc) => {
+          data?.push(doc.data());
+        });
+
+        setIsVisibleScore(data?.length > 0 ? true : false);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      console.warn(err);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="px-2">
       <div className="xl:block hidden">
@@ -649,6 +674,24 @@ const MarketAnalyticsDetail = () => {
                       <LiveStreaming eventId={pageData?.[0]?.eventId} />
                     )}
                   </div>
+                  {pageData?.length > 0 && isVisibleScore && (
+                    <div className="aspect-auto">
+                      <iframe
+                        className={`w-full ${
+                          pageData?.[0]?.sportsId === "4" ? "h-[100px]" : ""
+                        }`}
+                        src={`https://iframe.cbtfturbo247.com/${
+                          pageData?.[0]?.sportsId === "4"
+                            ? "cricket-score-new"
+                            : pageData?.[0]?.sportsId === "1"
+                            ? "soccer-score"
+                            : pageData?.[0]?.sportsId === "2"
+                            ? "tennis-score"
+                            : ""
+                        }/${pageData?.[0]?.eventId}`}
+                      />
+                    </div>
+                  )}
                   <div>
                     {!isLoading &&
                       pageData?.map((item, index) => {
