@@ -16,6 +16,7 @@ import {
   getBetHistoryLPData,
   getMarketDetailData,
 } from "../../../redux/services/MarketAnalytics";
+import BetHistoryModal from "../../../component/common/BetHistoryModal";
 
 const MarketAnalyticsDetail = () => {
   const navigate = useNavigate();
@@ -37,6 +38,8 @@ const MarketAnalyticsDetail = () => {
   const [fancyPlArray, setFancyPlArray] = useState([]);
   const [linePlData, setLinePlData] = useState([]);
   const [linePlArray, setLinePlArray] = useState([]);
+
+  const [visibleBestHistoryModal, setVisibleBestHistoryModal] = useState(false);
 
   const liveValue = useRef([]);
   const liveFancyValue = useRef([]);
@@ -565,8 +568,22 @@ const MarketAnalyticsDetail = () => {
     setIsLoading(false);
   };
 
+  const onCloseBetsHistoryModal = () => {
+    setVisibleBestHistoryModal(false);
+  };
+
+  const onOpenBetsHistoryModal = () => {
+    setVisibleBestHistoryModal(true);
+  };
+
   return (
     <div className="px-2">
+      <div className="xl:block hidden">
+        <BetHistoryModal
+          isVisible={visibleBestHistoryModal}
+          onCloseMenu={onCloseBetsHistoryModal}
+        />
+      </div>
       <div className="text-[#243a48] text-[16px] font-black mt-4 flex items-center">
         <FaChevronLeft
           color="#243a48"
@@ -605,7 +622,7 @@ const MarketAnalyticsDetail = () => {
                     >
                       <div className="flex items-center">
                         <div
-                          // onClick={onClickBetsHistoryModal}
+                          onClick={onOpenBetsHistoryModal}
                           className="bg-[#ECAD17] uppercase mr-2 rounded p-[3px] md:hidden"
                         >
                           Bets

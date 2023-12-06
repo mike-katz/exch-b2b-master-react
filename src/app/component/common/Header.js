@@ -6,9 +6,11 @@ import { getMyBalanceData } from "../../redux/services/DownLineUser";
 import { updateBalance } from "../../redux/actions/persistAction";
 import Loader from "./Loader";
 import jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userData, themeColor } = useSelector((state) => state?.persist);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,13 +32,25 @@ const Header = () => {
     setIsLoading(false);
   };
 
+  const onClickLogo = () => {
+    if (role === "Agent") {
+      navigate("/down-list-user");
+    } else {
+      navigate("/down-list-master");
+    }
+  };
+
   return (
     <div
       style={{ background: themeColor?.headerBgColor }}
       className="h-[60px] flex items-center"
     >
       <div className="container flex justify-between items-center px-2">
-        <img src={themeColor?.logoUrl} className="h-[40px]" />
+        <img
+          onClick={onClickLogo}
+          src={themeColor?.logoUrl}
+          className="h-[40px]"
+        />
         <div className="flex sm:flex-row flex-col items-center justify-center">
           <div className="flex items-center">
             <div className="px-[3px] bg-[#000000] rounded text-[10px] text-[#FFFFFF] uppercase font-bold">
