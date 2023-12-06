@@ -122,6 +122,60 @@ const MobileMenu = ({ isMenuVisible, onCloseDrawer }) => {
                     </div>
                   </div>
                 </MenuItem>
+                <SubMenu
+                  label={
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"My Reports"}
+                        </span>
+                      </div>
+                    </div>
+                  }
+                >
+                  <MenuItem
+                    onClick={() => {
+                      onClickMenu("/reports-by-client");
+                    }}
+                    rootStyles={{ paddingLeft: 5 }}
+                  >
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full border-b ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"Report by Client"}
+                        </span>
+                      </div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      onClickMenu("/reports-by-user");
+                    }}
+                    rootStyles={{ paddingLeft: 5 }}
+                  >
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full border-b ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"Report by User"}
+                        </span>
+                      </div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      onClickMenu("/reports-by-market");
+                    }}
+                    rootStyles={{ paddingLeft: 5 }}
+                  >
+                    <div className="flex w-full min-h-[30px]">
+                      <div className="flex items-center justify-between w-full border-b ml-2">
+                        <span className="text-[13px] font-semibold py-1">
+                          {"Report by Market"}
+                        </span>
+                      </div>
+                    </div>
+                  </MenuItem>
+                </SubMenu>
                 <MenuItem
                   onClick={() => {
                     onClickMenu("/market-analytics");
