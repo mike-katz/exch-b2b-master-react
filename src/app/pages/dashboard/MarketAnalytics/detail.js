@@ -41,6 +41,8 @@ const MarketAnalyticsDetail = () => {
   const [linePlArray, setLinePlArray] = useState([]);
 
   const [isVisibleScore, setIsVisibleScore] = useState(false);
+  // const [isVisibleSportScore, setIsVisibleSportScore] = useState(false);
+  // const [spredexId, setSpredexId] = useState("");
 
   const [visibleBestHistoryModal, setVisibleBestHistoryModal] = useState(false);
 
@@ -402,6 +404,17 @@ const MarketAnalyticsDetail = () => {
     }
   };
 
+  // const getMarketSpreadexId = async () => {
+  //   setIsLoading(true);
+  //   const data = await getMarketSpreadexIdData(eventId);
+  //   if (data?.spreadexId) {
+  //     setSpredexId(data?.spreadexId);
+  //   } else {
+  //     setSpredexId("");
+  //   }
+  //   setIsLoading(false);
+  // };ʼ
+
   const getBetPl = async (exEventId) => {
     const payload = {
       exEventId,
@@ -501,7 +514,12 @@ const MarketAnalyticsDetail = () => {
     data = data?.data;
 
     if (data) {
+      // if (data?.[0]?.sportsId === "4") {
+      //   getFirebaseSportScoreData(data?.[0]?.eventId);
+      // } else {
       getFirebaseScoreData(data?.[0]?.eventId);
+      // }
+
       if (data?.length === 0) {
         navigate("/sport/home");
         return false;
@@ -601,6 +619,26 @@ const MarketAnalyticsDetail = () => {
     }
   };
 
+  // const getFirebaseSportScoreData = async (spredexId) => {
+  //   try {
+  //     setIsLoading(true);
+  //     const citiesRef = collection(fireStoreOthers, "scoreBoard");
+  //     const q = query(citiesRef, where("eventId", "==", spredexId));
+  //     unsubscribeScoreBoardRef.current = onSnapshot(q, (docsSnap) => {
+  //       const data = [];
+  //       docsSnap.forEach((doc) => {
+  //         data?.push(doc.data());
+  //       });
+
+  //       setIsVisibleSportScore(data?.length > 0 ? true : false);
+  //       setIsLoading(false);
+  //     });
+  //   } catch (err) {
+  //     console.warn(err);
+  //     setIsLoading(false);
+  //   }
+  // };
+
   return (
     <div className="px-2">
       <div className="xl:block hidden">
@@ -674,11 +712,26 @@ const MarketAnalyticsDetail = () => {
                       <LiveStreaming eventId={pageData?.[0]?.eventId} />
                     )}
                   </div>
-                  {pageData?.length > 0 && isVisibleScore && (
+                  {/* {!isLoading &&
+                  pageData?.length > 0 &&
+                  pageData?.[0]?.sportsId === "4" &&
+                  isVisibleSportScore ? ( */}
+                  {isVisibleScore ? (
+                    <iframe
+                      className={`w-full ${
+                        pageData?.[0]?.sportsId === "4" ? "max-h-[110px]" : ""
+                      }`}
+                      src={`https://iframe.cbtfturbo247.com/cricket-score-new/${pageData?.[0]?.eventId}`}
+                    />
+                  ) : (
+                    ""
+                  )}
+
+                  {/* ) : pageData?.length > 0 && isVisibleScore ? (
                     <div className="aspect-auto">
                       <iframe
                         className={`w-full ${
-                          pageData?.[0]?.sportsId === "4" ? "h-[100px]" : ""
+                          pageData?.[0]?.sportsId === "4" ? "h-[110px]" : ""
                         }`}
                         src={`https://iframe.cbtfturbo247.com/${
                           pageData?.[0]?.sportsId === "4"
@@ -688,10 +741,12 @@ const MarketAnalyticsDetail = () => {
                             : pageData?.[0]?.sportsId === "2"
                             ? "tennis-score"
                             : ""
-                        }/${pageData?.[0]?.eventId}`}
+                        }/${spredexId}`}
                       />
                     </div>
-                  )}
+                  ) : (
+                    ""
+                  )} */}
                   <div>
                     {!isLoading &&
                       pageData?.map((item, index) => {
