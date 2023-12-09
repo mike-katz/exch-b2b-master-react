@@ -939,18 +939,18 @@ const BettingProfitLost = (props) => {
                     </tr>
                   );
                 } else if (currentType === "Aviator") {
-                  const pl =
-                    (Number(item?.pl) || 0) - (Number(item?.stack) || 0);
+                  // const pl =
+                  //   (Number(item?.pl) || 0) - (Number(item?.stack) || 0);
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td className=" capitalize">{item?.sportName}</td>
                       <td className="">{item?.stack}</td>
                       <td
                         className={`p-4 font-black ${
-                          pl <= 0 ? "text-[red]" : "text-[green]"
+                          item?.pl <= 0 ? "text-[red]" : "text-[green]"
                         }`}
                       >
-                        {Number(pl || 0)?.toFixed(2)}
+                        {Number(item?.pl || 0)?.toFixed(2)}
                       </td>
                       <td className="">
                         {moment
