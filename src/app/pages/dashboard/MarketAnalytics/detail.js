@@ -641,7 +641,7 @@ const MarketAnalyticsDetail = () => {
 
   return (
     <div className="px-2">
-      <div className="xl:block hidden">
+      <div className="block xl:hidden">
         <BetHistoryModal
           isVisible={visibleBestHistoryModal}
           onCloseMenu={onCloseBetsHistoryModal}
@@ -824,7 +824,7 @@ const MarketAnalyticsDetail = () => {
                 <div className="py-1">Live Bets</div>
               </div>
 
-              <div className="block xl:hidden">
+              <div className="xl:block hidden">
                 <BetHistory />
               </div>
             </div>
