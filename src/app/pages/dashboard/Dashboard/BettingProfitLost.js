@@ -895,12 +895,16 @@ const BettingProfitLost = (props) => {
                           className={`mr-1 font-black ${
                             item?.pl1 === 0
                               ? ""
+                              : item?.type === "lay" || item?.type === "no"
+                              ? "text-[green]"
                               : item?.pl1 > 0
                               ? "text-[green]"
                               : "text-[red]"
                           }`}
                         >
-                          {Number(item?.pl1 || 0)?.toFixed(2)}
+                          {item?.type === "lay" || item?.type === "no"
+                            ? Math.abs(Number(item?.pl1 || 0)?.toFixed(2))
+                            : Number(item?.pl1 || 0)?.toFixed(2)}
                         </span>
                         <span
                           className={`font-black ${

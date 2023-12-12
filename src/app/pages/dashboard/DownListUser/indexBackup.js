@@ -191,7 +191,7 @@ const DownLineUser = () => {
           <div className="text-[#243a48] text-[15px] font-black">
             IR{" "}
             {amountFormate(
-              Number(myBalance?.balance + myBalance?.totalExposure)
+              Number(myBalance?.balance + myBalance?.totalBalance)
             )}
           </div>
         </div>

@@ -2,14 +2,18 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { getReportUserListData } from "../../../redux/services/report";
-import { numberOppositeConvert } from "../../../utils/helper";
+import { numberOppositeConvert, roleStatus } from "../../../utils/helper";
 import { useSelector } from "react-redux";
+import jwtDecode from "jwt-decode";
+// import userEvent from "@testizzng-library/user-event";
 
 const ReportByUser = (props) => {
-  const { themeColor } = useSelector((state) => state?.persist);
-  const { userId } = useParams();
+  const { userData, themeColor, token } = useSelector(
+    (state) => state?.persist
+  );
+  // const { userId } = useParams();
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions(); // eslint-disable-line
   const [pageData, setPageData] = useState([]);
 
@@ -26,6 +30,9 @@ const ReportByUser = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [activePageId, setActivePageId] = useState("");
+  const [activePageRole, setActivePageRole] = useState([]);
+
   const onRefreshPagination = (count) => {
     setCurrentPage(count);
     const payload = {
@@ -33,15 +40,28 @@ const ReportByUser = (props) => {
       page: count,
       from: `${fromDate} ${moment().format("HH:mm:ss")}`,
       to: `${toDate} ${moment().format("HH:mm:ss")}`,
+      search: usernameValue,
       timeZone: timeZone,
-      userName: usernameValue,
+      userId: activePageId,
     };
 
     getAllPl(payload);
   };
 
+  const userDataJWT = jwtDecode(token);
+
+  const role = userDataJWT?.roles?.toString();
+
   useEffect(() => {
     getAllPl();
+    if (activePageRole?.length === 0) {
+      const customizeActivePageRole = [...activePageRole];
+      customizeActivePageRole.push({
+        role: role,
+        username: userData?.username,
+      });
+      setActivePageRole(customizeActivePageRole);
+    }
   }, []);
 
   const getAllPl = async (getPayload) => {
@@ -54,8 +74,9 @@ const ReportByUser = (props) => {
         page: currentPage,
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
-        userName: usernameValue,
+        search: usernameValue,
         timeZone: timeZone,
+        userId: activePageId,
       };
     }
 
@@ -93,9 +114,9 @@ const ReportByUser = (props) => {
       limit: perPage,
       from: fromDate,
       to: toDate,
-      userName: usernameValue,
+      search: usernameValue,
       timeZone: timeZone,
-      userId,
+      userId: activePageId,
     };
 
     getAllPl(payload);
@@ -109,9 +130,86 @@ const ReportByUser = (props) => {
       limit: value,
       from: fromDate,
       to: toDate,
-      userName: usernameValue,
+      search: usernameValue,
       timeZone: timeZone,
-      userId,
+      userId: activePageId,
+    };
+
+    getAllPl(payload);
+  };
+
+  const onClickChildren = (item) => {
+    // setSortConfig({
+    //   balance: "",
+    //   direction: "1",
+    // });
+
+    if (item?.roles?.toString() !== "User") {
+      setActivePageId(item?._id);
+
+      const customizeActivePageRole = [...activePageRole];
+      customizeActivePageRole.push({
+        role: item?.roles?.toString(),
+        username: item?.username,
+        _id: item?._id,
+      });
+      setActivePageRole(customizeActivePageRole);
+
+      const payload = {
+        page: 1,
+        limit: perPage,
+        to: toDate,
+        from: fromDate,
+        timeZone: timeZone,
+        search: usernameValue,
+        userId: item?._id,
+      };
+
+      getAllPl(payload);
+    }
+  };
+
+  const onClickUserManage = ({ role, _id }) => {
+    // setSortConfig({
+    //   balance: "",
+    //   direction: "1",
+    // });
+
+    if (userData?.roles?.toString() === role) {
+      setActivePageId("");
+    }
+
+    const customizeActivePageRole = [];
+
+    let lastData = false;
+    let remove = false;
+    activePageRole?.map((item, index) => {
+      if (!remove) {
+        customizeActivePageRole.push(item);
+      }
+
+      if (role === item?.role) {
+        if (activePageRole?.length === index + 1) {
+          lastData = true;
+        }
+        remove = true;
+      }
+    });
+
+    setActivePageRole(customizeActivePageRole);
+
+    if (lastData) {
+      return false;
+    }
+
+    const payload = {
+      page: 1,
+      limit: perPage,
+      to: toDate,
+      from: fromDate,
+      timeZone: timeZone,
+      search: usernameValue,
+      userId: _id,
     };
 
     getAllPl(payload);
@@ -169,6 +267,28 @@ const ReportByUser = (props) => {
           </button>
         </div>
       </div>
+
+      <div className="flex items-center border border-[#7e97a7] w-fit mb-4">
+        {activePageRole?.map((item, index) => {
+          return (
+            <div
+              onClick={() => {
+                onClickUserManage(item);
+              }}
+              key={index}
+              className={`w-fit rounded px-[15px] flex items-center ${
+                activePageRole?.length === index + 1 ? "" : "cursor-pointer"
+              } ${activePageRole?.length === index + 1 ? "" : "agent_path-L"}`}
+            >
+              {roleStatus(item?.role)}
+              <div className="text-[#1e1e1e] text-[16px] font-black leading-[30px]">
+                {item?.username}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       <div className="table-responsive">
         <table className="w-full min-w-max table-auto text-center">
           <thead>
@@ -199,7 +319,33 @@ const ReportByUser = (props) => {
               pageData?.map((item, index) => {
                 return (
                   <tr key={index} className="even:bg-blue-gray-50/50">
-                    <td className="text-left">{item?.username}</td>
+                    {/* <td className="text-left">{item?.username}</td> */}
+                    <td>
+                      <div
+                        onClick={() => {
+                          onClickChildren(item);
+                        }}
+                        className={`flex items-center ${
+                          item?.roles?.toString() === "User"
+                            ? ""
+                            : "text-[#568bc8] cursor-pointer"
+                        }`}
+                      >
+                        <span className="w-[30px]">
+                          {(currentPage - 1) * perPage + index + 1}.
+                        </span>{" "}
+                        {roleStatus(item?.roles?.toString())}
+                        <span
+                          className={`${
+                            item?.roles?.toString() === "User"
+                              ? ""
+                              : "underline"
+                          }`}
+                        >
+                          {item?.username}
+                        </span>
+                      </div>
+                    </td>
                     <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                     <td
                       className={` font-black ${

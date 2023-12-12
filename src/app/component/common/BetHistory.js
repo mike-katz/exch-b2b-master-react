@@ -67,7 +67,6 @@ const BetHistory = (props) => {
   const getBetHistory = async (payload) => {
     const data = await getBetHistoryDetailData(payload);
 
-    console.log({ data });
     if (data?.data) {
       // const backData = [];
       // const layData = [];

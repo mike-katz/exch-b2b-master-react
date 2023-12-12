@@ -2,8 +2,6 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
   getAuraBetListPlData,
-  getAuraEventPlData,
-  getAuraMarketPlData,
   getBetListData,
 } from "../../../redux/services/pl";
 import Loader from "../../../component/common/Loader";
@@ -17,6 +15,8 @@ import {
   getReportIntCasinoListData,
   getReportSportListData,
   getReportSportTotalPLData,
+  getReportUserEventsProfitLossAuraData,
+  getReportUserMarketsProfitLossAuraData,
 } from "../../../redux/services/report";
 import { numberOppositeConvert } from "../../../utils/helper";
 import { useSelector } from "react-redux";
@@ -379,12 +379,11 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
-        userId,
       };
 
       setIsLoading(true);
 
-      const data = await getAuraEventPlData(payload);
+      const data = await getReportUserEventsProfitLossAuraData(payload);
 
       if (data) {
         if (navigation?.length === 0) {
@@ -419,7 +418,7 @@ const ReportByMarket = (props) => {
 
       setIsLoading(true);
 
-      const data = await getAuraMarketPlData(payload);
+      const data = await getReportUserMarketsProfitLossAuraData(payload);
 
       if (data) {
         if (navigation?.length === 0) {
@@ -938,11 +937,16 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(item, item?.eventId, null, item?.eventName);
+                          onClickPl(
+                            item,
+                            item?.matchName,
+                            null,
+                            item?.matchName
+                          );
                         }}
-                        className=" underline text-[#568bc8] cursor-pointer"
+                        className="underline text-[#568bc8] cursor-pointer text-left"
                       >
-                        {item?.name}
+                        {item?.matchName}
                       </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
@@ -975,19 +979,7 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "AuraMarket") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td
-                        onClick={() => {
-                          onClickPl(
-                            item,
-                            item?.marketName,
-                            item?.sportId,
-                            item?.marketName
-                          );
-                        }}
-                        className=" underline text-[#568bc8] cursor-pointer"
-                      >
-                        {item?.name}
-                      </td>
+                      <td className="text-left">{item?.eventName}</td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${

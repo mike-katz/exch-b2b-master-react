@@ -216,12 +216,92 @@ export const getReportUserListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
-  if (payload?.userName) {
-    queryString += `${queryString ? "&" : "?"}userName=${payload?.userName}`;
+  if (payload?.search) {
+    queryString += `${queryString ? "&" : "?"}search=${payload?.search}`;
+  }
+
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
   const { data } = await Rest.get(
     `${APIEndpoint.getReportUserList}${queryString}`
+  );
+
+  return data;
+};
+
+export const getReportUserEventsProfitLossAuraData = async (payload) => {
+  let queryString = "";
+
+  if (payload?.limit) {
+    queryString += `${queryString ? "&" : "?"}limit=${payload?.limit}`;
+  }
+
+  if (payload?.page) {
+    queryString += `${queryString ? "&" : "?"}page=${payload?.page}`;
+  }
+
+  if (payload?.from) {
+    queryString += `${queryString ? "&" : "?"}from=${payload?.from}`;
+  }
+
+  if (payload?.to) {
+    queryString += `${queryString ? "&" : "?"}to=${payload?.to}`;
+  }
+
+  if (payload?.timeZone) {
+    queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
+  }
+
+  if (payload?.search) {
+    queryString += `${queryString ? "&" : "?"}search=${payload?.search}`;
+  }
+
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getReportUserEventsProfitLossAura}${queryString}`
+  );
+
+  return data;
+};
+
+export const getReportUserMarketsProfitLossAuraData = async (payload) => {
+  let queryString = "";
+
+  if (payload?.limit) {
+    queryString += `${queryString ? "&" : "?"}limit=${payload?.limit}`;
+  }
+
+  if (payload?.page) {
+    queryString += `${queryString ? "&" : "?"}page=${payload?.page}`;
+  }
+
+  if (payload?.from) {
+    queryString += `${queryString ? "&" : "?"}from=${payload?.from}`;
+  }
+
+  if (payload?.to) {
+    queryString += `${queryString ? "&" : "?"}to=${payload?.to}`;
+  }
+
+  if (payload?.timeZone) {
+    queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
+  }
+
+  if (payload?.matchName) {
+    queryString += `${queryString ? "&" : "?"}matchName=${payload?.matchName}`;
+  }
+
+  if (payload?.userId) {
+    queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getReportUserMarketsProfitLossAura}${queryString}`
   );
 
   return data;
