@@ -824,7 +824,9 @@ const MarketAnalyticsDetail = () => {
                 <div className="py-1">Live Bets</div>
               </div>
 
-              <BetHistory />
+              <div className="block xl:hidden">
+                <BetHistory />
+              </div>
             </div>
           </div>
         </div>

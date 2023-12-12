@@ -44,8 +44,9 @@ const BetHistory = (props) => {
         limit: 20,
         eventId: eventId,
       };
-
-      getBetHistory(payload);
+      if (window.innerWidth >= 720) {
+        getBetHistory(payload);
+      }
     }
   }, [eventId]);
 
@@ -57,7 +58,9 @@ const BetHistory = (props) => {
           limit: 20,
           eventId: eventId,
         };
-        getBetHistory(payload);
+        if (window.innerWidth >= 720) {
+          getBetHistory(payload);
+        }
       }, 2000);
 
       return () => clearInterval(interval);

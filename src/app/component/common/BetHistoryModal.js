@@ -47,7 +47,9 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
         eventId: eventId,
       };
 
-      getBetHistory(payload);
+      if (window.innerWidth < 720) {
+        getBetHistory(payload);
+      }
     }
   }, [eventId]);
 
@@ -59,7 +61,9 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
           limit: 20,
           eventId: eventId,
         };
-        getBetHistory(payload);
+        if (window.innerWidth < 720) {
+          getBetHistory(payload);
+        }
       }, 2000);
 
       return () => clearInterval(interval);

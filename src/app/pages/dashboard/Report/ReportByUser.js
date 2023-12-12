@@ -85,10 +85,25 @@ const ReportByUser = (props) => {
     const data = await getReportUserListData(payload);
 
     if (data) {
+      const desiredStatuses = [
+        "WhiteLabel",
+        "SuperSuper",
+        "Super",
+        "Master",
+        "Agent",
+        "User",
+      ];
+
+      const orderedData = data?.data?.results.sort((a, b) => {
+        const statusA = desiredStatuses.indexOf(a?.roles?.toString());
+        const statusB = desiredStatuses.indexOf(b?.roles?.toString());
+        return statusA - statusB;
+      });
+
       setTotalPage(data?.data?.totalPages);
       setPerPage(data?.data?.limit);
       setCurrentPage(Number(data?.data?.page));
-      setPageData(data?.data?.results);
+      setPageData(orderedData);
       setTotalResults(data?.data?.totalResults);
     }
 

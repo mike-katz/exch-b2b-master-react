@@ -16,8 +16,17 @@ const MarketAnalytics = () => {
   const getMarkets = async () => {
     setIsLoading(true);
     const data = await getMarketData();
+
     if (data?.data) {
-      setPageData(data?.data);
+      const desiredStatuses = ["Cricket", "Soccer", "Tennis"];
+
+      const orderedData = data?.data.sort((a, b) => {
+        const statusA = desiredStatuses.indexOf(a.sportName);
+        const statusB = desiredStatuses.indexOf(b.sportName);
+        return statusA - statusB;
+      });
+
+      setPageData(orderedData);
     }
     setIsLoading(false);
   };

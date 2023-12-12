@@ -291,9 +291,9 @@ export const getReportUserMarketsProfitLossAuraData = async (payload) => {
   if (payload?.timeZone) {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
-
   if (payload?.matchName) {
-    queryString += `${queryString ? "&" : "?"}matchName=${payload?.matchName}`;
+    const encodedMatchName = encodeURIComponent(payload?.matchName);
+    queryString += `${queryString ? "&" : "?"}matchName=${encodedMatchName}`;
   }
 
   if (payload?.userId) {
