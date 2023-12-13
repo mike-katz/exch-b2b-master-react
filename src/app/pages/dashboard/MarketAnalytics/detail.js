@@ -41,8 +41,8 @@ const MarketAnalyticsDetail = () => {
   const [linePlArray, setLinePlArray] = useState([]);
 
   const [isVisibleScore, setIsVisibleScore] = useState(false);
-  // const [isVisibleSportScore, setIsVisibleSportScore] = useState(false);
-  // const [spredexId, setSpredexId] = useState("");
+  const [isVisibleSportScore, setIsVisibleSportScore] = useState(false);
+  const [spredexId, setSpredexId] = useState("");
 
   const [visibleBestHistoryModal, setVisibleBestHistoryModal] = useState(false);
 
@@ -514,14 +514,14 @@ const MarketAnalyticsDetail = () => {
     data = data?.data;
 
     if (data) {
-      // if (data?.[0]?.sportsId === "4") {
-      //   getFirebaseSportScoreData(data?.[0]?.eventId);
-      // } else {
-      getFirebaseScoreData(data?.[0]?.eventId);
-      // }
+      if (data?.[0]?.sportsId === "4") {
+        getFirebaseSportScoreData(data?.[0]?.eventId);
+      } else {
+        getFirebaseScoreData(data?.[0]?.eventId);
+      }
 
       if (data?.length === 0) {
-        navigate("/sport/home");
+        navigate("/market-analytics");
         return false;
       }
       const fancyMarket = [];
@@ -575,7 +575,7 @@ const MarketAnalyticsDetail = () => {
       unsubscribeFromMessagesRef.current &&
         unsubscribeFromMessagesRef.current();
       getFirebaseData(eventId, sortMarket?.[0]?.sportsId);
-      // getMarketSpreadexId();
+      getMarketSpreadexId();
 
       setPageData(sortMarket);
 
@@ -619,25 +619,37 @@ const MarketAnalyticsDetail = () => {
     }
   };
 
-  // const getFirebaseSportScoreData = async (spredexId) => {
-  //   try {
-  //     setIsLoading(true);
-  //     const citiesRef = collection(fireStoreOthers, "scoreBoard");
-  //     const q = query(citiesRef, where("eventId", "==", spredexId));
-  //     unsubscribeScoreBoardRef.current = onSnapshot(q, (docsSnap) => {
-  //       const data = [];
-  //       docsSnap.forEach((doc) => {
-  //         data?.push(doc.data());
-  //       });
+  const getFirebaseSportScoreData = async (spredexId) => {
+    try {
+      setIsLoading(true);
+      const citiesRef = collection(fireStoreOthers, "scoreBoard");
+      const q = query(citiesRef, where("eventId", "==", spredexId));
+      unsubscribeScoreBoardRef.current = onSnapshot(q, (docsSnap) => {
+        const data = [];
+        docsSnap.forEach((doc) => {
+          data?.push(doc.data());
+        });
+        console.log({ data });
+        setIsVisibleSportScore(data?.[0]?.html ? true : false);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      console.warn(err);
+      setIsLoading(false);
+    }
+  };
 
-  //       setIsVisibleSportScore(data?.length > 0 ? true : false);
-  //       setIsLoading(false);
-  //     });
-  //   } catch (err) {
-  //     console.warn(err);
-  //     setIsLoading(false);
-  //   }
-  // };
+  const getMarketSpreadexId = async () => {
+    setIsLoading(true);
+    setSpredexId(123);
+    // const data = await getMarketSpreadexIdData(eventId);
+    // if (data?.spreadexId) {
+    //   setSpredexId(data?.spreadexId);
+    // } else {
+    //   setSpredexId("");
+    // }
+    setIsLoading(false);
+  };
 
   return (
     <div className="px-2">
@@ -712,22 +724,17 @@ const MarketAnalyticsDetail = () => {
                       <LiveStreaming eventId={pageData?.[0]?.eventId} />
                     )}
                   </div>
-                  {/* {!isLoading &&
+                  {!isLoading &&
                   pageData?.length > 0 &&
                   pageData?.[0]?.sportsId === "4" &&
-                  isVisibleSportScore ? ( */}
-                  {isVisibleScore ? (
+                  isVisibleSportScore ? (
                     <iframe
                       className={`w-full ${
                         pageData?.[0]?.sportsId === "4" ? "max-h-[110px]" : ""
                       }`}
                       src={`https://iframe.cbtfturbo247.com/cricket-score-new/${pageData?.[0]?.eventId}`}
                     />
-                  ) : (
-                    ""
-                  )}
-
-                  {/* ) : pageData?.length > 0 && isVisibleScore ? (
+                  ) : !isLoading && pageData?.length > 0 && isVisibleScore ? (
                     <div className="aspect-auto">
                       <iframe
                         className={`w-full ${
@@ -746,7 +753,7 @@ const MarketAnalyticsDetail = () => {
                     </div>
                   ) : (
                     ""
-                  )} */}
+                  )}
                   <div>
                     {!isLoading &&
                       pageData?.map((item, index) => {
