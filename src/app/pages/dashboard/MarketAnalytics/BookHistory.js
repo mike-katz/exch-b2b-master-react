@@ -47,12 +47,18 @@ const BookHistory = () => {
 
     if (data?.data?.results?.length > 0) {
       const tableSelections = [];
-      data?.data?.results?.[0]?.selectionId?.map((item) => {
-        const [key] = Object.entries(item)[0];
-        tableSelections?.push(data?.runnerData?.[key]);
-      });
+      // data?.data?.results?.[0]?.selectionId?.map((item) => {
+      //   const [key] = Object.entries(item)[0];
+      //   tableSelections?.push(data?.runnerData?.[key]);
+      // });
 
-      setTableRow(tableSelections);
+      // Object.keys(data?.runnerData)?.map((key) => {
+      //   tableSelections?.push(data?.runnerData?.[key]);
+      // });
+
+      console.log({ tableSelections });
+
+      setTableRow(data?.runnerData);
       setTotalPage(data?.data?.totalPages);
       setPerPage(data?.data?.limit);
       setCurrentPage(data?.data?.page);
@@ -114,10 +120,10 @@ const BookHistory = () => {
               <thead>
                 <tr>
                   <th className="">Username</th>
-                  {tableRow?.map((item, index) => {
+                  {Object.keys(tableRow)?.map((key, index) => {
                     return (
-                      <th key={index} className="w-36">
-                        {item}
+                      <th key={key} className="w-36">
+                        {tableRow?.[key]}
                       </th>
                     );
                   })}
@@ -173,7 +179,24 @@ const BookHistory = () => {
                               </Link>
                             </div>
                           </td>
-                          {item?.selectionId?.map((item) => {
+                          {Object.keys(tableRow)?.map((key) => {
+                            const keys = item?.selectionId?.find(
+                              (sl) => Object.keys(sl)[0] === key
+                            );
+                            return (
+                              <td
+                                key={key}
+                                className={`text-[${
+                                  keys?.[key] > 0 ? "green" : "red"
+                                }]`}
+                              >
+                                {amountFormate(
+                                  Number(keys?.[key])?.toFixed(2) || 0
+                                )}
+                              </td>
+                            );
+                          })}
+                          {/* {item?.selectionId?.map((item) => {
                             const [key, value] = Object.entries(item)[0];
                             return (
                               <td
@@ -185,7 +208,7 @@ const BookHistory = () => {
                                 {amountFormate(Number(value)?.toFixed(2) || 0)}
                               </td>
                             );
-                          })}
+                          })} */}
                         </tr>
                       </>
                     );
