@@ -576,7 +576,9 @@ const MarketAnalyticsDetail = () => {
       unsubscribeFromMessagesRef.current &&
         unsubscribeFromMessagesRef.current();
       getFirebaseData(eventId, sortMarket?.[0]?.sportsId);
-      getMarketSpreadexId();
+      if (data?.[0]?.sportsId !== "4") {
+        getMarketSpreadexId();
+      }
 
       setPageData(sortMarket);
 
