@@ -46,18 +46,6 @@ const BookHistory = () => {
     const data = await getUserPlByMarketData(payload);
 
     if (data?.data?.results?.length > 0) {
-      const tableSelections = [];
-      // data?.data?.results?.[0]?.selectionId?.map((item) => {
-      //   const [key] = Object.entries(item)[0];
-      //   tableSelections?.push(data?.runnerData?.[key]);
-      // });
-
-      // Object.keys(data?.runnerData)?.map((key) => {
-      //   tableSelections?.push(data?.runnerData?.[key]);
-      // });
-
-      console.log({ tableSelections });
-
       setTableRow(data?.runnerData);
       setTotalPage(data?.data?.totalPages);
       setPerPage(data?.data?.limit);

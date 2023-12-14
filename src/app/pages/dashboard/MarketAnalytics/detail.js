@@ -16,6 +16,7 @@ import Loader from "../../../component/common/Loader";
 import {
   getBetHistoryLPData,
   getMarketDetailData,
+  getMarketSpreadexIdData,
 } from "../../../redux/services/MarketAnalytics";
 import BetHistoryModal from "../../../component/common/BetHistoryModal";
 
@@ -517,7 +518,7 @@ const MarketAnalyticsDetail = () => {
       if (data?.[0]?.sportsId === "4") {
         getFirebaseSportScoreData(data?.[0]?.eventId);
       } else {
-        getFirebaseScoreData(data?.[0]?.eventId);
+        getFirebaseScoreData(spredexId);
       }
 
       if (data?.length === 0) {
@@ -603,7 +604,7 @@ const MarketAnalyticsDetail = () => {
     try {
       setIsLoading(true);
       const citiesRef = collection(fireStoreOthers, "scoreBoard");
-      const q = query(citiesRef, where("eventId", "==", spredexId));
+      const q = query(citiesRef, where("leagueSpEventId", "==", spredexId));
       unsubscribeScoreBoardRef.current = onSnapshot(q, (docsSnap) => {
         const data = [];
         docsSnap.forEach((doc) => {
@@ -629,7 +630,7 @@ const MarketAnalyticsDetail = () => {
         docsSnap.forEach((doc) => {
           data?.push(doc.data());
         });
-        console.log({ data });
+
         setIsVisibleSportScore(data?.[0]?.html ? true : false);
         setIsLoading(false);
       });
@@ -641,15 +642,26 @@ const MarketAnalyticsDetail = () => {
 
   const getMarketSpreadexId = async () => {
     setIsLoading(true);
-    setSpredexId(123);
-    // const data = await getMarketSpreadexIdData(eventId);
-    // if (data?.spreadexId) {
-    //   setSpredexId(data?.spreadexId);
-    // } else {
-    //   setSpredexId("");
-    // }
+
+    const payload = {
+      eventId,
+    };
+
+    const data = await getMarketSpreadexIdData(payload);
+    if (data?.spreadexId) {
+      setSpredexId(data?.spreadexId);
+    } else {
+      setSpredexId("");
+    }
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (spredexId) {
+      unsubscribeScoreBoardRef.current && unsubscribeScoreBoardRef.current();
+      getFirebaseScoreData(spredexId);
+    }
+  }, [spredexId]);
 
   return (
     <div className="px-2">

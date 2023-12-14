@@ -42,6 +42,7 @@ export default class APIEndpoint {
   static getSt8Balance = "master/st8/balance";
   static withdrawSt8Balance = "master/st8/withdraw";
   static getUserPlByMarket = "api/beating/market-pl";
+  static getExtraFetchScoreboard = "api/extra/fetch-scoreboard";
 
   // NEWS
   static news = "api/extra/news";

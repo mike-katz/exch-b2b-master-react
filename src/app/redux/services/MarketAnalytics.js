@@ -96,3 +96,17 @@ export const getUserPlByMarketData = async (payload) => {
 
   return data;
 };
+
+export const getMarketSpreadexIdData = async (payload) => {
+  let queryParams = "";
+
+  if (payload?.eventId) {
+    queryParams += `${queryParams ? "&" : "?"}eventId=${payload?.eventId}`;
+  }
+
+  const { data } = await Rest.get(
+    `${APIEndpoint.getExtraFetchScoreboard}${queryParams}`
+  );
+
+  return data;
+};
