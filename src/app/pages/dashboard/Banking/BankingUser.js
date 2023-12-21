@@ -486,29 +486,27 @@ const BankingMaster = () => {
                         </div>
                       </td>
                       <td className="text-right">
-                        <td>
-                          <div
-                            className="flex items-center text-[#2789ce] cursor-pointer"
-                            onClick={() => {
-                              onClickBalance(item?.username);
-                            }}
-                          >
-                            {amountFormate(
-                              Number(item?.balance + item?.exposure)
-                            )}
-                            {isLoadingBalance === item?.username ? (
-                              <Loader
-                                color={"#2789ce"}
-                                className="ml-1"
-                                size={10}
-                              />
-                            ) : isEnableBalanceView === item?.username ? (
-                              <FaMinusSquare className="ml-1" size={15} />
-                            ) : (
-                              <FaPlusSquare className="ml-1" size={15} />
-                            )}
-                          </div>
-                        </td>
+                        <div
+                          className="flex items-center text-[#2789ce] cursor-pointer"
+                          onClick={() => {
+                            onClickBalance(item?.username);
+                          }}
+                        >
+                          {amountFormate(
+                            Number(item?.balance + item?.exposure)
+                          )}
+                          {isLoadingBalance === item?.username ? (
+                            <Loader
+                              color={"#2789ce"}
+                              className="ml-1"
+                              size={10}
+                            />
+                          ) : isEnableBalanceView === item?.username ? (
+                            <FaMinusSquare className="ml-1" size={15} />
+                          ) : (
+                            <FaPlusSquare className="ml-1" size={15} />
+                          )}
+                        </div>
                       </td>
                       <td className="text-right">
                         {amountFormate(Number(item?.balance + item?.exposure))}

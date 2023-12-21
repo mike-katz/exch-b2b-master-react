@@ -679,12 +679,19 @@ const DownListMaster = () => {
                             : ""
                         }`}
                       >
-                        ({amountFormate(item?.exposure) || 0})
+                        (
+                        {amountFormate(
+                          Number(item?.exposure || 0) +
+                            Number(item?.downlineExposure || 0)
+                        ) || 0}
+                        )
                       </span>
                     </td>
-
                     <td className="text-right">
-                      {amountFormate(Number(item?.balance))}
+                      {amountFormate(
+                        Number(item?.balance || 0) +
+                          Number(item?.downlineBalance || 0)
+                      )}
                     </td>
                     {findUser ? (
                       <td className="text-right">
@@ -709,17 +716,24 @@ const DownListMaster = () => {
                       </td>
                     ) : null}
                     <td className="text-right">
-                      {Number(item?.balance - item?.creditRef) >= 0 ? (
+                      {Number(item?.balance || 0) +
+                        Number(item?.downlineBalance || 0) -
+                        Number(item?.creditRef || 0) >=
+                      0 ? (
                         <span className="text-[#508d0e]">
                           {amountFormate(
-                            Number(item?.balance - item?.creditRef)
+                            Number(item?.balance || 0) +
+                              Number(item?.downlineBalance || 0) -
+                              Number(item?.creditRef || 0)
                           )}
                         </span>
                       ) : (
                         <span className="text-[#d0021b]">
                           (
                           {amountFormate(
-                            Number(item?.balance - item?.creditRef)
+                            Number(item?.balance || 0) +
+                              Number(item?.downlineBalance || 0) -
+                              Number(item?.creditRef || 0)
                           )}
                           )
                         </span>

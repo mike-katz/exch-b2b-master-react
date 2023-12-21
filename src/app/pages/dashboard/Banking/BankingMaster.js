@@ -67,6 +67,7 @@ const BankingMaster = () => {
           remark: "",
           type: "",
           isVisibleCreditRef: false,
+          rate: 0,
         });
       });
       setPageSubmitData(clearData);
@@ -98,7 +99,7 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -114,7 +115,7 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -130,7 +131,23 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
+        count += 1;
+      }
+    });
+
+    setChangeCount(count);
+  };
+
+  const onChangeRate = (value, index) => {
+    const customizeData = [...pageSubmitData];
+    customizeData[index].rate = value;
+    setPageSubmitData(customizeData);
+
+    let count = 0;
+
+    customizeData?.map((item) => {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -148,6 +165,7 @@ const BankingMaster = () => {
         remark: "",
         type: "",
         isVisibleCreditRef: false,
+        rate: 0,
       });
     });
     setPageSubmitData(data);
@@ -171,7 +189,7 @@ const BankingMaster = () => {
         balanceError = true;
       }
 
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         submitData.push({
           userId: item?.userId,
           balance: Number(item?.dw) ? Number(item?.dw) : "",
@@ -182,6 +200,7 @@ const BankingMaster = () => {
               ? "withdraw"
               : "",
           remark: item?.remark,
+          rate: item?.rate,
           creditRef: Number(item?.creditRef) ? Number(item?.creditRef) : "",
         });
       }
@@ -221,7 +240,7 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -237,7 +256,7 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -260,7 +279,7 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -276,7 +295,7 @@ const BankingMaster = () => {
     let count = 0;
 
     customizeData?.map((item) => {
-      if (item?.dw || item?.creditRef || item?.remark) {
+      if (item?.dw || item?.creditRef || item?.remark || item?.rate) {
         count += 1;
       }
     });
@@ -387,8 +406,9 @@ const BankingMaster = () => {
           <thead>
             <tr>
               <th className="">UID</th>
-              <th className="">Balance</th>
-              <th className="text-right">Available D/W</th>
+              <th className="text-center">Rate</th>
+              <th className="">Available Balance</th>
+              <th className="text-right">Balance</th>
               <th className="text-right">Exposure</th>
               {/* <th className="text-right border-l border-r border-[#7e97a7]">
                 Check Balance
@@ -447,11 +467,59 @@ const BankingMaster = () => {
                         {item?.username}
                       </div>
                     </td>
-                    <td className="">{amountFormate(item?.balance)}</td>
-                    <td className="text-right">
-                      {amountFormate(Number(item?.balance + item?.exposure))}
+                    {item?.roles?.toString() === "User" ? (
+                      <td className="text-center">
+                        <button
+                          // onClick={onSubmitSearch}
+                          style={{
+                            background: themeColor?.headerBgColor,
+                            color: themeColor?.headerTextColor,
+                          }}
+                          className="rounded px-2 text-[13px] h-[25px] font-black"
+                        >
+                          Search
+                        </button>
+                      </td>
+                    ) : (
+                      <td className="text-center">
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            onChangeRate(e?.target?.value, index);
+                          }}
+                          value={pageSubmitData?.[index]?.rate || ""}
+                          placeholder="Rate"
+                          style={{
+                            boxShadow: "inset 0px 2px 0px rgba(0,0,0,.1)",
+                          }}
+                          className="rounded p-[5px] text-[#1e1e1e] border border-[#aaa] mr-2 text-right w-[80px]"
+                        />
+                      </td>
+                    )}
+
+                    <td className="">
+                      {amountFormate(
+                        Number(item?.balance || 0) +
+                          Number(item?.downlineBalance || 0)
+                      )}
                     </td>
-                    <td className="text-right">{item?.exposure}</td>
+                    <td className="text-right">
+                      {amountFormate(item?.balance)}
+                    </td>
+                    <td
+                      className={`text-right text-[#d0021b] ${
+                        item?.roles?.toString() === "User"
+                          ? "cursor-pointer"
+                          : ""
+                      }`}
+                    >
+                      (
+                      {amountFormate(
+                        Number(item?.exposure || 0) +
+                          Number(item?.downlineExposure || 0)
+                      ) || 0}
+                      )
+                    </td>
                     {/* <td
                     className="text-right border-l border-r border-[#7e97a7]"
                     width={200}
@@ -571,7 +639,28 @@ const BankingMaster = () => {
                       </div>
                     </td>
                     <td className="text-right border-r border-r-[#7e97a7]">
-                      {amountFormate(Number(item?.balance + item?.creditRef))}
+                      {Number(item?.balance || 0) +
+                        Number(item?.downlineBalance || 0) -
+                        Number(item?.creditRef || 0) >=
+                      0 ? (
+                        <span className="text-[#508d0e]">
+                          {amountFormate(
+                            Number(item?.balance || 0) +
+                              Number(item?.downlineBalance || 0) -
+                              Number(item?.creditRef || 0)
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-[#d0021b]">
+                          (
+                          {amountFormate(
+                            Number(item?.balance || 0) +
+                              Number(item?.downlineBalance || 0) -
+                              Number(item?.creditRef || 0)
+                          )}
+                          )
+                        </span>
+                      )}
                     </td>
                     <td className="text-right border-r border-r-[#7e97a7]">
                       <input
