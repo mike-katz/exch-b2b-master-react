@@ -315,7 +315,9 @@ const BettingHistory = ({ username }) => {
                       {item?.odds?.$numberDecimal || item?.odds}
                     </td>
                     <td className="font-black">{item?.stake}</td>
-                    <td className="font-black">{item?.pl}</td>
+                    <td className="font-black">
+                      {Number(item?.pl || 0)?.toFixed(2)}
+                    </td>
                     <td className="">
                       {moment(item?.createdAt).format("DD/MM/YYYY")}
                       <br />
