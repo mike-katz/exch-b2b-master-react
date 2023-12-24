@@ -1,6 +1,10 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import Loader from "../../../component/common/Loader";
+import Pagination from "../../../component/common/Pagination";
 import {
   getAuraBetListPlData,
   getAuraEventPlData,
@@ -16,10 +20,6 @@ import {
   getSt8CategoriesData,
   getSt8GameListData,
 } from "../../../redux/services/pl";
-import Loader from "../../../component/common/Loader";
-import Pagination from "../../../component/common/Pagination";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const BettingProfitLost = (props) => {
   const { userId } = useParams();
@@ -398,7 +398,7 @@ const BettingProfitLost = (props) => {
       setIsLoading(false);
     } else if (customType === "AuraEvent") {
       const payload = {
-        matchName: id,
+        eventId: name,
         limit: perPage,
         page: currentPage,
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
@@ -433,6 +433,7 @@ const BettingProfitLost = (props) => {
     } else if (customType === "AuraMarket") {
       const payload = {
         roundId: id,
+        matchName: name,
         limit: perPage,
         page: currentPage,
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
@@ -1074,7 +1075,7 @@ const BettingProfitLost = (props) => {
                       <td className=" capitalize">{item?.sportName}</td>
                       <td
                         onClick={() => {
-                          onClickPl(item?.eventName, null, item?.eventName);
+                          onClickPl(item?.eventId, null, item?.eventName);
                         }}
                         className="p-4 underline text-[#568bc8] cursor-pointer"
                       >
@@ -1124,9 +1125,9 @@ const BettingProfitLost = (props) => {
                       <td
                         onClick={() => {
                           onClickPl(
-                            item?.roundId,
+                            item?.marketName,
                             item?.sportId,
-                            item?.marketName
+                            item?.eventName
                           );
                         }}
                         className="p-4 underline text-[#568bc8] cursor-pointer"

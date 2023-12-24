@@ -411,6 +411,10 @@ export const getAuraMarketPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}matchName=${encodedMatchName}`;
   }
 
+  if (payload?.eventId) {
+    queryString += `${queryString ? "&" : "?"}eventId=${payload?.eventId}`;
+  }
+
   if (payload?.timeZone) {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
@@ -452,6 +456,11 @@ export const getAuraBetListPlData = async (payload) => {
 
   if (payload?.timeZone) {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
+  }
+
+  if (payload?.matchName) {
+    const encodedMatchName = encodeURIComponent(payload?.matchName);
+    queryString += `${queryString ? "&" : "?"}matchName=${encodedMatchName}`;
   }
 
   if (payload?.userId) {
