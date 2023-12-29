@@ -96,7 +96,7 @@ const MarketAnalyticsDetail = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       getBetPl(eventId);
-    }, 2000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
