@@ -412,7 +412,8 @@ export const getAuraMarketPlData = async (payload) => {
   }
 
   if (payload?.eventId) {
-    queryString += `${queryString ? "&" : "?"}eventId=${payload?.eventId}`;
+    const encodedMatchName = encodeURIComponent(payload?.eventId);
+    queryString += `${queryString ? "&" : "?"}eventId=${encodedMatchName}`;
   }
 
   if (payload?.timeZone) {
