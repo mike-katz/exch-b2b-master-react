@@ -160,7 +160,7 @@ const CustomRoutes = () => {
       />
 
       <Route
-        path="/bet-history/:eventId"
+        path="/bet-history/:eventId/:sportId"
         element={
           <PrivateRoute>
             <AllBetHistory />

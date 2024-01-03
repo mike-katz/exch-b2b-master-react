@@ -10,7 +10,7 @@ import { amountFormate } from "../../../utils/helper";
 import { BOOK_MARKET_TYPE } from "../../../utils/dropdown";
 
 const AllBetHistory = () => {
-  const { eventId } = useParams();
+  const { eventId, sportId } = useParams();
   const navigate = useNavigate();
   // const { themeColor } = useSelector((state) => state?.persist);
 
@@ -50,6 +50,7 @@ const AllBetHistory = () => {
         eventId: eventId,
         amount: amountValue,
         flag: marketType,
+        sportId,
       };
     }
 
@@ -78,6 +79,7 @@ const AllBetHistory = () => {
       eventId: eventId,
       amount: amountValue,
       flag: marketType,
+      sportId,
     };
 
     transactionsHistory(payload);
@@ -96,6 +98,7 @@ const AllBetHistory = () => {
       eventId: eventId,
       amount: amountValue,
       flag: marketType,
+      sportId,
     };
 
     transactionsHistory(payload);

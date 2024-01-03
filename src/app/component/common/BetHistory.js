@@ -117,7 +117,7 @@ const BetHistory = ({ sportId }) => {
             background: themeColor?.headerBgColor,
             color: themeColor?.headerTextColor,
           }}
-          to={`/bet-history/${eventId}`}
+          to={`/bet-history/${eventId}/${sportId}`}
           className="w-full text-[14px] cursor-pointer rounded px-2 h-[25px] font-black flex items-center justify-center"
         >
           View All
