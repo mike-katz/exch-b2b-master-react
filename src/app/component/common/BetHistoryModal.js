@@ -37,23 +37,23 @@ const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
   //   }
   // }, [activeMenu, pageLayAllData, pageFancyAllData]);
 
-  useEffect(() => {
-    if (eventId) {
-      setIsLoading(true);
+  // useEffect(() => {
+  //   if (eventId) {
+  //     setIsLoading(true);
 
-      const payload = {
-        page: 1,
-        limit: 20,
-        eventId: eventId,
-        flag: activeMenu,
-        sportId: sportId,
-      };
+  //     const payload = {
+  //       page: 1,
+  //       limit: 20,
+  //       eventId: eventId,
+  //       flag: activeMenu,
+  //       sportId: sportId,
+  //     };
 
-      if (window.innerWidth < 720) {
-        getBetHistory(payload);
-      }
-    }
-  }, [eventId, activeMenu]);
+  //     if (window.innerWidth < 720) {
+  //       getBetHistory(payload);
+  //     }
+  //   }
+  // }, [eventId, activeMenu]);
 
   useEffect(() => {
     if (eventId) {
@@ -68,11 +68,15 @@ const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
         if (window.innerWidth < 720) {
           getBetHistory(payload);
         }
-      }, 2000);
+      }, 5000);
 
       return () => clearInterval(interval);
     }
   }, [eventId, activeMenu]);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [activeMenu]);
 
   const getBetHistory = async (payload) => {
     const data = await getBetHistoryDetailData(payload);

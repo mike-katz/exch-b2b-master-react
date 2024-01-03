@@ -65,11 +65,15 @@ const BetHistory = ({ sportId }) => {
         if (window.innerWidth >= 720) {
           getBetHistory(payload);
         }
-      }, 2000);
+      }, 5000);
 
       return () => clearInterval(interval);
     }
   }, [eventId, activeMenu]);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [activeMenu]);
 
   const getBetHistory = async (payload) => {
     const data = await getBetHistoryDetailData(payload);
