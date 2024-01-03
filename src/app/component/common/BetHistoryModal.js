@@ -190,7 +190,7 @@ const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
             </label>
           </div> */}
             </div>
-            <div className="w-[calc(100vw-10px)] sm:w-full table-responsive mt-2">
+            <div className="w-[calc(100vw-10px)] sm:w-full table-responsive mt-2 !overflow-y-auto h-[calc(100vh-154px)]">
               <table className=" min-w-max table-fixe text-left">
                 <thead>
                   <tr>

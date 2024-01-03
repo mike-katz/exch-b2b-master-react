@@ -40,6 +40,7 @@ const MarketAnalyticsDetail = () => {
   const [fancyPlArray, setFancyPlArray] = useState([]);
   const [linePlData, setLinePlData] = useState([]);
   const [linePlArray, setLinePlArray] = useState([]);
+  const [currentSportId, setCurrentSportId] = useState(0);
 
   const [isVisibleScore, setIsVisibleScore] = useState(false);
   const [isVisibleSportScore, setIsVisibleSportScore] = useState(false);
@@ -95,11 +96,11 @@ const MarketAnalyticsDetail = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getBetPl(eventId);
+      getBetPl(eventId, currentSportId);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentSportId]);
 
   const getFirebaseData = async (eventId, sportsId) => {
     let currentFireStore;
@@ -385,7 +386,8 @@ const MarketAnalyticsDetail = () => {
 
         if (firstTimeRender?.current) {
           firstTimeRender.current = false;
-          getBetPl(eventId);
+          getBetPl(eventId, sportsId);
+          setCurrentSportId(sportsId);
         }
 
         setPageData(sortMarket);
@@ -416,9 +418,11 @@ const MarketAnalyticsDetail = () => {
   //   setIsLoading(false);
   // };ʼ
 
-  const getBetPl = async (exEventId) => {
+  const getBetPl = async (exEventId, sportId) => {
+    console.log({});
     const payload = {
       exEventId,
+      sportId,
     };
 
     const data = await getBetHistoryLPData(payload);
@@ -560,11 +564,6 @@ const MarketAnalyticsDetail = () => {
       liveFancyOdds.current = fancyMarketOdds;
       liveLineOdds.current = lineMarketOdds;
 
-      if (isLoggedIn && firstTimeRender?.current) {
-        firstTimeRender.current = false;
-        getBetPl(eventId);
-      }
-
       const desiredStatuses = ["match_odds", "bookmaker", "sportbook"];
 
       const sortMarket = market.sort((a, b) => {
@@ -578,6 +577,11 @@ const MarketAnalyticsDetail = () => {
       getFirebaseData(eventId, sortMarket?.[0]?.sportsId);
       if (data?.[0]?.sportsId !== "4") {
         getMarketSpreadexId();
+      }
+
+      if (isLoggedIn && firstTimeRender?.current) {
+        firstTimeRender.current = false;
+        getBetPl(eventId, sortMarket?.[0]?.sportsId);
       }
 
       setPageData(sortMarket);

@@ -157,9 +157,12 @@ const BetHistory = ({ sportId }) => {
             <Switch
               ripple={false}
               color="#ecad17"
-              className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+              className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17] border-[#000000]"
+              containerProps={{
+                className: "w-11 h-6",
+              }}
               circleProps={{
-                className: "before:hidden border-none",
+                className: "before:hidden left-0.5 border-none",
               }}
               value={liveBetAPICall}
               checked={liveBetAPICall}

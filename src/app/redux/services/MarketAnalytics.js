@@ -84,6 +84,10 @@ export const getBetHistoryLPData = async (payload) => {
     queryParams += `${queryParams ? "&" : "?"}eventId=${payload?.exEventId}`;
   }
 
+  if (payload?.sportId) {
+    queryParams += `${queryParams ? "&" : "?"}sportId=${payload?.sportId}`;
+  }
+
   const { data } = await Rest.get(
     `${APIEndpoint.getBetHistoryLPData}${queryParams}`
   );
