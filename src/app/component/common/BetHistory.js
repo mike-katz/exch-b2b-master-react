@@ -5,13 +5,13 @@ import { getBetHistoryDetailData } from "../../redux/services/MarketAnalytics";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const BetHistory = (props) => {
+const BetHistory = ({ sportId }) => {
   const { eventId } = useParams();
   const { themeColor } = useSelector((state) => state?.persist);
 
-  const [activeMenu, setActiveMenu] = useState("matched");
-  const [pageFancyAllData, setPageFancyAllData] = useState([]);
-  const [pageLayAllData, setPageLayAllData] = useState([]);
+  const [activeMenu, setActiveMenu] = useState("other");
+  // const [pageFancyAllData, setPageFancyAllData] = useState([]);
+  // const [pageLayAllData, setPageLayAllData] = useState([]);
   // const [pageBackData, setPageBackData] = useState([]);
   // const [pageLayData, setPageLayData] = useState([]);
   const [pageData, setPageData] = useState([]);
@@ -19,21 +19,21 @@ const BetHistory = (props) => {
   // const [betInfo, setBetInfo] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (activeMenu) {
-      let filterData = [];
-      if (activeMenu === "matched") {
-        filterData = pageLayAllData?.filter(
-          (bet) => bet?.type === "lay" || bet?.type === "back"
-        );
-      } else {
-        filterData = pageFancyAllData?.filter(
-          (bet) => bet?.type === "yes" || bet?.type === "no"
-        );
-      }
-      setPageData(filterData);
-    }
-  }, [activeMenu, pageLayAllData, pageFancyAllData]);
+  // useEffect(() => {
+  //   if (activeMenu) {
+  //     let filterData = [];
+  //     if (activeMenu === "other") {
+  //       filterData = pageLayAllData?.filter(
+  //         (bet) => bet?.type === "lay" || bet?.type === "back"
+  //       );
+  //     } else {
+  //       filterData = pageFancyAllData?.filter(
+  //         (bet) => bet?.type === "yes" || bet?.type === "no"
+  //       );
+  //     }
+  //     setPageData(filterData);
+  //   }
+  // }, [activeMenu, pageLayAllData, pageFancyAllData]);
 
   useEffect(() => {
     if (eventId) {
@@ -43,12 +43,14 @@ const BetHistory = (props) => {
         page: 1,
         limit: 20,
         eventId: eventId,
+        flag: activeMenu,
+        sportId: sportId,
       };
       if (window.innerWidth >= 720) {
         getBetHistory(payload);
       }
     }
-  }, [eventId]);
+  }, [eventId, activeMenu]);
 
   useEffect(() => {
     if (eventId) {
@@ -57,6 +59,8 @@ const BetHistory = (props) => {
           page: 1,
           limit: 20,
           eventId: eventId,
+          flag: activeMenu,
+          sportId: sportId,
         };
         if (window.innerWidth >= 720) {
           getBetHistory(payload);
@@ -65,12 +69,13 @@ const BetHistory = (props) => {
 
       return () => clearInterval(interval);
     }
-  }, [eventId]);
+  }, [eventId, activeMenu]);
 
   const getBetHistory = async (payload) => {
     const data = await getBetHistoryDetailData(payload);
 
     if (data?.data) {
+      console.log({ data });
       // const backData = [];
       // const layData = [];
       // data?.data?.results?.map((item) => {
@@ -81,9 +86,9 @@ const BetHistory = (props) => {
       //   }
       // });
 
-      setPageFancyAllData(data?.data?.fancyResult);
-      setPageLayAllData(data?.data?.otherResult);
-      // setPageData(data?.data?.results);
+      // setPageFancyAllData(data?.data?.result);
+      // setPageLayAllData(data?.data?.result);
+      setPageData(data?.data?.results);
     }
     setIsLoading(false);
   };
@@ -116,10 +121,10 @@ const BetHistory = (props) => {
           <div className="flex items-center">
             <div
               onClick={() => {
-                onClickTab("matched");
+                onClickTab("other");
               }}
               className={`border-b-2 ${
-                activeMenu === "matched"
+                activeMenu === "other"
                   ? "text-[#6D081D] border-[#6D081D]"
                   : "border-transparent"
               } hover:text-[#6D081D] cursor-pointer px-[16px] py-[8px]`}

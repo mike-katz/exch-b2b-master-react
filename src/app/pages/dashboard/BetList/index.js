@@ -254,6 +254,8 @@ const BetList = () => {
         <div className="col-span-6 lg:col-span-2">
           <div className="text-[#000] text-[12px]">From Date :</div>
           <input
+            min={moment().subtract(14, "days").format("YYYY-MM-DD")}
+            max={moment().format("YYYY-MM-DD")}
             value={fromDate}
             onChange={onChangeFromDate}
             type="date"
@@ -264,6 +266,8 @@ const BetList = () => {
         <div className="col-span-6 lg:col-span-2">
           <div className="text-[#000] text-[12px]">To Date :</div>
           <input
+            min={moment().subtract(1, "months").format("YYYY-MM-DD")}
+            max={moment().format("YYYY-MM-DD")}
             value={toDate}
             onChange={onChangeToDate}
             type="date"
@@ -403,6 +407,10 @@ const BetList = () => {
                     </td>
                     <td className="">
                       {item?.odds?.$numberDecimal || item?.odds}
+                      {(item?.size || item?.size === 0) &&
+                        `/${
+                          item?.mrktType === "line_market" ? "100" : item?.size
+                        }`}
                     </td>
                     <td className="font-black">{item?.stake}</td>
                     <td className="">

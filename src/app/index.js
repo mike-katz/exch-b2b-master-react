@@ -149,8 +149,8 @@ const MainApp = () => {
       window.location?.pathname?.includes("/credit-ref-logs/") ||
       window.location?.pathname?.includes("/banking-logs/") ||
       window.location?.pathname?.includes("/banking-logs-all") ||
-      window.location?.pathname?.includes("/profile-logs-all") ||
-      window.location?.pathname?.includes("/bet-history");
+      window.location?.pathname?.includes("/profile-logs-all");
+    //  || window.location?.pathname?.includes("/bet-history");
 
     setIsVisibleHeader(noHeader);
   }, [location.pathname]);

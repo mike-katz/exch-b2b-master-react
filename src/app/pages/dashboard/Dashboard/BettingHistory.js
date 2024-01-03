@@ -313,6 +313,10 @@ const BettingHistory = ({ username }) => {
                     </td>
                     <td className="">
                       {item?.odds?.$numberDecimal || item?.odds}
+                      {(item?.size || item?.size === 0) &&
+                        `/${
+                          item?.mrktType === "line_market" ? "100" : item?.size
+                        }`}
                     </td>
                     <td className="font-black">{item?.stake}</td>
                     <td className="font-black">

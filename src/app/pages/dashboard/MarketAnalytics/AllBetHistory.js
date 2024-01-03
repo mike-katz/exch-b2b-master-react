@@ -1,15 +1,18 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+// import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../component/common/Loader";
-import { amountFormate } from "../../../utils/helper";
 import Pagination from "../../../component/common/Pagination";
 import { getBetHistoryData } from "../../../redux/services/MarketAnalytics";
-import { FaChevronLeft } from "react-icons/fa";
+import { amountFormate } from "../../../utils/helper";
+import { BOOK_MARKET_TYPE } from "../../../utils/dropdown";
 
 const AllBetHistory = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  // const { themeColor } = useSelector((state) => state?.persist);
 
   const [pageData, setPageData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,13 +23,16 @@ const AllBetHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
+  const [marketType, setMarketType] = useState("");
+  const [amountValue, setAmountValue] = useState("");
+
   useEffect(() => {
     const interval = setInterval(() => {
       transactionsHistory(false, currentPage, perPage);
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage, amountValue, marketType]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -42,6 +48,8 @@ const AllBetHistory = () => {
         page: currentPage,
         limit: perPage,
         eventId: eventId,
+        amount: amountValue,
+        flag: marketType,
       };
     }
 
@@ -68,6 +76,8 @@ const AllBetHistory = () => {
       page: count,
       limit: perPage,
       eventId: eventId,
+      amount: amountValue,
+      flag: marketType,
     };
 
     transactionsHistory(payload);
@@ -84,15 +94,76 @@ const AllBetHistory = () => {
       page: 1,
       limit: value,
       eventId: eventId,
+      amount: amountValue,
+      flag: marketType,
     };
 
     transactionsHistory(payload);
   };
 
+  const onChangeMarketType = (e) => {
+    setMarketType(e?.target?.value);
+  };
+
+  const onChangeAmount = (e) => {
+    setAmountValue(e?.target?.value);
+  };
+
+  // const onClickSubmit = () => {};
+
   return (
-    <div className="py-4">
-      <div style={{ boxShadow: "0 4px 5px rgba(0,0,0,.5)" }}>
-        <div className="flex items-center bg-[#1b2d38] h-[40px] px-[10px] py-[5px]">
+    <div className="px-2">
+      <div>
+        <div className="text-[#243a48] text-[16px] font-black mt-4 flex items-center">
+          <FaChevronLeft
+            size={20}
+            color="#243a48"
+            onClick={onClickBack}
+            className="mr-2 cursor-pointer"
+          />{" "}
+          Bet List
+        </div>
+        <div className="grid grid-cols-12 gap-4 items-end mb-4 mt-4 bg-[#e0e6e6] p-3 pt-2 rounded">
+          <div className="col-span-6 lg:col-span-2">
+            <div className="text-[#000] text-[12px]">Market Type: </div>
+            <select
+              value={marketType}
+              onChange={onChangeMarketType}
+              className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2"
+            >
+              {BOOK_MARKET_TYPE?.map((item, index) => {
+                return (
+                  <option key={index} value={item?.value}>
+                    {item?.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="col-span-6 lg:col-span-2">
+            <div className="text-[#000] text-[12px]">Amount :</div>
+            <input
+              value={amountValue}
+              onChange={onChangeAmount}
+              type="number"
+              className="text-[#333] bg-[#ffffff] text-[12px] border border-[#959595] w-full h-[25px] rounded px-2"
+              placeholder="Amount"
+            />
+          </div>
+          {/* <div className="col-span-6 lg:col-span-2">
+            <button
+              onClick={onClickSubmit}
+              style={{
+                background: themeColor?.headerBgColor,
+                color: themeColor?.headerTextColor,
+              }}
+              className="rounded px-2 text-[13px] h-[25px] font-black w-[140px]"
+            >
+              SUBMIT
+            </button>
+          </div> */}
+        </div>
+        {/* <div className="flex items-center bg-[#1b2d38] h-[40px] px-[10px] py-[5px]">
           <FaChevronLeft
             size={20}
             color="#FFFFFF"
@@ -102,10 +173,7 @@ const AllBetHistory = () => {
           <div className="text-[18px] text-[#FFFFFF] font-black">
             Bet History
           </div>
-          {/* <div className="bg-[#fff] text-[#243a48] text-[15px] py-[1px] px-[8px] rounded mx-[5px] font-black">
-            {username}
-          </div> */}
-        </div>
+        </div> */}
 
         <div>
           <div className="table-responsive">
@@ -182,6 +250,12 @@ const AllBetHistory = () => {
                             } `}
                           >
                             {amountFormate(Number(item?.odds)?.toFixed(2) || 0)}
+                            {(item?.size || item?.size === 0) &&
+                              `/${
+                                item?.mrktType === "line_market"
+                                  ? "100"
+                                  : item?.size
+                              }`}
                           </td>
                           <td
                             className={`${

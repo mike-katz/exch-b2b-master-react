@@ -47,3 +47,9 @@ export const MARKET_TYPE = [
   { value: "sportbook", label: "Sports Book" },
   { value: "bookmaker", label: "Book Maker" },
 ];
+
+export const BOOK_MARKET_TYPE = [
+  { value: "", label: "ALL" },
+  { value: "other", label: "Match Odds" },
+  { value: "fancy", label: "Fancy" },
+];

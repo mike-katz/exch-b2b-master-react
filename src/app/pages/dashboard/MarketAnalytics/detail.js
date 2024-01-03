@@ -668,10 +668,13 @@ const MarketAnalyticsDetail = () => {
   return (
     <div className="px-2">
       <div className="block xl:hidden">
-        <BetHistoryModal
-          isVisible={visibleBestHistoryModal}
-          onCloseMenu={onCloseBetsHistoryModal}
-        />
+        {pageData?.[0]?.sportsId && (
+          <BetHistoryModal
+            sportId={pageData?.[0]?.sportsId}
+            isVisible={visibleBestHistoryModal}
+            onCloseMenu={onCloseBetsHistoryModal}
+          />
+        )}
       </div>
       <div className="text-[#243a48] text-[16px] font-black mt-4 flex items-center">
         <FaChevronLeft
@@ -846,7 +849,9 @@ const MarketAnalyticsDetail = () => {
               </div>
 
               <div className="xl:block hidden">
-                <BetHistory />
+                {pageData?.[0]?.sportsId && (
+                  <BetHistory sportId={pageData?.[0]?.sportsId} />
+                )}
               </div>
             </div>
           </div>

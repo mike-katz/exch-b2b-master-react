@@ -7,13 +7,13 @@ import Model from "./Modal";
 import { FiX } from "react-icons/fi";
 import moment from "moment";
 
-const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
+const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
   const { eventId } = useParams();
   const { themeColor } = useSelector((state) => state?.persist);
 
-  const [activeMenu, setActiveMenu] = useState("matched");
-  const [pageFancyAllData, setPageFancyAllData] = useState([]);
-  const [pageLayAllData, setPageLayAllData] = useState([]);
+  const [activeMenu, setActiveMenu] = useState("other");
+  // const [pageFancyAllData, setPageFancyAllData] = useState([]);
+  // const [pageLayAllData, setPageLayAllData] = useState([]);
   // const [pageBackData, setPageBackData] = useState([]);
   // const [pageLayData, setPageLayData] = useState([]);
   const [pageData, setPageData] = useState([]);
@@ -21,21 +21,21 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
   // const [betInfo, setBetInfo] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (activeMenu) {
-      let filterData = [];
-      if (activeMenu === "matched") {
-        filterData = pageLayAllData?.filter(
-          (bet) => bet?.type === "lay" || bet?.type === "back"
-        );
-      } else {
-        filterData = pageFancyAllData?.filter(
-          (bet) => bet?.type === "yes" || bet?.type === "no"
-        );
-      }
-      setPageData(filterData);
-    }
-  }, [activeMenu, pageLayAllData, pageFancyAllData]);
+  // useEffect(() => {
+  //   if (activeMenu) {
+  //     let filterData = [];
+  //     if (activeMenu === "other") {
+  //       filterData = pageLayAllData?.filter(
+  //         (bet) => bet?.type === "lay" || bet?.type === "back"
+  //       );
+  //     } else {
+  //       filterData = pageFancyAllData?.filter(
+  //         (bet) => bet?.type === "yes" || bet?.type === "no"
+  //       );
+  //     }
+  //     setPageData(filterData);
+  //   }
+  // }, [activeMenu, pageLayAllData, pageFancyAllData]);
 
   useEffect(() => {
     if (eventId) {
@@ -45,13 +45,15 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
         page: 1,
         limit: 20,
         eventId: eventId,
+        flag: activeMenu,
+        sportId: sportId,
       };
 
       if (window.innerWidth < 720) {
         getBetHistory(payload);
       }
     }
-  }, [eventId]);
+  }, [eventId, activeMenu]);
 
   useEffect(() => {
     if (eventId) {
@@ -60,6 +62,8 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
           page: 1,
           limit: 20,
           eventId: eventId,
+          flag: activeMenu,
+          sportId: sportId,
         };
         if (window.innerWidth < 720) {
           getBetHistory(payload);
@@ -68,7 +72,7 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
 
       return () => clearInterval(interval);
     }
-  }, [eventId]);
+  }, [eventId, activeMenu]);
 
   const getBetHistory = async (payload) => {
     const data = await getBetHistoryDetailData(payload);
@@ -84,9 +88,9 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
       //   }
       // });
 
-      setPageFancyAllData(data?.data?.fancyResult);
-      setPageLayAllData(data?.data?.otherResult);
-      // setPageData(data?.data?.results);
+      // setPageFancyAllData(data?.data?.fancyResult);
+      // setPageLayAllData(data?.data?.otherResult);
+      setPageData(data?.data?.results);
     }
     setIsLoading(false);
   };
@@ -126,10 +130,10 @@ const BetHistoryModal = ({ isVisible, onCloseMenu }) => {
               <div className="flex items-center">
                 <div
                   onClick={() => {
-                    onClickTab("matched");
+                    onClickTab("other");
                   }}
                   className={`border-b-2 ${
-                    activeMenu === "matched"
+                    activeMenu === "other"
                       ? "text-[#6D081D] border-[#6D081D]"
                       : "border-transparent"
                   } hover:text-[#6D081D] cursor-pointer px-[16px] py-[8px]`}
