@@ -6,12 +6,14 @@ import { useSelector } from "react-redux";
 import Model from "./Modal";
 import { FiX } from "react-icons/fi";
 import moment from "moment";
+import { Switch } from "@material-tailwind/react";
 
 const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
   const { eventId } = useParams();
   const { themeColor } = useSelector((state) => state?.persist);
 
   const [activeMenu, setActiveMenu] = useState("other");
+  const [liveBetAPICall, setLiveBetAPICall] = useState(false);
   // const [pageFancyAllData, setPageFancyAllData] = useState([]);
   // const [pageLayAllData, setPageLayAllData] = useState([]);
   // const [pageBackData, setPageBackData] = useState([]);
@@ -37,26 +39,26 @@ const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
   //   }
   // }, [activeMenu, pageLayAllData, pageFancyAllData]);
 
-  // useEffect(() => {
-  //   if (eventId) {
-  //     setIsLoading(true);
+  useEffect(() => {
+    if (eventId && isVisible) {
+      setIsLoading(true);
 
-  //     const payload = {
-  //       page: 1,
-  //       limit: 20,
-  //       eventId: eventId,
-  //       flag: activeMenu,
-  //       sportId: sportId,
-  //     };
+      const payload = {
+        page: 1,
+        limit: 20,
+        eventId: eventId,
+        flag: activeMenu,
+        sportId: sportId,
+      };
 
-  //     if (window.innerWidth < 720) {
-  //       getBetHistory(payload);
-  //     }
-  //   }
-  // }, [eventId, activeMenu]);
+      if (window.innerWidth < 720) {
+        getBetHistory(payload);
+      }
+    }
+  }, [eventId, activeMenu, isVisible]);
 
   useEffect(() => {
-    if (eventId) {
+    if (eventId && liveBetAPICall && isVisible) {
       const interval = setInterval(() => {
         const payload = {
           page: 1,
@@ -68,11 +70,11 @@ const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
         if (window.innerWidth < 720) {
           getBetHistory(payload);
         }
-      }, 5000);
+      }, 2000);
 
       return () => clearInterval(interval);
     }
-  }, [eventId, activeMenu]);
+  }, [eventId, activeMenu, liveBetAPICall, isVisible]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -156,6 +158,24 @@ const BetHistoryModal = ({ isVisible, onCloseMenu, sportId }) => {
                 >
                   <div className={`text-[13px]`}>Fancy</div>
                 </div>
+              </div>
+              <div className="flex items-center">
+                <div className="col-span-5 text-[12px] text-[#1e1e1e] font-semibold mr-2">
+                  Live Bet
+                </div>
+                <Switch
+                  ripple={false}
+                  color="#ecad17"
+                  className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+                  circleProps={{
+                    className: "before:hidden border-none",
+                  }}
+                  value={liveBetAPICall}
+                  checked={liveBetAPICall}
+                  onChange={(e) => {
+                    setLiveBetAPICall(e?.target?.checked);
+                  }}
+                />
               </div>
               {/* <div className="flex items-center">
             <input

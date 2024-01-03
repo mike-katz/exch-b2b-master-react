@@ -4,12 +4,14 @@ import Loader from "./Loader";
 import { getBetHistoryDetailData } from "../../redux/services/MarketAnalytics";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Switch } from "@material-tailwind/react";
 
 const BetHistory = ({ sportId }) => {
   const { eventId } = useParams();
   const { themeColor } = useSelector((state) => state?.persist);
 
   const [activeMenu, setActiveMenu] = useState("other");
+  const [liveBetAPICall, setLiveBetAPICall] = useState(false);
   // const [pageFancyAllData, setPageFancyAllData] = useState([]);
   // const [pageLayAllData, setPageLayAllData] = useState([]);
   // const [pageBackData, setPageBackData] = useState([]);
@@ -53,7 +55,7 @@ const BetHistory = ({ sportId }) => {
   }, [eventId, activeMenu]);
 
   useEffect(() => {
-    if (eventId) {
+    if (eventId && liveBetAPICall) {
       const interval = setInterval(() => {
         const payload = {
           page: 1,
@@ -65,11 +67,11 @@ const BetHistory = ({ sportId }) => {
         if (window.innerWidth >= 720) {
           getBetHistory(payload);
         }
-      }, 5000);
+      }, 2000);
 
       return () => clearInterval(interval);
     }
-  }, [eventId, activeMenu]);
+  }, [eventId, activeMenu, liveBetAPICall]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -147,6 +149,24 @@ const BetHistory = ({ sportId }) => {
             >
               <div className={`text-[13px]`}>Fancy</div>
             </div>
+          </div>
+          <div className="flex items-center">
+            <div className="col-span-5 text-[12px] text-[#1e1e1e] font-semibold mr-2">
+              Live Bet
+            </div>
+            <Switch
+              ripple={false}
+              color="#ecad17"
+              className="h-full w-full checked:bg-[#ecad17] peer-checked:border-[#ecad17] checked:border-[#ecad17]"
+              circleProps={{
+                className: "before:hidden border-none",
+              }}
+              value={liveBetAPICall}
+              checked={liveBetAPICall}
+              onChange={(e) => {
+                setLiveBetAPICall(e?.target?.checked);
+              }}
+            />
           </div>
           {/* <div className="flex items-center">
             <input
