@@ -258,7 +258,15 @@ const BetHistory = ({ sportId }) => {
                               : "bg-[#efe1e5]"
                           } `}
                         >
-                          {Number(item?.odds)?.toFixed(2) || 0}
+                          {item?.size
+                            ? item?.odds
+                            : Number(item?.odds || 0)?.toFixed(2)}
+                          {(item?.size || item?.size === 0) &&
+                            `/${
+                              item?.mrktType === "line_market"
+                                ? "100"
+                                : item?.size
+                            }`}
                         </td>
                         <td
                           className={`${

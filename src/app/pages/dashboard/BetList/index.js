@@ -406,7 +406,11 @@ const BetList = () => {
                       {item?.type}
                     </td>
                     <td className="">
-                      {item?.odds?.$numberDecimal || item?.odds}
+                      {item?.size
+                        ? item?.odds?.$numberDecimal || item?.odds
+                        : Number(
+                            item?.odds?.$numberDecimal || item?.odds || 0
+                          )?.toFixed(2)}
                       {(item?.size || item?.size === 0) &&
                         `/${
                           item?.mrktType === "line_market" ? "100" : item?.size

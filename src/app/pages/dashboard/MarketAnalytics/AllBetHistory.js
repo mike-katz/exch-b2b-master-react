@@ -252,7 +252,9 @@ const AllBetHistory = () => {
                                 : "bg-[#efe1e5]"
                             } `}
                           >
-                            {amountFormate(Number(item?.odds)?.toFixed(2) || 0)}
+                            {item?.size
+                              ? item?.odds
+                              : Number(item?.odds || 0)?.toFixed(2)}
                             {(item?.size || item?.size === 0) &&
                               `/${
                                 item?.mrktType === "line_market"
