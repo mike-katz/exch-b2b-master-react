@@ -108,6 +108,12 @@ export const getReportSportListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}exEventId=${payload?.exEventId}`;
   }
 
+  if (payload?.exMarketId) {
+    queryString += `${queryString ? "&" : "?"}exMarketId=${
+      payload?.exMarketId
+    }`;
+  }
+
   if (payload?.from) {
     queryString += `${queryString ? "&" : "?"}from=${payload?.from}`;
   }

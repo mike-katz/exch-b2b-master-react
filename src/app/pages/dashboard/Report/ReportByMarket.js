@@ -1,9 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import {
-  getAuraBetListPlData,
-  getBetListData,
-} from "../../../redux/services/pl";
+import { getAuraBetListPlData } from "../../../redux/services/pl";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
 import { useParams } from "react-router-dom";
@@ -338,8 +335,7 @@ const ReportByMarket = (props) => {
       setIsLoading(false);
     } else if (customType === "Markets") {
       const payload = {
-        sportId: sportId,
-        marketId: id,
+        exMarketId: id,
         limit: perPage,
         page: currentPage,
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
@@ -350,7 +346,7 @@ const ReportByMarket = (props) => {
 
       setIsLoading(true);
 
-      const data = await getBetListData(payload);
+      const data = await getReportSportListData(payload);
 
       if (data) {
         if (navigation?.length === 0) {
@@ -748,7 +744,19 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "Markets") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td className="text-left">{item?.marketName}</td>
+                      <td
+                        onClick={() => {
+                          onClickPl(
+                            item,
+                            item?.exMarketId,
+                            null,
+                            item?.marketName
+                          );
+                        }}
+                        className="text-left underline text-[#568bc8] cursor-pointer"
+                      >
+                        {item?.marketName}
+                      </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${
@@ -780,14 +788,7 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "BetList") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td
-                        onClick={() => {
-                          onClickPl(item, false, false, "Aviator", "Aviator");
-                        }}
-                        className=" underline text-[#568bc8] cursor-pointer"
-                      >
-                        {item?.name}
-                      </td>
+                      <td className="text-left">{item?.username}</td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${

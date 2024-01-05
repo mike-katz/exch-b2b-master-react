@@ -937,7 +937,7 @@ const BettingProfitLost = (props) => {
                           .format("DD/MM/YYYY")}
                         <br />
                         {moment
-                          .utc(item?.createdAt)
+                          .utc(item?.matchedTime)
                           .utcOffset(moment().utcOffset())
                           .format("LTS")}
                       </td>
@@ -1229,7 +1229,7 @@ const BettingProfitLost = (props) => {
                           .format("DD/MM/YYYY")}
                         <br />
                         {moment
-                          .utc(item?.createdAt)
+                          .utc(item?.matchedTime)
                           .utcOffset(moment().utcOffset())
                           .format("LTS")}
                       </td>
