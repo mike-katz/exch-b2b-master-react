@@ -14,6 +14,7 @@ import LineGameCard from "../../../component/common/LineGameCard";
 import LiveStreaming from "../../../component/common/LiveStriming";
 import Loader from "../../../component/common/Loader";
 import {
+  getBetHistoryFancyLPData,
   getBetHistoryLPData,
   getMarketDetailData,
   getMarketSpreadexIdData,
@@ -424,14 +425,13 @@ const MarketAnalyticsDetail = () => {
       sportId,
     };
 
-    const data = await getBetHistoryLPData(payload);
+    const [data, dataFancy] = await Promise.all([
+      getBetHistoryLPData(payload),
+      getBetHistoryFancyLPData(payload),
+    ]);
 
     if (data?.data) {
       const cusData = [];
-      const cusFancyData = [];
-      const cusLineData = [];
-      const cusSelectionIdArray = [];
-      const cusLineSelectionIdArray = [];
 
       const sortedAllData = data?.data?.sort(
         (a, b) => a?.sequence - b?.sequence
@@ -439,19 +439,39 @@ const MarketAnalyticsDetail = () => {
 
       sortedAllData?.map((item) => {
         const selectionId = {};
+
+        item?.selectionId?.map((si, index) => {
+          Object.assign(selectionId, si);
+        });
+
+        cusData?.push({
+          exMarketId: item?.exMarketId,
+          runnerData: selectionId,
+        });
+      });
+
+      setPagePlData(cusData);
+    }
+
+    if (dataFancy?.data) {
+      const cusFancyData = [];
+      const cusLineData = [];
+      const cusSelectionIdArray = [];
+      const cusLineSelectionIdArray = [];
+
+      const sortedAllData = dataFancy?.data?.sort(
+        (a, b) => a?.sequence - b?.sequence
+      );
+
+      sortedAllData?.map((item) => {
         const fancySelectionId = {};
         const lineSelectionId = {};
         const selectionIdArray = [];
 
         item?.selectionId?.map((si, index) => {
           if (item?.type === "fancy") {
-            // const fancyOdds = liveFancyOdds.current?.find(
-            //   (odds) => odds?.exMarketId === item?.exMarketId
-            // );
-
-            // if (index >= fancyOdds?.odds - 5 && index <= fancyOdds?.odds + 5) {
             selectionIdArray.push(si);
-            // }
+
             Object.assign(fancySelectionId, {
               [item?.exMarketId]: item?.selectionId.reduce(
                 (min, current) =>
@@ -460,13 +480,8 @@ const MarketAnalyticsDetail = () => {
               ),
             });
           } else if (item?.type === "line_market") {
-            // const lineOdds = liveLineOdds.current?.find(
-            //   (odds) => odds?.exMarketId === item?.exMarketId
-            // );
-
-            // if (index >= lineOdds?.odds - 5 && index <= lineOdds?.odds + 5) {
             selectionIdArray.push(si);
-            // }
+
             Object.assign(lineSelectionId, {
               [item?.exMarketId]: item?.selectionId.reduce(
                 (min, current) =>
@@ -474,14 +489,7 @@ const MarketAnalyticsDetail = () => {
                 undefined
               ),
             });
-          } else {
-            Object.assign(selectionId, si);
           }
-        });
-
-        cusData?.push({
-          exMarketId: item?.exMarketId,
-          runnerData: selectionId,
         });
 
         if (Object.keys(fancySelectionId)?.length > 0) {
@@ -507,7 +515,6 @@ const MarketAnalyticsDetail = () => {
         }
       });
 
-      setPagePlData(cusData);
       setFancyPlData(cusFancyData);
       setFancyPlArray(cusSelectionIdArray);
 
