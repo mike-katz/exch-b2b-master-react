@@ -44,7 +44,7 @@ const LineGameCard = (props) => {
   return (
     <div className="mb-2">
       <Model isVisible={isVisiblePlData} onCloseMenu={onCLosePlModal}>
-        <div className="w-full md:min-w-[300px] pt-3">
+        <div className="bg-[#FFFFFF] w-full md:min-w-[300px] pt-3">
           <div className="flex items-center justify-between px-2">
             <div className="text-[14px]">{plModalData?.marketName}</div>
             <FiX

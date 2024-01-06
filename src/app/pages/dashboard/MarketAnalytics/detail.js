@@ -445,29 +445,33 @@ const MarketAnalyticsDetail = () => {
 
         item?.selectionId?.map((si, index) => {
           if (item?.type === "fancy") {
-            const fancyOdds = liveFancyOdds.current?.find(
-              (odds) => odds?.exMarketId === item?.exMarketId
-            );
+            // const fancyOdds = liveFancyOdds.current?.find(
+            //   (odds) => odds?.exMarketId === item?.exMarketId
+            // );
 
-            if (index >= fancyOdds?.odds - 5 && index <= fancyOdds?.odds + 5) {
-              selectionIdArray.push({ odds: index, si });
-            }
+            // if (index >= fancyOdds?.odds - 5 && index <= fancyOdds?.odds + 5) {
+            selectionIdArray.push(si);
+            // }
             Object.assign(fancySelectionId, {
-              [item?.exMarketId]: item?.selectionId.reduce((a, b) =>
-                Math.min(a, b)
+              [item?.exMarketId]: item?.selectionId.reduce(
+                (min, current) =>
+                  min === undefined || current?.si < min ? current?.si : min,
+                undefined
               ),
             });
           } else if (item?.type === "line_market") {
-            const lineOdds = liveLineOdds.current?.find(
-              (odds) => odds?.exMarketId === item?.exMarketId
-            );
+            // const lineOdds = liveLineOdds.current?.find(
+            //   (odds) => odds?.exMarketId === item?.exMarketId
+            // );
 
-            if (index >= lineOdds?.odds - 5 && index <= lineOdds?.odds + 5) {
-              selectionIdArray.push({ odds: index, si });
-            }
+            // if (index >= lineOdds?.odds - 5 && index <= lineOdds?.odds + 5) {
+            selectionIdArray.push(si);
+            // }
             Object.assign(lineSelectionId, {
-              [item?.exMarketId]: item?.selectionId.reduce((a, b) =>
-                Math.min(a, b)
+              [item?.exMarketId]: item?.selectionId.reduce(
+                (min, current) =>
+                  min === undefined || current?.si < min ? current?.si : min,
+                undefined
               ),
             });
           } else {
@@ -505,6 +509,8 @@ const MarketAnalyticsDetail = () => {
 
       setPagePlData(cusData);
       setFancyPlData(cusFancyData);
+      console.log({ cusFancyData });
+      console.log({ cusSelectionIdArray });
       setFancyPlArray(cusSelectionIdArray);
 
       setLinePlData(cusLineData);
