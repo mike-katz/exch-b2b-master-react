@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getAuraBetListPlData } from "../../../redux/services/pl";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   apiReportIntCasinoTotalPLData,
   getReportAviatorListData,
@@ -788,7 +788,13 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "BetList") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td className="text-left">{item?.username}</td>
+                      <td className="text-left underline text-[#568bc8] cursor-pointer">
+                        <Link
+                          to={`/down-list-master/details/account-summery/${item?.userId}`}
+                        >
+                          {item?.username}
+                        </Link>
+                      </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${
