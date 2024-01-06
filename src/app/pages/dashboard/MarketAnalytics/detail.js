@@ -419,7 +419,6 @@ const MarketAnalyticsDetail = () => {
   // };ʼ
 
   const getBetPl = async (exEventId, sportId) => {
-    console.log({});
     const payload = {
       exEventId,
       sportId,

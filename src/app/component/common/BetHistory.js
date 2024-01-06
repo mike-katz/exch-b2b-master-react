@@ -81,7 +81,6 @@ const BetHistory = ({ sportId }) => {
     const data = await getBetHistoryDetailData(payload);
 
     if (data?.data) {
-      console.log({ data });
       // const backData = [];
       // const layData = [];
       // data?.data?.results?.map((item) => {
