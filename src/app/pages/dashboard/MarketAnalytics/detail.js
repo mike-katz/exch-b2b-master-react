@@ -509,8 +509,6 @@ const MarketAnalyticsDetail = () => {
 
       setPagePlData(cusData);
       setFancyPlData(cusFancyData);
-      console.log({ cusFancyData });
-      console.log({ cusSelectionIdArray });
       setFancyPlArray(cusSelectionIdArray);
 
       setLinePlData(cusLineData);
