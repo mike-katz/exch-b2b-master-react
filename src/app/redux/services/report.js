@@ -144,6 +144,10 @@ export const getReportAviatorListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}page=${payload?.page}`;
   }
 
+  if (payload?.user) {
+    queryString += `${queryString ? "&" : "?"}user=${payload?.user}`;
+  }
+
   if (payload?.from) {
     queryString += `${queryString ? "&" : "?"}from=${payload?.from}`;
   }

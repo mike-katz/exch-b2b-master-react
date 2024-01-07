@@ -263,6 +263,43 @@ const ReportByMarket = (props) => {
         setCurrentType("Aviator");
       }
       setIsLoading(false);
+    } else if (customType === "AviatorUser") {
+      {
+        console.log({ id });
+      }
+      const payload = {
+        user: id,
+        limit: perPage,
+        page: currentPage,
+        from: `${fromDate} ${moment().format("HH:mm:ss")}`,
+        to: `${toDate} ${moment().format("HH:mm:ss")}`,
+        timeZone: timeZone,
+      };
+
+      setIsLoading(true);
+
+      const data = await getReportAviatorListData(payload);
+
+      if (data) {
+        if (navigation?.length === 0) {
+          customizeNavigation.push({
+            item,
+            type: "AviatorUser",
+            payload,
+            name,
+            id,
+            sportId,
+          });
+        }
+        setNavigationData(customizeNavigation);
+
+        setTotalPage(data?.data?.totalPages);
+        setPerPage(data?.data?.limit);
+        setCurrentPage(Number(data?.data?.page));
+        setPageData(data?.data?.results);
+        setCurrentType("AviatorUser");
+      }
+      setIsLoading(false);
     } else if (customType === "Sports") {
       const payload = {
         sportName: name,
@@ -828,12 +865,50 @@ const ReportByMarket = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(item, false, false, "Aviator", "Aviator");
+                          onClickPl(
+                            item,
+                            item?.user,
+                            false,
+                            item?.user,
+                            "AviatorUser"
+                          );
                         }}
-                        className="text-left"
+                        className="text-left underline text-[#568bc8] cursor-pointer"
                       >
-                        {item?.sportName}
+                        {item?.user}
                       </td>
+                      <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
+                      <td
+                        className={` font-black ${
+                          Number(item?.pl) === 0
+                            ? ""
+                            : Number(item?.pl) > 0
+                            ? "text-[green]"
+                            : "text-[red]"
+                        }`}
+                      >
+                        {Number(item?.pl)?.toFixed(2)}
+                      </td>
+                      <td className="">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
+                      <td
+                        className={` font-black ${
+                          Number(numberOppositeConvert(item?.pl)) === 0
+                            ? ""
+                            : Number(numberOppositeConvert(item?.pl)) > 0
+                            ? "text-[green]"
+                            : "text-[red]"
+                        }`}
+                      >
+                        {Number(numberOppositeConvert(item?.pl))?.toFixed(2)}
+                      </td>
+                    </tr>
+                  );
+                } else if (currentType === "AviatorUser") {
+                  return (
+                    <tr key={index} className="even:bg-blue-gray-50/50">
+                      <td className="text-left">{item?.sportName}</td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${
