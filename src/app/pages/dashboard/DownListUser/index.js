@@ -487,11 +487,13 @@ const DownListMaster = () => {
         <div className="xl:col-span-2 md:col-span-4 col-span-6 px-2 flex flex-col justify-center bg-[#FFFFFF] border border-[#7e97a7] min-h-[53px]">
           <div className="text-[12px] text-[#9b9b9b]">Upper Line PL</div>
           <div className="text-[#243a48] text-[15px] font-black">
+            IR{" "}
             <span
               className={`${
                 Number(
                   Number(myBalance?.creditRef || 0) -
-                    Number(myBalance?.balance || 0)
+                    (Number(myBalance?.balance || 0) +
+                      Number(myBalance?.totalBalance || 0))
                 ) > 0
                   ? "text-[#508d0e]"
                   : "text-[#d0021b]"
