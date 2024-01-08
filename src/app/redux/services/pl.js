@@ -451,8 +451,9 @@ export const getAuraBetListPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}to=${payload?.to}`;
   }
 
-  if (payload?.to) {
-    queryString += `${queryString ? "&" : "?"}roundId=${payload?.roundId}`;
+  if (payload?.roundId) {
+    const encodedRoundId = encodeURIComponent(payload?.roundId);
+    queryString += `${queryString ? "&" : "?"}roundId=${encodedRoundId}`;
   }
 
   if (payload?.timeZone) {

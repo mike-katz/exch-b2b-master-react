@@ -16,6 +16,7 @@ import {
 } from "../../../redux/services/report";
 import { numberOppositeConvert } from "../../../utils/helper";
 import { useSelector } from "react-redux";
+import { FaArrowDownShortWide } from "react-icons/fa6";
 
 const ReportByMarket = (props) => {
   const { themeColor } = useSelector((state) => state?.persist);
@@ -41,6 +42,10 @@ const ReportByMarket = (props) => {
   const [perPage, setPerPage] = useState(20);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState({
+    stack: "",
+    direction: "1",
+  });
 
   const onRefreshPagination = (count) => {
     setCurrentPage(count);
@@ -63,6 +68,11 @@ const ReportByMarket = (props) => {
   }, []);
 
   const getAllPl = async (getPayload) => {
+    setSortConfig({
+      stack: "",
+      direction: "1",
+    });
+
     let payload = {};
     if (getPayload) {
       payload = getPayload;
@@ -144,9 +154,18 @@ const ReportByMarket = (props) => {
     name,
     type = false,
     navigation = [],
-    currentPage = 1
+    currentPage = 1,
+    sortConfigPass = false
   ) => {
     setCurrentTotalItem(item);
+
+    let customSortConfig;
+    if (sortConfigPass) {
+      customSortConfig = sortConfigPass;
+    } else {
+      customSortConfig = sortConfig;
+    }
+
     let customizeNavigation = [];
     let customType = "";
     if (type) {
@@ -170,6 +189,8 @@ const ReportByMarket = (props) => {
         category: id,
         timeZone: timeZone,
         developerCode: id,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -205,6 +226,8 @@ const ReportByMarket = (props) => {
         category: id,
         timeZone: timeZone,
         gameName: id,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -238,6 +261,8 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -271,6 +296,8 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -305,6 +332,8 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -339,6 +368,8 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -374,6 +405,8 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -410,6 +443,8 @@ const ReportByMarket = (props) => {
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
         userId,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -443,6 +478,8 @@ const ReportByMarket = (props) => {
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -478,6 +515,8 @@ const ReportByMarket = (props) => {
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
         userId,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -514,6 +553,8 @@ const ReportByMarket = (props) => {
         to: `${toDate} ${moment().format("HH:mm:ss")}`,
         timeZone: timeZone,
         userId,
+        sortBy: customSortConfig?.key ? customSortConfig?.key : undefined,
+        order: customSortConfig?.key ? customSortConfig?.direction : undefined,
       };
 
       setIsLoading(true);
@@ -544,6 +585,11 @@ const ReportByMarket = (props) => {
   };
 
   const onClickNavigation = (value) => {
+    setSortConfig({
+      stack: "",
+      direction: "1",
+    });
+
     const customizeNavigation = [];
 
     let lastData = false;
@@ -573,9 +619,41 @@ const ReportByMarket = (props) => {
       lastRecord?.sportId,
       lastRecord?.name,
       lastRecord?.type,
-      customizeNavigation
+      customizeNavigation,
+      currentPage,
+      {
+        stack: "",
+        direction: "1",
+      }
     );
   };
+
+  const handleSort = (key) => {
+    let direction = "1";
+    if (sortConfig.key === key && sortConfig.direction === "1") {
+      direction = "-1";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  useEffect(() => {
+    if (sortConfig?.key) {
+      setCurrentPage(1);
+
+      const lastRecord = navigationData?.[navigationData?.length - 1];
+
+      onClickPl(
+        lastRecord?.item,
+        lastRecord?.id,
+        lastRecord?.sportId,
+        lastRecord?.name,
+        lastRecord?.type,
+        navigationData,
+        currentPage,
+        sortConfig
+      );
+    }
+  }, [sortConfig]);
 
   let totalStack = 0;
   let totalPL = 0;
@@ -700,8 +778,36 @@ const ReportByMarket = (props) => {
           <thead>
             <tr>
               <th className="text-left">Name</th>
-              <th>Stack</th>
-              <th>Profit/Lost</th>
+              <th>
+                <div
+                  onClick={() => {
+                    if (currentType !== "Sports") {
+                      handleSort("stack");
+                    }
+                  }}
+                  className="flex justify-center items-center cursor-pointer"
+                >
+                  Stack
+                  {currentType === "Sports" ? null : (
+                    <FaArrowDownShortWide className="ml-2" />
+                  )}
+                </div>
+              </th>
+              <th>
+                <div
+                  onClick={() => {
+                    if (currentType !== "Sports") {
+                      handleSort("pl");
+                    }
+                  }}
+                  className="flex justify-center items-center cursor-pointer"
+                >
+                  Profit/Lost
+                  {currentType === "Sports" ? null : (
+                    <FaArrowDownShortWide className="ml-2" />
+                  )}
+                </div>
+              </th>
               <th>Commission</th>
               <th>Upline PL</th>
             </tr>

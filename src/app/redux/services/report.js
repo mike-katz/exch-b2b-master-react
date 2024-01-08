@@ -126,6 +126,14 @@ export const getReportSportListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
   }
 
+  if (payload?.sortBy) {
+    queryString += `${queryString ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryString += `${queryString ? "&" : "?"}order=${payload?.order}`;
+  }
+
   const { data } = await Rest.get(
     `${APIEndpoint.getReportSportList}${queryString}`
   );
@@ -158,6 +166,14 @@ export const getReportAviatorListData = async (payload) => {
 
   if (payload?.timeZone) {
     queryString += `${queryString ? "&" : "?"}timeZone=${payload?.timeZone}`;
+  }
+
+  if (payload?.sortBy) {
+    queryString += `${queryString ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryString += `${queryString ? "&" : "?"}order=${payload?.order}`;
   }
 
   const { data } = await Rest.get(
@@ -200,6 +216,14 @@ export const getReportIntCasinoListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}gameName=${payload?.gameName}`;
   }
 
+  if (payload?.sortBy) {
+    queryString += `${queryString ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryString += `${queryString ? "&" : "?"}order=${payload?.order}`;
+  }
+
   const { data } = await Rest.get(
     `${APIEndpoint.getReportIntCasinoList}${queryString}`
   );
@@ -238,6 +262,14 @@ export const getReportUserListData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }
 
+  if (payload?.sortBy) {
+    queryString += `${queryString ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryString += `${queryString ? "&" : "?"}order=${payload?.order}`;
+  }
+
   const { data } = await Rest.get(
     `${APIEndpoint.getReportUserList}${queryString}`
   );
@@ -274,6 +306,14 @@ export const getReportUserEventsProfitLossAuraData = async (payload) => {
 
   if (payload?.userId) {
     queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  if (payload?.sortBy) {
+    queryString += `${queryString ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryString += `${queryString ? "&" : "?"}order=${payload?.order}`;
   }
 
   const { data } = await Rest.get(
@@ -317,6 +357,14 @@ export const getReportUserMarketsProfitLossAuraData = async (payload) => {
 
   if (payload?.userId) {
     queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
+  }
+
+  if (payload?.sortBy) {
+    queryString += `${queryString ? "&" : "?"}sortBy=${payload?.sortBy}`;
+  }
+
+  if (payload?.order) {
+    queryString += `${queryString ? "&" : "?"}order=${payload?.order}`;
   }
 
   const { data } = await Rest.get(

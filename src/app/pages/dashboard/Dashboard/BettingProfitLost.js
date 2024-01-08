@@ -28,6 +28,7 @@ const BettingProfitLost = (props) => {
   const [aviatorData, setAviatorData] = useState();
   const [st8Data, setSt8Data] = useState([]);
   const [auraData, setAuraData] = useState([]);
+  const [currentTotalItem, setCurrentTotalItem] = useState();
 
   const [currentType, setCurrentType] = useState("Sports");
   const [navigationData, setNavigationData] = useState([]);
@@ -50,6 +51,7 @@ const BettingProfitLost = (props) => {
     const lastRecord = navigationData?.[navigationData?.length - 1];
 
     onClickPl(
+      lastRecord?.item,
       lastRecord?.id,
       lastRecord?.sportId,
       lastRecord?.name,
@@ -107,6 +109,7 @@ const BettingProfitLost = (props) => {
     if (data) {
       setCurrentType("Sports");
       setNavigationData([]);
+      setCurrentTotalItem();
       // setTotalPage(data?.data?.totalPages);
       // setPerPage(data?.data?.limit);
       // setCurrentPage(Number(data?.data?.page));
@@ -139,6 +142,7 @@ const BettingProfitLost = (props) => {
   };
 
   const onClickPl = async (
+    item,
     id,
     sportId,
     name,
@@ -146,6 +150,7 @@ const BettingProfitLost = (props) => {
     navigation = [],
     currentPage = 1
   ) => {
+    setCurrentTotalItem(item);
     let customizeNavigation = [];
     let customType = "";
     if (type) {
@@ -183,6 +188,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -216,6 +222,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -249,6 +256,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -283,6 +291,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -316,6 +325,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -352,6 +362,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -385,6 +396,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -419,6 +431,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -454,6 +467,7 @@ const BettingProfitLost = (props) => {
             name,
             id,
             sportId,
+            item,
           });
         }
         setNavigationData(customizeNavigation);
@@ -493,6 +507,7 @@ const BettingProfitLost = (props) => {
     const lastRecord = customizeNavigation?.[customizeNavigation?.length - 1];
 
     onClickPl(
+      lastRecord?.item,
       lastRecord?.id,
       lastRecord?.sportId,
       lastRecord?.name,
@@ -500,6 +515,46 @@ const BettingProfitLost = (props) => {
       customizeNavigation
     );
   };
+
+  let totalPL = 0;
+  let totalCommission = 0;
+  let totalPLWithCommission = 0;
+
+  if (currentTotalItem) {
+    totalPLWithCommission +=
+      Number(
+        currentTotalItem?.pl || aviatorData?.total || st8Data?.totalPL || 0
+      ) + Number(currentTotalItem?.commission || 0);
+    totalPL +=
+      Number(
+        currentTotalItem?.pl || aviatorData?.total || st8Data?.totalPL || 0
+      ) || 0;
+    totalCommission += Number(currentTotalItem?.commission || 0) || 0;
+  }
+
+  if (currentType === "Sports") {
+    pageData?.map((item) => {
+      totalPLWithCommission +=
+        Number(item?.pl || 0) + Number(item?.commission || 0);
+      totalPL += Number(item?.pl || 0) || 0;
+      totalCommission += Number(item?.commission || 0) || 0;
+    });
+
+    totalPLWithCommission +=
+      Number(aviatorData?.total || 0) + Number(aviatorData?.commission || 0);
+    totalPL += Number(aviatorData?.total || 0) || 0;
+    totalCommission += Number(aviatorData?.commission || 0) || 0;
+
+    totalPLWithCommission +=
+      Number(st8Data?.totalPL || 0) + Number(st8Data?.commission || 0);
+    totalPL += Number(st8Data?.totalPL || 0) || 0;
+    totalCommission += Number(st8Data?.commission || 0) || 0;
+
+    totalPLWithCommission +=
+      Number(auraData?.pl || 0) + Number(auraData?.commission || 0);
+    totalPL += Number(auraData?.pl || 0) || 0;
+    totalCommission += Number(auraData?.commission || 0) || 0;
+  }
 
   return (
     <div>
@@ -721,7 +776,7 @@ const BettingProfitLost = (props) => {
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td
                         onClick={() => {
-                          onClickPl(item?.sportId, null, item?.sportName);
+                          onClickPl(item, item?.sportId, null, item?.sportName);
                         }}
                         className="underline text-[#568bc8] cursor-pointer"
                       >
@@ -763,7 +818,7 @@ const BettingProfitLost = (props) => {
                       <td className="">{item?.sportName}</td>
                       <td
                         onClick={() => {
-                          onClickPl(item?.eventId, null, item?.eventName);
+                          onClickPl(item, item?.eventId, null, item?.eventName);
                         }}
                         className="p-4 underline text-[#568bc8] cursor-pointer"
                       >
@@ -818,6 +873,7 @@ const BettingProfitLost = (props) => {
                       <td
                         onClick={() => {
                           onClickPl(
+                            item,
                             item?.exMarketId,
                             item?.sportId,
                             item?.marketName
@@ -977,6 +1033,7 @@ const BettingProfitLost = (props) => {
                       <td
                         onClick={() => {
                           onClickPl(
+                            item,
                             item?.developerCode,
                             null,
                             item?.categoryName,
@@ -1075,7 +1132,7 @@ const BettingProfitLost = (props) => {
                       <td className=" capitalize">{item?.sportName}</td>
                       <td
                         onClick={() => {
-                          onClickPl(item?.eventId, null, item?.eventName);
+                          onClickPl(item, item?.eventId, null, item?.eventName);
                         }}
                         className="p-4 underline text-[#568bc8] cursor-pointer"
                       >
@@ -1125,6 +1182,7 @@ const BettingProfitLost = (props) => {
                       <td
                         onClick={() => {
                           onClickPl(
+                            item,
                             item?.marketName,
                             item?.sportId,
                             item?.eventName
@@ -1246,7 +1304,13 @@ const BettingProfitLost = (props) => {
                 <tr className="even:bg-blue-gray-50/50">
                   <td
                     onClick={() => {
-                      onClickPl(false, false, "Aviator", "Aviator");
+                      onClickPl(
+                        aviatorData,
+                        false,
+                        false,
+                        "Aviator",
+                        "Aviator"
+                      );
                     }}
                     className=" underline text-[#568bc8] cursor-pointer"
                   >
@@ -1284,7 +1348,13 @@ const BettingProfitLost = (props) => {
               <tr className="even:bg-blue-gray-50/50">
                 <td
                   onClick={() => {
-                    onClickPl(false, false, "Int Casino", "Int Casino");
+                    onClickPl(
+                      st8Data,
+                      false,
+                      false,
+                      "Int Casino",
+                      "Int Casino"
+                    );
                   }}
                   className=" underline text-[#568bc8] cursor-pointer"
                 >
@@ -1322,7 +1392,7 @@ const BettingProfitLost = (props) => {
               <tr className="even:bg-blue-gray-50/50">
                 <td
                   onClick={() => {
-                    onClickPl(false, false, "Casino", "Casino");
+                    onClickPl(auraData, false, false, "Casino", "Casino");
                   }}
                   className=" underline text-[#568bc8] cursor-pointer"
                 >
@@ -1353,6 +1423,95 @@ const BettingProfitLost = (props) => {
                 >
                   {Number(auraData?.pl)?.toFixed(2)}
                 </td>
+              </tr>
+            )}
+
+            {!isLoading && (
+              <tr className="even:bg-blue-gray-50/50">
+                <td className="bg-[#e0e6e6] font-black">Total</td>
+                {currentType === "Events" ||
+                currentType === "Markets" ||
+                currentType === "BetList" ||
+                currentType === "Aviator" ||
+                currentType === "Int Casino" ||
+                currentType === "St8Category" ||
+                currentType === "AuraEvent" ||
+                currentType === "AuraMarket" ||
+                currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                {currentType === "Markets" ||
+                currentType === "BetList" ||
+                currentType === "St8Category" ||
+                currentType === "AuraMarket" ||
+                currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                {currentType === "Markets" ||
+                currentType === "BetList" ||
+                currentType === "AuraMarket" ||
+                currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                {currentType === "BetList" || currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                {currentType === "BetList" || currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                {currentType === "BetList" || currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                <td
+                  className={`bg-[#e0e6e6] font-black ${
+                    Number(totalPLWithCommission) === 0
+                      ? ""
+                      : Number(totalPLWithCommission) > 0
+                      ? "text-[green]"
+                      : "text-[red]"
+                  }`}
+                >
+                  {Number(totalPLWithCommission)?.toFixed(2)}
+                </td>
+                {currentType === "BetList" ||
+                currentType === "Aviator" ||
+                currentType === "AuraBetList" ? null : (
+                  <td className="bg-[#e0e6e6] ">
+                    {Number(totalCommission || 0)?.toFixed(2) || "-"}
+                  </td>
+                )}
+                {currentType === "BetList" ||
+                currentType === "Aviator" ||
+                currentType === "AuraMarket" ||
+                currentType === "AuraBetList" ? null : (
+                  <td
+                    className={`bg-[#e0e6e6] font-black ${
+                      Number(totalPL) === 0
+                        ? ""
+                        : Number(totalPL) > 0
+                        ? "text-[green]"
+                        : "text-[red]"
+                    }`}
+                  >
+                    {Number(totalPL)?.toFixed(2)}
+                  </td>
+                )}
+
+                {currentType === "Events" ||
+                currentType === "Markets" ||
+                currentType === "BetList" ||
+                currentType === "Aviator" ||
+                currentType === "Int Casino" ||
+                currentType === "St8Category" ||
+                currentType === "AuraMarket" ||
+                currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
+                {currentType === "BetList" ||
+                currentType === "AuraMarket" ||
+                currentType === "AuraBetList" ? (
+                  <td className="bg-[#e0e6e6]"></td>
+                ) : null}
               </tr>
             )}
           </tbody>
