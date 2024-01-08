@@ -464,6 +464,11 @@ export const getAuraBetListPlData = async (payload) => {
     queryString += `${queryString ? "&" : "?"}matchName=${encodedMatchName}`;
   }
 
+  if (payload?.eventName) {
+    const encodedMatchName = encodeURIComponent(payload?.eventName);
+    queryString += `${queryString ? "&" : "?"}eventName=${encodedMatchName}`;
+  }
+
   if (payload?.userId) {
     queryString += `${queryString ? "&" : "?"}userId=${payload?.userId}`;
   }

@@ -1,6 +1,5 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { getAuraBetListPlData } from "../../../redux/services/pl";
 import Loader from "../../../component/common/Loader";
 import Pagination from "../../../component/common/Pagination";
 import { Link, useParams } from "react-router-dom";
@@ -197,6 +196,41 @@ const ReportByMarket = (props) => {
         setCurrentType("St8Category");
       }
       setIsLoading(false);
+    } else if (customType === "St8Games") {
+      const payload = {
+        limit: perPage,
+        page: currentPage,
+        from: `${fromDate} ${moment().format("HH:mm:ss")}`,
+        to: `${toDate} ${moment().format("HH:mm:ss")}`,
+        category: id,
+        timeZone: timeZone,
+        gameName: id,
+      };
+
+      setIsLoading(true);
+
+      const data = await getReportIntCasinoListData(payload);
+
+      if (data) {
+        if (navigation?.length === 0) {
+          customizeNavigation.push({
+            item,
+            type: "St8Games",
+            payload,
+            name,
+            id,
+            sportId,
+          });
+        }
+        setNavigationData(customizeNavigation);
+
+        setTotalPage(data?.data?.totalPages);
+        setPerPage(data?.data?.limit);
+        setCurrentPage(Number(data?.data?.page));
+        setPageData(data?.data?.results);
+        setCurrentType("St8Games");
+      }
+      setIsLoading(false);
     } else if (customType === "Int Casino") {
       const payload = {
         limit: perPage,
@@ -264,9 +298,6 @@ const ReportByMarket = (props) => {
       }
       setIsLoading(false);
     } else if (customType === "AviatorUser") {
-      {
-        console.log({ id });
-      }
       const payload = {
         user: id,
         limit: perPage,
@@ -475,7 +506,8 @@ const ReportByMarket = (props) => {
       setIsLoading(false);
     } else if (customType === "AuraMarket") {
       const payload = {
-        roundId: id,
+        eventName: id,
+        matchName: item?.matchName,
         limit: perPage,
         page: currentPage,
         from: `${fromDate} ${moment().format("HH:mm:ss")}`,
@@ -486,7 +518,7 @@ const ReportByMarket = (props) => {
 
       setIsLoading(true);
 
-      const data = await getAuraBetListPlData(payload);
+      const data = await getReportUserMarketsProfitLossAuraData(payload);
 
       if (data) {
         if (navigation?.length === 0) {
@@ -985,7 +1017,58 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "St8Category") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td className="text-left">{item?.gameName}</td>
+                      <td
+                        className="text-left underline text-[#568bc8] cursor-pointer"
+                        onClick={() => {
+                          onClickPl(
+                            item,
+                            item?.gameName,
+                            null,
+                            item?.gameName,
+                            "St8Games"
+                          );
+                        }}
+                      >
+                        {item?.gameName}
+                      </td>
+                      <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
+                      <td
+                        className={` font-black ${
+                          Number(item?.pl) === 0
+                            ? ""
+                            : Number(item?.pl) > 0
+                            ? "text-[green]"
+                            : "text-[red]"
+                        }`}
+                      >
+                        {Number(item?.pl)?.toFixed(2)}
+                      </td>
+                      <td className="">
+                        {Number(item?.commission || 0)?.toFixed(2) || "-"}
+                      </td>
+                      <td
+                        className={` font-black ${
+                          Number(numberOppositeConvert(item?.pl)) === 0
+                            ? ""
+                            : Number(numberOppositeConvert(item?.pl)) > 0
+                            ? "text-[green]"
+                            : "text-[red]"
+                        }`}
+                      >
+                        {Number(numberOppositeConvert(item?.pl))?.toFixed(2)}
+                      </td>
+                    </tr>
+                  );
+                } else if (currentType === "St8Games") {
+                  return (
+                    <tr key={index} className="even:bg-blue-gray-50/50">
+                      <td className="underline text-[#568bc8] cursor-pointer text-left">
+                        <Link
+                          to={`/down-list-master/details/account-summery/${item?.userId}`}
+                        >
+                          {item?.username}
+                        </Link>
+                      </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${
@@ -1061,7 +1144,19 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "AuraMarket") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td className="text-left">{item?.eventName}</td>
+                      <td
+                        onClick={() => {
+                          onClickPl(
+                            item,
+                            item?.eventName,
+                            null,
+                            item?.eventName
+                          );
+                        }}
+                        className="underline text-[#568bc8] cursor-pointer text-left"
+                      >
+                        {item?.eventName}
+                      </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td
                         className={` font-black ${
@@ -1093,13 +1188,12 @@ const ReportByMarket = (props) => {
                 } else if (currentType === "AuraBetList") {
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
-                      <td
-                        onClick={() => {
-                          onClickPl(item, false, false, "Aviator", "Aviator");
-                        }}
-                        className=" underline text-[#568bc8] cursor-pointer"
-                      >
-                        {item?.name}
+                      <td className="underline text-[#568bc8] cursor-pointer text-left">
+                        <Link
+                          to={`/down-list-master/details/account-summery/${item?._id}`}
+                        >
+                          {item?.username}
+                        </Link>
                       </td>
                       <td>{Number(item?.stack || 0)?.toFixed(2)}</td>
                       <td

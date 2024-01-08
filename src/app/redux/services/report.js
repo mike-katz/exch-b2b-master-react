@@ -196,6 +196,10 @@ export const getReportIntCasinoListData = async (payload) => {
     }`;
   }
 
+  if (payload?.gameName) {
+    queryString += `${queryString ? "&" : "?"}gameName=${payload?.gameName}`;
+  }
+
   const { data } = await Rest.get(
     `${APIEndpoint.getReportIntCasinoList}${queryString}`
   );
@@ -304,6 +308,11 @@ export const getReportUserMarketsProfitLossAuraData = async (payload) => {
   if (payload?.matchName) {
     const encodedMatchName = encodeURIComponent(payload?.matchName);
     queryString += `${queryString ? "&" : "?"}matchName=${encodedMatchName}`;
+  }
+
+  if (payload?.eventName) {
+    const encodedEventName = encodeURIComponent(payload?.eventName);
+    queryString += `${queryString ? "&" : "?"}eventName=${encodedEventName}`;
   }
 
   if (payload?.userId) {
