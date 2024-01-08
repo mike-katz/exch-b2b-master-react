@@ -501,7 +501,8 @@ const DownListMaster = () => {
             >
               {amountFormate(
                 Number(myBalance?.creditRef || 0) -
-                  Number(myBalance?.balance || 0)
+                  (Number(myBalance?.balance || 0) +
+                    Number(myBalance?.totalBalance || 0))
               )}
             </span>
           </div>
